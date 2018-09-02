@@ -1,0 +1,31 @@
+{
+  "name": "suds-iot-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "DEV=1 nodemon --ext js index.js",
+    "cypress": "./node_modules/cypress/bin/cypress run ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsbarragan796/backend.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jsbarragan796/backend/issues"
+  },
+  "homepage": "https://github.com/jsbarragan796/backend#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "morgan": "^1.9.0",
+    "path": "^0.12.7"
+  }
+}
