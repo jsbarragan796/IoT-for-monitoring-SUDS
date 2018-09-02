@@ -11,9 +11,7 @@ module.exports = router
 
 const prueba = async () => {
   const Influx = require('influx')
-  const influx = new Influx.InfluxDB({
-    host: 'localhost',
-    database: 'suds',
+  const influx = new Influx.InfluxDB('https://suds:suds@influx.ingeinsta.com:443/suds', {
     schema: [
       {
         measurement: 'ph',
@@ -27,13 +25,8 @@ const prueba = async () => {
     ]
   })
 
+  // ESCRITURA
   influx.writePoints([
-    {
-      measurement: 'ph',
-      tags: { sensor: 'entrada' },
-      fields: { value: 30 },
-      timestamp: new Date()
-    },
     {
       measurement: 'ph',
       tags: { sensor: 'entrada' },
@@ -42,17 +35,19 @@ const prueba = async () => {
     }
   ])
 
-  let rows = await influx.query(`
+  // LECTURA
+  await influx.query(`
       select * from ph
       where sensor = ${Influx.escape.stringLit('entrada')}
       order by time desc
       limit 1000
   `)
-
-  console.log(rows)
 }
 
 // prueba()
 // .then(() => {
 
+// })
+// .catch(e => {
+//   console.log(e)
 // })
