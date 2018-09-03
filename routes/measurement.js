@@ -16,10 +16,8 @@ router.get('/', async (req, res, next) => {
   try {
     if (!measurementType) throw new Error(QUERY_MUST_HAVE_MEASUREMENT_TYPE)
     const measurements = await measurementLogic.getMeasurements(measurementType, sensorType, sensorId, fromDate, toDate)
-    console.log(measurements)
     res.send(measurements)
   } catch (e) {
-    console.log(e)
     res.status(400).send(e.message)
   }
 })
@@ -32,7 +30,6 @@ router.post('/', async (req, res, next) => {
     await measurementLogic.saveMeasurement(sensorType, sensorId, measurementType, value, ts)
     res.sendStatus(200)
   } catch (e) {
-    console.log(e)
     res.status(400).send(e.message)
   }
 })

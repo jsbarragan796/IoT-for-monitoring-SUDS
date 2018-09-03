@@ -1,6 +1,5 @@
 
 const Influx = require('influx')
-const { toNanoDate } = Influx
 
 // const influx = new Influx.InfluxDB('http://root:root@localhost:8086/suds', {
 const influx = new Influx.InfluxDB('https://suds:suds@influx.ingeinsta.com:443/suds', {
@@ -26,12 +25,11 @@ module.exports = {
       whereClause = 'where '
       if (sensorType) whereClause += `sensorType = ${sensorType} `
       if (sensorId) whereClause += (sensorType ? ` and ` : ``) + `sensorId = ${sensorId}`
-
-      // fromDate = toNanoDate(String(new Date(fromDate).getTime() * 1000000)).toNanoISOString()
-      // toDate = toNanoDate(String(new Date(toDate).getTime() * 1000000)).toNanoISOString()
-
-      // console.log(fromDate)
-      // console.log(toDate)
+      if (fromDate) whereClause += ((sensorType || sensorId) ? ` and ` : ``) + `time >= ${fromDate}`
+      if (toDate) {
+        whereClause += ((sensorType || sensorId || fromDate) ? ` and ` : ``) +
+          `time <= ${toDate}`
+      }
     }
 
     const query = `
@@ -39,9 +37,7 @@ module.exports = {
     ${whereClause || ''}
     order by time desc
     `
-    // where time >= ${fromDate} and time <= ${toDate}${tags}
-    // `
-    console.log(query)
+
     return influx.query(query)
   },
 
