@@ -1,0 +1,171 @@
+{
+	"info": {
+		"name": "suds",
+		"_postman_id": "46cc7bf5-a001-e2ec-5a77-aab93fceba11",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"measurementType\": \"ph\",\n\t\"sensorType\": \"entrada\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": \"2018-01-01T00:00:10\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4400/measurement",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4400",
+					"path": [
+						"measurement"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:4400/measurement?measurementType=ph&fromDate=2008-01-01&toDate=2020-01-01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4400",
+					"path": [
+						"measurement"
+					],
+					"query": [
+						{
+							"key": "measurementType",
+							"value": "ph",
+							"equals": true
+						},
+						{
+							"key": "fromDate",
+							"value": "2008-01-01",
+							"equals": true
+						},
+						{
+							"key": "toDate",
+							"value": "2020-01-01",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:4400/measurement?measurementType=ph",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4400",
+					"path": [
+						"measurement"
+					],
+					"query": [
+						{
+							"key": "measurementType",
+							"value": "ph",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:4400/measurement?measurementType=ph&sensorType='entrada'",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4400",
+					"path": [
+						"measurement"
+					],
+					"query": [
+						{
+							"key": "measurementType",
+							"value": "ph",
+							"equals": true
+						},
+						{
+							"key": "sensorType",
+							"value": "'entrada'",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get4",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:4400/measurement?measurementType=ph&sensorId='1'",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4400",
+					"path": [
+						"measurement"
+					],
+					"query": [
+						{
+							"key": "measurementType",
+							"value": "ph",
+							"equals": true
+						},
+						{
+							"key": "sensorId",
+							"value": "'1'",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
