@@ -9,14 +9,14 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 
-const { BACKEND_PORT } = require('./config')
+const { BACKEND_PORT, PUBLIC_PATH } = require('./config')
 
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(cors())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
 app.set('port', BACKEND_PORT)
 
 const server = http.createServer(app)

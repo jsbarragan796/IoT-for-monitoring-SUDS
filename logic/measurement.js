@@ -1,8 +1,9 @@
 
 const Influx = require('influx')
 
-// const influx = new Influx.InfluxDB('http://root:root@localhost:8086/suds', {
-const influx = new Influx.InfluxDB('https://suds:suds@influx.ingeinsta.com:443/suds', {
+const { INFLUX_DB_URL } = require('../config')
+
+const influx = new Influx.InfluxDB(INFLUX_DB_URL, {
   schema: [
     {
       measurement: 'ph',
