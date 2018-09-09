@@ -41,13 +41,14 @@ const eventDurationMins = 120
 const timeBetweenEventsMins = 60
 const sensors = 2
 const intervalSecs = 0.5
+const batchPercent = 1.5
 
 const before = async () => {
   await influx.dropDatabase(INFLUX_DB_DATABASE)
   await influx.createDatabase(INFLUX_DB_DATABASE)
 }
 
-const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMins, sensors, intervalSecs) => {
+const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMins, sensors, intervalSecs, batchPercent) => {
   await before()
   let date = initialDate
   const eventDuration = eventDurationMins * 60 * 1000
@@ -64,7 +65,8 @@ const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMin
   let prevProgress = -1
 
   console.log(`time points: ${totalMeditionsPerType}`)
-  console.log(`total meditions: ${totalMeditionsPerType * sensors}\n`)
+  console.log(`total meditions: ${totalMeditionsPerType * sensors}`)
+  console.log(`total records: ${totalMeditionsPerType * sensors * 2}\n`)
 
   for (let i = 0; i < events; i++) {
     for (let k = 0; k < eventDuration; k += interval) {
@@ -78,7 +80,7 @@ const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMin
             sensorId: j
           },
           fields: {
-            conductivity
+            value: conductivity
           },
           timestamp: new Date(date)
         })
@@ -88,7 +90,7 @@ const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMin
             sensorId: j
           },
           fields: {
-            level
+            value: level
           },
           timestamp: new Date(date)
         })
@@ -96,7 +98,7 @@ const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMin
 
       count++
       progress = Math.round(10000 * count / totalMeditionsPerType) / 100
-      if ((progress - 1) > prevProgress) {
+      if ((progress - batchPercent) >= prevProgress) {
         await influx.writePoints(measurements)
         measurements = []
         console.log(`count: ${count * sensors} -> ${progress}%`)
@@ -111,7 +113,7 @@ const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMin
   console.log(`finished in : ${Math.round((new Date().getTime() - time) / (1000 * 60))}min\n`)
 }
 
-init(initialDate, events, eventDurationMins, timeBetweenEventsMins, sensors, intervalSecs)
+init(initialDate, events, eventDurationMins, timeBetweenEventsMins, sensors, intervalSecs, batchPercent)
 .catch((e) => {
   console.log(e)
 })

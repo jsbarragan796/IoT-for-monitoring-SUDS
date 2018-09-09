@@ -32,11 +32,12 @@ const influx = new Influx.InfluxDB({
 })
 
 module.exports = {
-  getMeasurements: async (measurementType, sensorId, fromDate, toDate) => {
+  getMeasurements: async (measurementType, sensorId, fromDate, toDate, aggregate, timeRange) => {
     let whereClause
+    let groupClause
 
     if (sensorId || fromDate || toDate) {
-      whereClause = 'where '
+      whereClause = 'WHERE '
       if (sensorId) whereClause += `sensorId = ${sensorId}`
       if (fromDate) whereClause += (sensorId ? ` and ` : ``) + `time >= ${fromDate}`
       if (toDate) {
@@ -45,11 +46,18 @@ module.exports = {
       }
     }
 
+    if (timeRange) {
+      groupClause = `GROUP BY time(${timeRange})`
+    }
+
     const query = `
-    select * from ${measurementType}
+    SELECT ${aggregate ? `${aggregate}(${'value'})` : '*'} 
+    FROM ${measurementType}
     ${whereClause || ''}
-    order by time desc
+    ${groupClause || ''}
+    ORDER BY time desc
     `
+    console.log(query)
 
     return influx.query(query)
   },

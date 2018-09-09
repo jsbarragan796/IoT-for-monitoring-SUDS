@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"measurementType\": \"ph\",\n\t\"sensorType\": \"entrada\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": \"2018-01-01T00:00:10\"\n}"
+					"raw": "{\n\t\"measurementType\": \"ph\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": \"2018-01-01T00:00:10\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:4400/measurement",
@@ -36,13 +36,13 @@
 			"response": []
 		},
 		{
-			"name": "get1",
+			"name": "measuresFromTypeFromDateRange",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=ph&fromDate=2008-01-01&toDate=2020-01-01",
+					"raw": "http://localhost:4400/measurement?measurementType=level&fromDate='2008-01-01'&toDate='2020-01-01'",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -54,33 +54,33 @@
 					"query": [
 						{
 							"key": "measurementType",
-							"value": "ph",
+							"value": "level",
 							"equals": true
 						},
 						{
 							"key": "fromDate",
-							"value": "2008-01-01",
+							"value": "'2008-01-01'",
 							"equals": true
 						},
 						{
 							"key": "toDate",
-							"value": "2020-01-01",
+							"value": "'2020-01-01'",
 							"equals": true
 						}
 					]
 				},
-				"description": ""
+				"description": "Las medidas de un tipo (nivel) de un rango de fechas"
 			},
 			"response": []
 		},
 		{
-			"name": "get2",
+			"name": "aggregatesByTimeFromTypeFromDateRange",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=ph",
+					"raw": "http://localhost:4400/measurement?measurementType=level&aggregate=mean&timeRange=5m&fromDate='2018-06-06 02:00:00'&toDate='2018-06-06 09:00:00'",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -92,56 +92,43 @@
 					"query": [
 						{
 							"key": "measurementType",
-							"value": "ph",
-							"equals": true
-						}
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "get3",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=ph&sensorType='entrada'",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4400",
-					"path": [
-						"measurement"
-					],
-					"query": [
-						{
-							"key": "measurementType",
-							"value": "ph",
+							"value": "level",
 							"equals": true
 						},
 						{
-							"key": "sensorType",
-							"value": "'entrada'",
+							"key": "aggregate",
+							"value": "mean",
+							"equals": true
+						},
+						{
+							"key": "timeRange",
+							"value": "5m",
+							"equals": true
+						},
+						{
+							"key": "fromDate",
+							"value": "'2018-06-06 02:00:00'",
+							"equals": true
+						},
+						{
+							"key": "toDate",
+							"value": "'2018-06-06 09:00:00'",
 							"equals": true
 						}
 					]
 				},
-				"description": ""
+				"description": "Agrupamiento por funcion (max) de medidas de un tipo (nivel) de un rango de fechas"
 			},
 			"response": []
 		},
 		{
-			"name": "get4",
+			"name": "measuresFromTypeFromSensorFromDateRange",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=ph&sensorId='1'",
+					"raw": "http://localhost:4400/measurement?measurementType=level&fromDate='2008-01-01'&toDate='2020-01-01'",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -153,17 +140,75 @@
 					"query": [
 						{
 							"key": "measurementType",
-							"value": "ph",
+							"value": "level",
+							"equals": true
+						},
+						{
+							"key": "fromDate",
+							"value": "'2008-01-01'",
+							"equals": true
+						},
+						{
+							"key": "toDate",
+							"value": "'2020-01-01'",
+							"equals": true
+						}
+					]
+				},
+				"description": "Las medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
+			},
+			"response": []
+		},
+		{
+			"name": "aggregatesByTimeFromTypeFromSensorFromDateRange",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:4400/measurement?measurementType=level&aggregate=mean&timeRange=5m&sensorId='0'&fromDate='2018-06-06 02:00:00'&toDate='2018-06-06 09:00:00'",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4400",
+					"path": [
+						"measurement"
+					],
+					"query": [
+						{
+							"key": "measurementType",
+							"value": "level",
+							"equals": true
+						},
+						{
+							"key": "aggregate",
+							"value": "mean",
+							"equals": true
+						},
+						{
+							"key": "timeRange",
+							"value": "5m",
 							"equals": true
 						},
 						{
 							"key": "sensorId",
-							"value": "'1'",
+							"value": "'0'",
+							"equals": true
+						},
+						{
+							"key": "fromDate",
+							"value": "'2018-06-06 02:00:00'",
+							"equals": true
+						},
+						{
+							"key": "toDate",
+							"value": "'2018-06-06 09:00:00'",
 							"equals": true
 						}
 					]
 				},
-				"description": ""
+				"description": "Agrupamiento por funcion (max) de medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
 			},
 			"response": []
 		}

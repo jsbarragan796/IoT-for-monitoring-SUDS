@@ -11,5 +11,6 @@ module.exports = {
   INFLUX_DB_PROTOCOL: isDev ? process.env.INFLUX_DB_PROTOCOL_DEV : process.env.INFLUX_DB_PROTOCOL,
   PUBLIC_PATH: process.env.PUBLIC_PATH,
 
-  QUERY_MUST_HAVE_MEASUREMENT_TYPE: 'Debe especificar el tipo de medición'
+  QUERY_MUST_HAVE_MEASUREMENT_TYPE: 'Debe especificar el tipo de medición',
+  QUERY_MUST_HAVE_FUNCTION_AND_TIME_RANGE: 'Debe especificar función e intervalos de agrupamiento'
 }
