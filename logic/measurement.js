@@ -1,34 +1,46 @@
 
 const Influx = require('influx')
 
-const { INFLUX_DB_URL } = require('../config')
+const { INFLUX_DB_DATABASE, INFLUX_DB_HOST, INFLUX_DB_PORT,
+  INFLUX_DB_USERNAME, INFLUX_DB_PASSWORD, INFLUX_DB_PROTOCOL } = require('../config')
 
-const influx = new Influx.InfluxDB(INFLUX_DB_URL, {
-  schema: [
-    {
-      measurement: 'ph',
-      fields: {
-        value: Influx.FieldType.FLOAT
-      },
-      tags: [
-        'sensorType',
-        'sensorId'
-      ]
-    }
-  ]
+const influx = new Influx.InfluxDB({
+  database: INFLUX_DB_DATABASE,
+  host: INFLUX_DB_HOST,
+  port: INFLUX_DB_PORT,
+  username: INFLUX_DB_USERNAME,
+  password: INFLUX_DB_PASSWORD,
+  protocol: INFLUX_DB_PROTOCOL
+}, {
+  schema: [ {
+    measurement: 'conductivity',
+    fields: {
+      value: Influx.FieldType.FLOAT
+    },
+    tags: [
+      'sensorId'
+    ]
+  }, {
+    measurement: 'level',
+    fields: {
+      value: Influx.FieldType.FLOAT
+    },
+    tags: [
+      'sensorId'
+    ]
+  }]
 })
 
 module.exports = {
-  getMeasurements: async (measurementType, sensorType, sensorId, fromDate, toDate) => {
+  getMeasurements: async (measurementType, sensorId, fromDate, toDate) => {
     let whereClause
 
-    if (sensorType || sensorId || fromDate || toDate) {
+    if (sensorId || fromDate || toDate) {
       whereClause = 'where '
-      if (sensorType) whereClause += `sensorType = ${sensorType} `
-      if (sensorId) whereClause += (sensorType ? ` and ` : ``) + `sensorId = ${sensorId}`
-      if (fromDate) whereClause += ((sensorType || sensorId) ? ` and ` : ``) + `time >= ${fromDate}`
+      if (sensorId) whereClause += `sensorId = ${sensorId}`
+      if (fromDate) whereClause += (sensorId ? ` and ` : ``) + `time >= ${fromDate}`
       if (toDate) {
-        whereClause += ((sensorType || sensorId || fromDate) ? ` and ` : ``) +
+        whereClause += ((sensorId || fromDate) ? ` and ` : ``) +
           `time <= ${toDate}`
       }
     }
@@ -55,7 +67,7 @@ module.exports = {
 
     await influx.writePoints([{
       measurement: measurementType,
-      tags: { sensorType, sensorId },
+      tags: { sensorId },
       fields: { value },
       timestamp
     }])

@@ -11,11 +11,12 @@ const { QUERY_MUST_HAVE_MEASUREMENT_TYPE } = require('../config')
 // })
 
 router.get('/', async (req, res, next) => {
-  const { measurementType, sensorType, sensorId, fromDate, toDate } = req.query
+  const { measurementType, sensorId, fromDate, toDate } = req.query
 
   try {
     if (!measurementType) throw new Error(QUERY_MUST_HAVE_MEASUREMENT_TYPE)
-    const measurements = await measurementLogic.getMeasurements(measurementType, sensorType, sensorId, fromDate, toDate)
+    const measurements = await measurementLogic.getMeasurements(measurementType, sensorId, fromDate, toDate)
+    console.log(measurements.length)
     res.send(measurements)
   } catch (e) {
     res.status(400).send(e.message)

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "DEV=1 nodemon --ext js index.js",
-    "cypress": "./node_modules/cypress/bin/cypress run ."
+    "dev": "DEV=1 nodemon --ignore scripts/ --ext js index.js",
+    "poblate": "DEV=1 node scripts/poblate.js"
   },
   "repository": {
     "type": "git",
