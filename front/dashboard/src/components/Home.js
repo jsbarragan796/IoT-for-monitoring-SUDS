@@ -9,7 +9,7 @@ class Home extends Component {
     let resp = ''
     if(this.props.auth.isAuthenticated()===false){
         resp = (
-        <div className="center-div">       
+        <div className="inicio">       
           <button onClick={()=>{this.props.auth.login()}}  className="btn btn-dark btn-lg btn-block">
           Iniciar sesión
           </button>
@@ -21,7 +21,7 @@ class Home extends Component {
     }
     return (
       <div className="main">
-        <div className="center-div">       
+        <div className="inicio">       
           <img className="logo" src={logo} alt="Logo"/>
         </div>
         <div className="center-div">       

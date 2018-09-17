@@ -19,7 +19,7 @@ class Callback extends Component {
   render() {
     return (
       <div className="main">
-        <div className="center-div">       
+        <div className="inicio">       
           <img className="logo" src={logo} alt="Logo"/>
         </div>
         <div className="center-div">       
