@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "DEV=1 nodemon --ignore scripts/ --ext js index.js",
+    "dev": "nodemon --ignore scripts/ --ext js index.js",
     "poblate": "DEV=1 node scripts/poblate.js"
   },
   "repository": {
@@ -27,5 +27,8 @@
     "http": "0.0.0",
     "influx": "^5.0.7",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
   }
 }

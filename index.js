@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(cors())
 app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
-app.set('port', BACKEND_PORT)
+
 
 const server = http.createServer(app)
 server.listen(BACKEND_PORT)
