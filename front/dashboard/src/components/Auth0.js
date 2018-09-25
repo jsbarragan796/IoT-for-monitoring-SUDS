@@ -48,6 +48,7 @@ export default class Auth0 {
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
         localStorage.removeItem('expires_at');
+        localStorage.clear();
         // navigate to the home route
         location.pathname= '/';
       }

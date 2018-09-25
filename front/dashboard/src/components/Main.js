@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Data from './Data';
 
 class Main extends Component {
 
@@ -13,6 +14,7 @@ class Main extends Component {
           <button onClick={()=>{this.props.auth.logout()}}  className="btn btn-danger btn-lg btn-block">
           cerrar sesión
           </button>
+          <Data />
         </div>
     );
   }
