@@ -81,7 +81,7 @@ module.exports = {
       tags: { sensorId },
       fields: { value },
       timestamp
-    }])
+    }]).catch((e)=>console.log(e))
   }
 }
 
