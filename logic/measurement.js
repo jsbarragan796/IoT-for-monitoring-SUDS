@@ -72,7 +72,10 @@ module.exports = {
   */
   saveMeasurement: async (sensorType, sensorId, measurementType, value, timestamp) => {
     // MEASUREMENT
-    console.log("mesuarement ",timestamp)
+    console.log("timestamp ",timestamp)
+    console.log("sensorId ",sensorId)
+    console.log("value ",value)
+
     await influx.writePoints([{
       measurement: measurementType,
       tags: { sensorId },
