@@ -30,7 +30,7 @@ class App extends Component {
       <BrowserRouter>
       <Switch>
       <Route exact path="/" render={()=><Home user={this.state.user} auth={this.state.auth}/>}/>
-      <Route path="/home2" render={()=><Home user={this.state.user} auth={this.state.auth}/>} />
+      <Route path="/home2" render={()=><Home user={this.state.user} auth={this.state.auth}/>}/>
       <Route path="/callback" render={()=><Callback login = {(user) => this.setUser(user)}/>}/>
       <Route component={ErrorPage}/>
       </Switch>

@@ -29,9 +29,9 @@ class App extends Component {
     return (
       <BrowserRouter>
       <Switch>
-      <Route exact path="/" render={()=><Home user={this.state.user} auth={this.state.auth}/>}/>
-      <Route path="/home2" render={()=><Home user={this.state.user} auth={this.state.auth}/>} />
-      <Route path="/callback" render={()=><Callback login = {(user) => this.setUser(user)}/>}/>
+      <Route path="/" render={()=><Home user={this.state.user} auth={this.state.auth}/>}  exact/>
+      <Route path="/hola2" render={()=><Home user={this.state.user} auth={this.state.auth}/>}  exact/>
+      <Route path="/callback" render={()=><Callback login = {(user) => this.setUser(user)}/>} exact/>
       <Route component={ErrorPage}/>
       </Switch>
       </BrowserRouter>

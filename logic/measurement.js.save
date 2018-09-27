@@ -71,7 +71,10 @@ module.exports = {
   * @returns {Promise <Object, Error>} A promise that resolves with the client or rejects an error
   */
   saveMeasurement: async (sensorType, sensorId, measurementType, value, timestamp) => {
-    // MEASUREMENT   
+    // MEASUREMENT
+    console.log("timestamp ",timestamp)
+    console.log("sensorId ",sensorId)
+    console.log("value ",valu
     await influx.writePoints([{
       measurement: measurementType,
       tags: { sensorId },

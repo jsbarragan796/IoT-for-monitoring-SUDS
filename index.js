@@ -16,8 +16,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(cors())
-app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
-
 
 const server = http.createServer(app)
 server.listen(BACKEND_PORT)
@@ -31,3 +29,9 @@ routes.forEach(routeStr => {
   let route = require('./routes/' + routeName)
   app.use('/' + routeName, route)
 })
+
+app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
+app.get('*', function(req, res) {
+  res.sendFile('index.html', {root: path.join(__dirname, PUBLIC_PATH)});
+});
+
