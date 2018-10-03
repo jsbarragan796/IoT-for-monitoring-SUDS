@@ -34,8 +34,8 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const { sensorType, sensorId, measurementType, value, timestamp } = req.body
-  const ts = new Date(timestamp*1000)
-  console.log("getting data ",req.body)
+  const ts = new Date(timestamp * 1000)
+  console.log('getting data ', req.body)
   const val = Number(value)
   try {
     await measurementLogic.saveMeasurement(sensorType, sensorId, measurementType, val, ts)
