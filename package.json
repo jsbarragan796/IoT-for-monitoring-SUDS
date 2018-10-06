@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "first-deploy": "pm2 start index.js --name suds-api",
+    "deploy": "pm2 delete suds-api && pm2 start index.js --name suds-api",
     "dev": "nodemon --ignore scripts/ --ext js index.js",
     "poblate": "DEV=1 node scripts/poblate.js"
   },
