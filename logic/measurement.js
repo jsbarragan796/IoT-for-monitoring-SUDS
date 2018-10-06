@@ -4,6 +4,8 @@ const Influx = require('influx')
 const { INFLUX_DB_DATABASE, INFLUX_DB_HOST, INFLUX_DB_PORT,
   INFLUX_DB_USERNAME, INFLUX_DB_PASSWORD, INFLUX_DB_PROTOCOL } = require('../config')
 
+const eventLogic = require('./event')
+
 const influx = new Influx.InfluxDB({
   database: INFLUX_DB_DATABASE,
   host: INFLUX_DB_HOST,
@@ -71,13 +73,22 @@ module.exports = {
   * @returns {Promise <Object, Error>} A promise that resolves with the client or rejects an error
   */
   saveMeasurement: async (sensorType, sensorId, measurementType, value, timestamp) => {
-    // MEASUREMENT   
+    const { _id, lastMeasurementDate } = await eventLogic.findMostRecentEvent()
+
+    if (lastMeasurementDate + 1000 * 60 * 30 < timestamp) {
+      const data = { _id, finishDate: lastMeasurementDate, startDate: timestamp }
+      await eventLogic.endEventAndCreateOne(data)
+    } else {
+      const eventToUpdate = { _id, lastMeasurementDate: timestamp }
+      await eventLogic.updateLastMeasurementDate(eventToUpdate)
+    }
+
     await influx.writePoints([{
       measurement: measurementType,
       tags: { sensorId },
       fields: { value },
       timestamp
-    }]).catch((e)=>console.log(e))
+    }]).catch((e) => console.log(e))
   }
 }
 
