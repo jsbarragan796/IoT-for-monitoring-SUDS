@@ -1,6 +1,6 @@
 
 const { MONGODB_URI } = require('../config')
-
+const { sendNewRainEventStartedAlert } = require('../functions')
 const MongoCLient = require('mongodb').MongoClient
 
 module.exports = {
@@ -34,7 +34,6 @@ module.exports = {
   },
 
   endEventAndCreateOne: (data) => {
-    console.log(data)
     return new Promise((resolve, reject) => {
       MongoCLient.connect(MONGODB_URI, async (err, client) => {
         if (err) reject(err)
@@ -49,8 +48,17 @@ module.exports = {
           await Events.insertOne({
             'startDate': data.startDate, 'lastMeasurementDate': data.startDate}
           )
-          resolve()
-          // client.close()
+          const Users = client.db().collection('User')
+          Users.find({}).toArray(async (err, users) => {
+            if (err) reject(err)
+            else {
+              for (let user of users) {
+                const { phone } = user
+                await sendNewRainEventStartedAlert(phone)
+              }
+              resolve()
+            }
+          })
         }
       })
     })

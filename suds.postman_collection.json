@@ -7,6 +7,44 @@
 	},
 	"item": [
 		{
+			"name": "measuresFromTypeFromSensorFromDateRange",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:4400/measurement?measurementType=level&fromDate='2008-01-01'&toDate='2020-01-01'",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4400",
+					"path": [
+						"measurement"
+					],
+					"query": [
+						{
+							"key": "measurementType",
+							"value": "level",
+							"equals": true
+						},
+						{
+							"key": "fromDate",
+							"value": "'2008-01-01'",
+							"equals": true
+						},
+						{
+							"key": "toDate",
+							"value": "'2020-01-01'",
+							"equals": true
+						}
+					]
+				},
+				"description": "Las medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
+			},
+			"response": []
+		},
+		{
 			"name": "post",
 			"request": {
 				"method": "POST",
@@ -14,11 +52,15 @@
 					{
 						"key": "Content-Type",
 						"value": "application/json"
+					},
+					{
+						"key": "authorization",
+						"value": "EFLSJS09870SFAKLJSDV9080DSV8SDLKJS57SAFKS654S5S7"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"measurementType\": \"ph\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": \"2018-01-01T00:00:10\"\n}"
+					"raw": "{\n\t\"measurementType\": \"ph\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": 1538930569\n}"
 				},
 				"url": {
 					"raw": "http://localhost:4400/measurement",
@@ -118,44 +160,6 @@
 					]
 				},
 				"description": "Agrupamiento por funcion (max) de medidas de un tipo (nivel) de un rango de fechas"
-			},
-			"response": []
-		},
-		{
-			"name": "measuresFromTypeFromSensorFromDateRange",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=level&fromDate='2008-01-01'&toDate='2020-01-01'",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4400",
-					"path": [
-						"measurement"
-					],
-					"query": [
-						{
-							"key": "measurementType",
-							"value": "level",
-							"equals": true
-						},
-						{
-							"key": "fromDate",
-							"value": "'2008-01-01'",
-							"equals": true
-						},
-						{
-							"key": "toDate",
-							"value": "'2020-01-01'",
-							"equals": true
-						}
-					]
-				},
-				"description": "Las medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
 			},
 			"response": []
 		},

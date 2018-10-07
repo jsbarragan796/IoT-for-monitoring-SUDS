@@ -31,7 +31,9 @@ routes.forEach(routeStr => {
 })
 
 app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
-app.get('*', function(req, res) {
-  res.sendFile('index.html', {root: path.join(__dirname, PUBLIC_PATH)});
-});
+app.get('*', function (req, res) {
+  res.sendFile('index.html', {root: path.join(__dirname, PUBLIC_PATH)})
+})
 
+// const { sendNewRainEventStartedAlert } = require('./functions')
+// sendNewRainEventStartedAlert('+573138296275')
