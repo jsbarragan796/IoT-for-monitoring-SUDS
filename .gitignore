@@ -5,6 +5,9 @@ node_modules/
 
 package-lock.json
 
+<<<<<<< HEAD
 
 entrada.csv
 salida.csv
+=======
+>>>>>>> 42e5077463e661e67e8872fc42661c5783aac254

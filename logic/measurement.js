@@ -59,7 +59,6 @@ module.exports = {
     ${groupClause || ''}
     ORDER BY time desc
     `
-    console.log(query)
 
     return influx.query(query)
   },
@@ -73,11 +72,31 @@ module.exports = {
   * @returns {Promise <Object, Error>} A promise that resolves with the client or rejects an error
   */
   saveMeasurement: async (sensorType, sensorId, measurementType, value, timestamp) => {
-    const { _id, lastMeasurementDate } = await eventLogic.findMostRecentEvent()
+    const { _id, lastMeasurementDate: mostRecentEventFinishDate, startDate: mostRecentEventStartDate } = await eventLogic.findMostRecentEvent()
 
-    if (lastMeasurementDate + 1000 * 60 * 30 < timestamp) {
-      const data = { _id, finishDate: lastMeasurementDate, startDate: timestamp }
-      await eventLogic.endEventAndCreateOne(data)
+    if (mostRecentEventFinishDate + 1000000000 * 60 * 30 < timestamp) {
+      const inputQuery = `
+        SELECT MEAN(value)
+        FROM level
+        WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
+          AND sensorId = '0'
+        GROUP BY time(1m)
+      `
+      const lastEventInputMeasurements = await influx.query(inputQuery)
+
+      const outputQuery = `
+        SELECT MEAN(value)
+        FROM level
+        WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
+          AND sensorId= '1'
+        GROUP BY time(1m)
+      `
+      const lastEventOutputMeasurements = await influx.query(outputQuery)
+
+      const lastEventData = { _id, finishDate: mostRecentEventFinishDate, startDate: mostRecentEventStartDate, inputMeasurements: lastEventInputMeasurements, outputMeasurements: lastEventOutputMeasurements }
+      const newEventData = { startDate: timestamp }
+
+      await eventLogic.endEventAndCreateOne(lastEventData, newEventData)
     } else {
       const eventToUpdate = { _id, lastMeasurementDate: timestamp }
       await eventLogic.updateLastMeasurementDate(eventToUpdate)
@@ -91,13 +110,3 @@ module.exports = {
     }]).catch((e) => console.log(e))
   }
 }
-
-// influx.writePoints([{
-//   measurement: 'ph',
-//   tags: { sensorType: 'entrada', sensorId: '1' },
-//   fields: { value: 11 },
-//   timestamp: new Date()
-// }])
-// .then(() => {
-//   console.log('coronamos')
-// })
