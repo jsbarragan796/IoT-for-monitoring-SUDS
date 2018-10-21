@@ -33,19 +33,25 @@ const influx = new Influx.InfluxDB({
   }]
 })
 
+// 1528264800000000
+// 1528264801000000 1s
+// 1528264860000000 1m
+
 // 2018/06/06 06:00:00
 const initialDate = 1528264800000
 
-const events = 4
+const events = 0
 const eventDurationMins = 120
-const timeBetweenEventsMins = 60
-const sensors = 2
+const timeBetweenEventsMins = 60 * 8
+const sensors = 0
 const intervalSecs = 0.5
 const batchPercent = 1.5
 
 const before = async () => {
   await influx.dropDatabase(INFLUX_DB_DATABASE)
+  console.log('deleted database')
   await influx.createDatabase(INFLUX_DB_DATABASE)
+  console.log('created database\n')
 }
 
 const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMins, sensors, intervalSecs, batchPercent) => {
@@ -110,7 +116,7 @@ const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMin
   }
 
   await influx.writePoints(measurements)
-  console.log(`finished in : ${Math.round((new Date().getTime() - time) / (1000 * 60))}min\n`)
+  console.log(`\nfinished in : ${Math.round((new Date().getTime() - time) / (1000 * 60))} mins\n`)
 }
 
 init(initialDate, events, eventDurationMins, timeBetweenEventsMins, sensors, intervalSecs, batchPercent)

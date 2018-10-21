@@ -39,6 +39,7 @@ router.post('/', async (req, res, next) => {
       await measurementLogic.saveMeasurement(sensorType, sensorId, measurementType, val, ts)
       res.sendStatus(200)
     } catch (e) {
+      console.log(e)
       res.status(400).send(e.message)
     }
   }
