@@ -7,7 +7,8 @@
     "first-deploy": "pm2 start index.js --name suds-api",
     "deploy": "pm2 delete suds-api && pm2 start index.js --name suds-api",
     "dev": "nodemon --ignore scripts/ --ext js index.js",
-    "poblate": "DEV=1 node scripts/poblate.js"
+    "poblate": "DEV=1 node scripts/poblate.js",
+    "importdata": "node scripts/import_data.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "fast-csv": "^2.4.1",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "influx": "^5.0.7",
