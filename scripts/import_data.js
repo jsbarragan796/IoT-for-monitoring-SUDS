@@ -1,84 +1,117 @@
+require('dotenv').config()
 const fs = require('fs')
 const { SENSOR_SECRET_TOKEN  } = require('../config')
 const csv = require('fast-csv')
-
-let entry = []
-
-let exit = []
-
-fs.createReadStream('entrada.csv')
-    .pipe(csv())
-    .on('data', function(data){
-        data[0] = Number(data[0])
-        data[1] = Number(data[1])
-        data[2] = Number(data[2])
-        data[3] = Number(data[3])
-        entry.push(data);
-    })
-    .on('end', function(){
-        console.log(entry[2234]);
-    });
-
-fs.createReadStream('salida.csv')
-    .pipe(csv())
-    .on('data', function(data){
-        data[0] = Number(data[0])
-        data[1] = Number(data[1])
-        data[2] = Number(data[2])
-        data[3] = Number(data[3])
-        exit.push(data);
-    })
-    .on('end', function(){
-        console.log(exit[2234]);
-    });
-
-let events = [
-    [1496925000,1496930700],
-    [1431854100,1431869700],
-    [1494859800,1494872100],
-    [1494578400,1494605700] ]
-
 const http = require('http')
 
+const fileNames = ["entrada","salida"]
 
-  
-  const options = {
+const getDataFromFile = (fileName) => {
+    return new Promise((resolve, reject) => {
+        let allData = []
+        fs.createReadStream(`${fileName}.csv`)
+        .pipe(csv())
+        .on('data', function(data){
+            data[0] = Number(data[0])
+            data[1] = Number(data[1])
+            data[2] = Number(data[2])
+            data[3] = Number(data[3])
+            data[4] = fileName
+            allData.push(data);
+        })
+        .on('end', function(){
+            resolve(allData)
+        })
+        .on('error',(e) => {
+            reject(e)
+        })
+    })
+}
+
+const events = [
+    [1494578400,1494605700],
+    [1494859800,1494872100],
+    [1495012500,1495028100],
+    [1496925000,1496930700]
+    ]
+
+const postOptions = {
     hostname: 'localhost',
     port: 4400,
-    path: '/mesuarement',
+    path: '/measurement',
     method: 'POST',
     headers: {
       'authorization': SENSOR_SECRET_TOKEN,
       'Content-Type':'application/json'
     }
-  };
+};
   
-  const req = http.request(options, (res) => {
-    console.log(`STATUS: ${res.statusCode}`);
-    console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-    res.setEncoding('utf8');
-    res.on('data', (chunk) => {
-      console.log(`BODY: ${chunk}`);
-    });
-    res.on('end', () => {
-      console.log('No more data in response.');
-    });
-  });
-  
-  req.on('error', (e) => {
-    console.error(`problem with request: ${e.message}`);
-  });
+const postData = (body) =>{
+    return new Promise((resolve,reject)=>{
+        const req = http.request(postOptions, (res) => {
+            res.setEncoding('utf8');
+        })
+        req.on('error', (e) => {
+            console.error(`problem with post request: ${e.message}`);
+            reject(e.message)
+        })
+        req.on('response', (e) => {
+           // console.log("Status Code",e.statusCode);
+           resolve(e.statusCode)
+        })
+        req.write(body)
+        req.end()
+    })
+}
+
   
 
-
-  const postBody = (sensorId,value,timestamp) => {
-    return querystring.stringify({
+const buildPostBody = (sensorId,value,timestamp) => {
+    return JSON.stringify({
         'measurementType': 'level',
         'sensorId': sensorId,
         'value':  value,
         'timestamp': timestamp
       })
-  } 
-  // write data to request body
-  req.write(postBody);
-  req.end();
+} 
+
+const postEventData = async (event) => {
+
+    let entry =  await getDataFromFile(fileNames[0])
+    let exit = await getDataFromFile(fileNames[1])
+
+    let entryEventData =  entry.filter((row)=>{
+        return(row[0]>= event[0] && row[0]<= event[1])
+        })
+    let exitEventData =  exit.filter((row)=>{
+        return(row[0]>= event[0] && row[0]<= event[1])
+    })
+  
+    let allData = entryEventData.concat(exitEventData).sort((a,b)=>{
+            if (a[0] < b[0]) {
+                return -1
+            }
+            else if (a[0] > b[0]) {
+                return 1
+            }
+            else {
+                return 0
+            }       
+        })
+
+
+    for (let index = 0; index < allData.length; index++) {
+        const row = allData[index]
+        const body = buildPostBody(row[4],row[3],row[0])
+        await postData(body)        
+    }
+}
+    
+const loadEvents = async () => {
+    events.map((event)=>{     
+        postEventData(event)
+        .catch((e) => {
+        })
+    })
+}
+loadEvents()

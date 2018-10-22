@@ -1,13 +1,8 @@
-node_modules/
-.env
-
-*.pem
 
 package-lock.json
-
-<<<<<<< HEAD
-
 entrada.csv
 salida.csv
-=======
->>>>>>> 42e5077463e661e67e8872fc42661c5783aac254
+node_modules/
+.env
+*.pem
+
