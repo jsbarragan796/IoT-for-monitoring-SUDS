@@ -72,7 +72,7 @@ module.exports = {
             volumeOutput += flow * 60
           })
 
-          const didNotGoOut = volumeInput - volumeInput
+          const didNotGoOut = volumeInput - volumeOutput
 
           const efficiency = volumeInput !== 0 ? parseInt(100 * didNotGoOut / volumeInput) : 0
 
