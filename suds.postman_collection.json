@@ -26,7 +26,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528264800000000\n}"
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528264800\n}"
 						},
 						"url": {
 							"raw": "http://localhost:4400/measurement",
@@ -59,7 +59,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528264800000000\n}"
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528264800\n}"
 						},
 						"url": {
 							"raw": "http://localhost:4400/measurement",
@@ -92,7 +92,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528264860000000\n}"
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528264800\n}"
 						},
 						"url": {
 							"raw": "http://localhost:4400/measurement",
@@ -125,7 +125,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528264860000000\n}"
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528264800\n}"
 						},
 						"url": {
 							"raw": "http://localhost:4400/measurement",
@@ -201,7 +201,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": 1528264800000000\n}"
+					"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": 1528264800\n}"
 				},
 				"url": {
 					"raw": "http://localhost:4400/measurement",
@@ -378,7 +378,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 99,\n\t\"timestamp\": 1538264860000000\n}"
+					"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 99,\n\t\"timestamp\": 1528264800\n}"
 				},
 				"url": {
 					"raw": "http://localhost:4400/measurement",
