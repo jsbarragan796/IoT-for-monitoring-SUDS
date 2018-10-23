@@ -79,7 +79,7 @@ module.exports = {
         SELECT MEAN(value)
         FROM level
         WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId = '0'
+          AND sensorId = 'entrada'
         GROUP BY time(1m)
       `
       const lastEventInputMeasurements = await influx.query(inputQuery)
@@ -88,7 +88,7 @@ module.exports = {
         SELECT MEAN(value)
         FROM level
         WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId= '1'
+          AND sensorId= 'salida'
         GROUP BY time(1m)
       `
       const lastEventOutputMeasurements = await influx.query(outputQuery)
