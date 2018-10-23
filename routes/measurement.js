@@ -32,7 +32,7 @@ router.post('/', async (req, res, next) => {
   else {
     const { sensorType, sensorId, measurementType, value, timestamp } = body
 
-    const ts = timestamp * 1000
+    const ts = timestamp * 1000000000
     const val = Number(value)
 
     try {

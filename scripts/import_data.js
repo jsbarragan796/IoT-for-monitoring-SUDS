@@ -30,10 +30,11 @@ const getDataFromFile = (fileName) => {
 
 const events = [
     [1494578400,1494605700],
-    [1494859800,1494872100],
-    [1495012500,1495028100],
-    [1496925000,1496930700]
+    [1494857340,1494929940],
+    [1495012500,1495029000],
+    [1496922300,1496965500]
     ]
+
 
 const postOptions = {
     hostname: 'localhost',
@@ -102,16 +103,17 @@ const postEventData = async (event) => {
 
     for (let index = 0; index < allData.length; index++) {
         const row = allData[index]
-        const body = buildPostBody(row[4],row[3],row[0])
+        const body = buildPostBody(row[4],row[3],row[0]+18000)
         await postData(body)        
     }
 }
     
 const loadEvents = async () => {
-    events.map((event)=>{     
-        postEventData(event)
-        .catch((e) => {
-        })
-    })
+
+    for (let index = 0; index < events.length; index++) {
+        const event = events[index];
+        await postEventData(event).catch((e) => {})
+        console.log("Termino evento")
+    }
 }
 loadEvents()
