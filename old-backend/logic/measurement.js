@@ -73,7 +73,7 @@ module.exports = {
   */
   saveMeasurement: async (sensorType, sensorId, measurementType, value, timestamp) => {
     const { _id, lastMeasurementDate: mostRecentEventFinishDate, startDate: mostRecentEventStartDate } = await eventLogic.findMostRecentEvent()
- 
+
     if (mostRecentEventFinishDate + 1000000000 * 60 * 30 < timestamp) {
       const inputQuery = `
         SELECT MEAN(value)

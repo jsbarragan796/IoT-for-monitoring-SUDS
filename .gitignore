@@ -1,8 +1,11 @@
 
-package-lock.json
-entrada.csv
-salida.csv
-node_modules/
 .env
 *.pem
 
+package-lock.json
+node_modules/
+
+logs/
+
+entrada.csv
+salida.csv
