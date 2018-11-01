@@ -1,25 +1,9 @@
 require('dotenv').config()
 
-const morgan = require('morgan')
-const http = require('http')
-const cors = require('cors')
-const express = require('express')
-const bodyParser = require('body-parser')
-const fs = require('fs')
 const rfs = require('rotating-file-stream')
+const morgan = require('morgan')
 
-const { PORT, LOG_DIRECTORY } = require('./config')
-
-const app = express()
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors())
-
-const server = http.createServer(app)
-server.listen(PORT)
-server.on('listening', () => {
-  console.log(`Server is running on port ${PORT}\n`)
-})
+const { LOG_DIRECTORY } = require('./config')
 
 const pad = (num) => {
   return (num > 9 ? '' : '0') + num
