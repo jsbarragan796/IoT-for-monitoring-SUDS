@@ -7,7 +7,7 @@ const { sendEventStartAlarm } = require('./alarm')
 module.exports = {
   findAllEvents: () => {
     return new Promise((resolve, reject) => {
-      MongoClient.connect(MONGODB_URI,{ useNewUrlParser: true }, (err, client) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, (err, client) => {
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')
@@ -23,7 +23,7 @@ module.exports = {
 
   findMostRecentEvent: () => {
     return new Promise((resolve, reject) => {
-      MongoClient.connect(MONGODB_URI,{ useNewUrlParser: true }, async (err, client) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')
@@ -37,7 +37,7 @@ module.exports = {
 
   endEventAndCreateOne: (lastEventData, newEventData) => {
     return new Promise((resolve, reject) => {
-      MongoClient.connect(MONGODB_URI,{ useNewUrlParser: true }, async (err, client) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
           const { _id, finishDate, inputMeasurements, outputMeasurements } = lastEventData
@@ -86,7 +86,7 @@ module.exports = {
             startDate, lastMeasurementDate: startDate
           })
 
-          //await sendEventStartAlarm()
+          // await sendEventStartAlarm()
           client.close()
           resolve()
         }
@@ -96,7 +96,7 @@ module.exports = {
 
   updateLastMeasurementDate: (eventToUpdate) => {
     return new Promise((resolve, reject) => {
-      MongoClient.connect(MONGODB_URI,{ useNewUrlParser: true }, async (err, client) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')

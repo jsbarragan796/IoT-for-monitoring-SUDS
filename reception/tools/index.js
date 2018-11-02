@@ -14,6 +14,7 @@ module.exports = {
       try {
         const message = `${sensorId}_$_${measurementType}_$_${val}_$_${ts}`
         producer.produce(KAFKA_TOPIC, null, Buffer.from(message))
+        producer.disconnect()
       } catch (e) {
         console.error('A problem occurred when sending our message')
         console.error(e)
