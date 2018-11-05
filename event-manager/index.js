@@ -1,41 +1,36 @@
-require('dotenv').config()
+(async () => {
+  require('dotenv').config()
 
-const fs = require('fs')
+  const fs = require('fs')
 
-const { LOG_DIRECTORY, KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC } = require('./config')
+  const { LOG_DIRECTORY } = require('./config')
 
-fs.existsSync(LOG_DIRECTORY) || fs.mkdirSync(LOG_DIRECTORY)
+  fs.existsSync(LOG_DIRECTORY) || fs.mkdirSync(LOG_DIRECTORY)
 
-const Kafka = require('node-rdkafka')
+  const { log, findMostRecentEvent, endEventAndCreateOne, updateLastMeasurementDate } = require('./tools')
+  const { getConsumer, getProducer } = require('./kafka')
 
-const consumer = new Kafka.KafkaConsumer({
-  'group.id': 'kafka',
-  'metadata.broker.list': `${KAFKA_HOST}:${KAFKA_PORT}`
-}, {})
+  const consumer = await getConsumer()
+  const producer = await getProducer()
 
-const { log, findMostRecentEvent, endEventAndCreateOne, updateLastMeasurementDate } = require('./functions')
+  consumer
+    .on('data', async (data) => {
+      try {
+        log.info(data.value.toString())
+        const { value: valueMsg } = data
 
-consumer.connect()
+        const message = valueMsg.toString()
+        const parts = message.split('_$_')
+        const timestamp = Number(parts[3])
 
-consumer
-  .on('ready', () => {
-    consumer.subscribe([KAFKA_TOPIC])
-    consumer.consume()
-  })
-  .on('data', async (data) => {
-    try {
-      log.info(data.value.toString())
-      const { value: valueMsg } = data
+        console.log(`Event manager got message ${message}`)
 
-      const message = valueMsg.toString()
-      const parts = message.split('_$_')
-      const timestamp = Number(parts[3])
+        const { _id, lastMeasurementDate: mostRecentEventLastMeasurementDate } = await findMostRecentEvent()
 
-      const { _id, lastMeasurementDate: mostRecentEventLastMeasurementDate } = await findMostRecentEvent()
-
-      if (mostRecentEventLastMeasurementDate + 1000000000 * 60 * 30 < timestamp) await endEventAndCreateOne(_id, timestamp)
-      else await updateLastMeasurementDate(_id, timestamp)
-    } catch (e) {
-      log.error(e.message)
-    }
-  })
+        if (mostRecentEventLastMeasurementDate + 1000000000 * 60 * 30 < timestamp) await endEventAndCreateOne(producer, _id, timestamp)
+        else await updateLastMeasurementDate(_id, timestamp)
+      } catch (e) {
+        log.error(e.message)
+      }
+    })
+})()
