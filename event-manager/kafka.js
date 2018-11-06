@@ -1,6 +1,6 @@
 const Kafka = require('node-rdkafka')
 
-const { KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC_CONSUMER } = require('./config')
+const { KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC_CONSUMER, KAFKA_GROUP } = require('./config')
 
 module.exports = {
   getProducer: () => {
@@ -18,7 +18,7 @@ module.exports = {
   getConsumer: () => {
     return new Promise((resolve, reject) => {
       const consumer = new Kafka.KafkaConsumer({
-        'group.id': 'kafka',
+        'group.id': KAFKA_GROUP,
         'metadata.broker.list': `${KAFKA_HOST}:${KAFKA_PORT}`
       }, {})
 
@@ -26,7 +26,7 @@ module.exports = {
 
       consumer
       .on('ready', () => {
-        console.log('Event manager ready to consume')
+        console.log('Event manager ready to consume\n')
         consumer.subscribe([KAFKA_TOPIC_CONSUMER])
         consumer.consume()
         resolve(consumer)

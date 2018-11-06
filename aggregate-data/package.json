@@ -1,0 +1,19 @@
+{
+  "name": "aggregate-data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "DEV=1 nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "bunyan-rotating-file-stream": "^1.6.3",
+    "dotenv": "^6.1.0",
+    "influx": "^5.0.7",
+    "mongodb": "^3.1.8",
+    "node-rdkafka": "^2.4.2"
+  }
+}
