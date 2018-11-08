@@ -13,6 +13,8 @@ module.exports = {
 
   PUBLIC_PATH: process.env.PUBLIC_PATH,
 
+  PORT: process.env.PORT,
+
   MONGODB_URI: process.env.MONGODB_URI,
 
   QUERY_MUST_HAVE_MEASUREMENT_TYPE: 'Debe especificar el tipo de medición',
