@@ -13,24 +13,28 @@ const EXIT_SENSOR_ID = "salida"
 const MEASUREMENT = "level"
 
 router.get('/', async (req, res, next) => {
-  const { pageNumber} = req.query
+  let { pageNumber} = req.query
+  pageNumber = Number(pageNumber)
   const numberOfEvents = await EventLogic.numberOfEvents()
   const numberOfPages = Math.trunc(numberOfEvents/EVENT_PAGINATION) + (numberOfEvents%EVENT_PAGINATION >0? 1: 0)
   try {
     if ( pageNumber && (pageNumber>numberOfPages || pageNumber<0) ) throw new Error("Pagina fuera de rango")
     else {
+      const currentPage = pageNumber? pageNumber : 1
       const firstEventPage = pageNumber? (pageNumber-1)*EVENT_PAGINATION : 0
       const eventsInPage = pageNumber? ((pageNumber-1)*EVENT_PAGINATION+EVENT_PAGINATION > numberOfEvents? numberOfEvents-firstEventPage: EVENT_PAGINATION) : (numberOfEvents<EVENT_PAGINATION? numberOfEvents: EVENT_PAGINATION)
 
       const events = await EventLogic.findFinishedEvents(firstEventPage,eventsInPage)
-
+ 
       for (let index = 0; index < events.length; index++) {
         const entry = await measurementLogic.getMeasurements(MEASUREMENT, ENTRY_SENSOR_ID, events[index].startDate, events[index].finishDate, AGGREGATION_FUNCTION, TIME_INTERVAL_MINUTES)
         const exit = await measurementLogic.getMeasurements(MEASUREMENT, EXIT_SENSOR_ID, events[index].startDate, events[index].finishDate, AGGREGATION_FUNCTION , TIME_INTERVAL_MINUTES)       
         events[index]["entry"] = entry
         events[index]["exit"] = exit
       }
-      res.send(events)
+
+      const paginator = {"currentPage":currentPage, "totalPages":numberOfPages, "events":events}
+      res.send(paginator)
     }
   } catch (e) {
     res.status(400).send(e.message)
