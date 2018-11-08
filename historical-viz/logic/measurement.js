@@ -40,7 +40,7 @@ module.exports = {
 
     if (sensorId || fromDate || toDate) {
       whereClause = 'WHERE '
-      if (sensorId) whereClause += `sensorId = ${sensorId}`
+      if (sensorId) whereClause += `"sensorId" = '${sensorId}'`
       if (fromDate) whereClause += (sensorId ? ` and ` : ``) + `time >= ${fromDate}`
       if (toDate) {
         whereClause += ((sensorId || fromDate) ? ` and ` : ``) +
@@ -59,12 +59,12 @@ module.exports = {
     ${groupClause || ''}
     ORDER BY time desc
     `
-
+    console.log(query)
     return influx.query(query)
   },
 
   /**
-  * Sabes a measurement
+  * Saves a measurement
   * @param sensorId id of the sensor
   * @param measurementType type of measure
   * @param value value of the measure

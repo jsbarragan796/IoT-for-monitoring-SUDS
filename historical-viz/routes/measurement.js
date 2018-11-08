@@ -26,4 +26,21 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.get('/events', async (req, res, next) => {
+  const { measurementType, sensorId, fromDate, toDate, aggregate, timeRange } = req.query
+
+  try {
+    
+      const measurements = await measurementLogic.getMeasurements(measurementType, sensorId, fromDate, toDate, aggregate, timeRange)
+      res.send({
+        time: `${Math.round((new Date().getTime() - time) / 1000)} secs`,
+        records: measurements.length,
+        results: measurements
+      })
+      // res.send(measurements.length)
+  } catch (e) {
+    res.status(400).send(e.message)
+  }
+})
+
 module.exports = router
