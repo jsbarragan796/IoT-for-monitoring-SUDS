@@ -1,10 +1,10 @@
 
-const { MONGODB_URI, KAFKA_TOPIC_PRODUCER_CLOSING_EVENT } = require('../config')
+const { MONGODB_URI, KAFKA_TOPIC_PRODUCER_CLOSING_EVENT, KAFKA_TOPIC_PRODUCER_NOTIFICATION, NOTIFICATION_STARTED_RAINING } = require('../config')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 
-module.exports = {
-  findMostRecentEvent: () => {
+module.exports = (producer) => {
+  const findMostRecentEvent = () => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
@@ -17,8 +17,9 @@ module.exports = {
         }
       })
     })
-  },
-  endEventAndCreateOne: (producer, _id, timestamp, mostRecentEventLastMeasurementDate) => {
+  }
+
+  const endEventAndCreateOne = (_id, timestamp, mostRecentEventLastMeasurementDate) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
@@ -34,14 +35,16 @@ module.exports = {
           })
 
           producer.produce(KAFKA_TOPIC_PRODUCER_CLOSING_EVENT, null, Buffer.from(_id.toString()))
+          producer.produce(KAFKA_TOPIC_PRODUCER_NOTIFICATION, null, Buffer.from(NOTIFICATION_STARTED_RAINING))
 
           client.close()
           resolve()
         }
       })
     })
-  },
-  updateLastMeasurementDate: (_id, timestamp) => {
+  }
+
+  const updateLastMeasurementDate = (_id, timestamp) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
@@ -57,5 +60,11 @@ module.exports = {
         }
       })
     })
+  }
+
+  return {
+    findMostRecentEvent,
+    endEventAndCreateOne,
+    updateLastMeasurementDate
   }
 }

@@ -4,7 +4,7 @@
   const fs = require('fs')
 
   const { LOG_DIRECTORY, INFLUX_DB_DATABASE, INFLUX_DB_HOST, INFLUX_DB_PORT,
-  INFLUX_DB_USERNAME, INFLUX_DB_PASSWORD, INFLUX_DB_PROTOCOL } = require('./config')
+    INFLUX_DB_USERNAME, INFLUX_DB_PASSWORD, INFLUX_DB_PROTOCOL } = require('./config')
 
   fs.existsSync(LOG_DIRECTORY) || fs.mkdirSync(LOG_DIRECTORY)
 
