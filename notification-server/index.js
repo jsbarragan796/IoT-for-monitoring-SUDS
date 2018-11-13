@@ -1,23 +1,25 @@
 (async () => {
   require('dotenv').config()
 
-  const { NOTIFICATION_STARTED_RAINING } = require('./config')
-
   const { getConsumer } = require('./kafka')
 
-  console.log('va')
+  const { sendEventStartAlarm } = require('./tools')
+
+  const { NOTIFICATION_STARTED_RAINING } = require('./config')
 
   const consumer = await getConsumer()
 
   consumer.connect()
 
   consumer
-    .on('data', (data) => {
+    .on('data', async (data) => {
       const { value } = data
       const message = value.toString()
 
-      if (message === NOTIFICATION_STARTED_RAINING) {
+      console.log(`Notification got message ${message}`)
 
+      if (message === NOTIFICATION_STARTED_RAINING) {
+        await sendEventStartAlarm()
       }
     })
 })()

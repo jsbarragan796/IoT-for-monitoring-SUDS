@@ -34,6 +34,8 @@ module.exports = (producer) => {
             startDate: timestamp, lastMeasurementDate: timestamp
           })
 
+          console.log('va a mandar la notificación')
+
           producer.produce(KAFKA_TOPIC_PRODUCER_CLOSING_EVENT, null, Buffer.from(_id.toString()))
           producer.produce(KAFKA_TOPIC_PRODUCER_NOTIFICATION, null, Buffer.from(NOTIFICATION_STARTED_RAINING))
 
