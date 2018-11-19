@@ -1,27 +1,25 @@
+(async () => {
+  require('dotenv').config()
 
-require('dotenv').config()
+  const { getConsumer } = require('./kafka')
 
-const Kafka = require('node-rdkafka')
+  const { sendEventStartAlarm } = require('./tools')
 
-const { KAFKA_GROUP_ID, KAFKA_BROKER_HOST, KAFKA_BROKER_PORT, KAFKA_TOPIC } = require('./config')
+  const { NOTIFICATION_STARTED_RAINING } = require('./config')
 
-const consumer = new Kafka.KafkaConsumer({
-  'group.id': 'kafka',
-  'metadata.broker.list': 'localhost:9092'
-}, {})
+  const consumer = await getConsumer()
 
-consumer.connect()
+  consumer.connect()
 
-consumer
-  .on('ready', () => {
-    consumer.subscribe(['test'])
+  consumer
+    .on('data', async (data) => {
+      const { value } = data
+      const message = value.toString()
 
-    // Consume from the librdtesting-01 topic. This is what determines
-    // the mode we are running in. By not specifying a callback (or specifying
-    // only a callback) we get messages as soon as they are available.
-    consumer.consume()
-  })
-  .on('data', (data) => {
-    // Output the actual message contents
-    console.log(data.value.toString())
-  })
+      console.log(`Notification got message ${message}`)
+
+      if (message === NOTIFICATION_STARTED_RAINING) {
+        await sendEventStartAlarm()
+      }
+    })
+})()

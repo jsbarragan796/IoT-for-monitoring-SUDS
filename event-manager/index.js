@@ -21,11 +21,12 @@
     }]
   })
 
-  const { findMostRecentEvent, endEventAndCreateOne, updateLastMeasurementDate } = require('./tools')
   const { getConsumer, getProducer } = require('./kafka')
 
   const consumer = await getConsumer()
   const producer = await getProducer()
+
+  const { findMostRecentEvent, endEventAndCreateOne, updateLastMeasurementDate } = require('./tools')(producer)
 
   consumer.on('data', async (data) => {
     try {
@@ -40,7 +41,7 @@
 
       const { _id, lastMeasurementDate: mostRecentEventLastMeasurementDate } = await findMostRecentEvent()
 
-      if (mostRecentEventLastMeasurementDate + 1000000000 * 60 * 30 < timestamp) await endEventAndCreateOne(producer, _id, timestamp, mostRecentEventLastMeasurementDate)
+      if (mostRecentEventLastMeasurementDate + 1000000000 * 60 * 30 < timestamp) await endEventAndCreateOne(_id, timestamp, mostRecentEventLastMeasurementDate)
       else await updateLastMeasurementDate(_id, timestamp)
     } catch (e) {
       log.error(e.message)

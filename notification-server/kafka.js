@@ -14,7 +14,7 @@ module.exports = {
 
       consumer
         .on('ready', () => {
-          console.log('Crude data ready to consume\n')
+          console.log('Notification ready to consume\n')
           consumer.subscribe([KAFKA_TOPIC])
           consumer.consume()
           resolve(consumer)
