@@ -67,7 +67,8 @@ module.exports = {
             volumeInput += flow * 60
           })
 
-          let volumeOutput = 0
+          let 
+           = 0
           minuteAverageOutputFlows.forEach(flow => {
             volumeOutput += flow * 60
           })

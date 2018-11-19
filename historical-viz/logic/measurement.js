@@ -93,7 +93,15 @@ module.exports = {
       `
       const lastEventOutputMeasurements = await influx.query(outputQuery)
 
-      const lastEventData = { _id, finishDate: mostRecentEventFinishDate, startDate: mostRecentEventStartDate, inputMeasurements: lastEventInputMeasurements, outputMeasurements: lastEventOutputMeasurements }
+      const peakEntryFlowQuery = `
+        SELECT max(value)
+        FROM level
+        WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
+          AND sensorId= 'entrada'
+      `
+      const peakEntryFlow = await influx.query(peakEntryFlowQuery)
+
+      const lastEventData = { _id, finishDate: mostRecentEventFinishDate, startDate: mostRecentEventStartDate, inputMeasurements: lastEventInputMeasurements, outputMeasurements: lastEventOutputMeasurements,peakEntryFlow}
       const newEventData = { startDate: timestamp }
 
       await eventLogic.endEventAndCreateOne(lastEventData, newEventData)
