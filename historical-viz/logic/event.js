@@ -126,7 +126,38 @@ module.exports = {
     })
   },
 
-  numberOfEvents: (filter) => {
+  numberOfNotEndedEvents: () => {
+    return new Promise((resolve, reject) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
+        if (err) reject(err)
+        else {
+          let Events = client.db().collection('Event')
+          const numberOfEvents = Events.find(
+            { finishDate: { $exists: false }}).count()
+          client.close()
+          resolve(numberOfEvents)
+        }
+      })
+    })
+  },
+
+  findNotFinishedEvents: (firstEventPage,eventsInPage) => {
+    return new Promise((resolve, reject) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
+        if (err) reject(err)
+        else {
+          let Events = client.db().collection('Event')
+          Events.find({ finishDate: { $exists: false }},{ sort: { _id: 1 },skip: firstEventPage, limit: eventsInPage }).toArray((err, points) => {
+            if (err) reject(err)
+            else resolve(points)
+            client.close()
+          })
+        }
+      })
+    })
+  },
+
+  numberOfFilteredEvents: (filter) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
@@ -151,7 +182,7 @@ module.exports = {
     })
   },
 
-  findFinishedEventsFilter: (firstEventPage,eventsInPage, filter) => {
+  findFinishedFilteredEvents: (firstEventPage,eventsInPage, filter) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
