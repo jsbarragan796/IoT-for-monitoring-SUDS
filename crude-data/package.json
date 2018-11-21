@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "DEV=1 nodemon index.js"
+    "dev": "DEV=1 nodemon index.js",
+    "first-deploy": "pm2 start index.js --name suds-crude",
+    "deploy": "pm2 delete suds-crude && pm2 start index.js --name suds-crude"
   },
   "author": "",
   "license": "MIT",
