@@ -30,7 +30,7 @@
   const Influx = require('influx')
 
   const { INFLUX_DB_DATABASE, INFLUX_DB_HOST, INFLUX_DB_PORT,
-  INFLUX_DB_USERNAME, INFLUX_DB_PASSWORD, INFLUX_DB_PROTOCOL, MONGODB_URI } = require('./config')
+    INFLUX_DB_USERNAME, INFLUX_DB_PASSWORD, INFLUX_DB_PROTOCOL, MONGODB_URI } = require('./config')
 
   const influx = new Influx.InfluxDB({
     database: INFLUX_DB_DATABASE,
@@ -92,23 +92,23 @@
           const outputMeasurements = await influx.query(outputQuery)
 
           const minuteAverageInputFlows = inputMeasurements
-              .filter(m => {
-                const { mean } = m
-                return mean
-              }).map(m => {
-                const { mean } = m
-                return parseLevelIntoFlow(mean)
-              })
+            .filter(m => {
+              const { mean } = m
+              return mean
+            }).map(m => {
+              const { mean } = m
+              return parseLevelIntoFlow(mean)
+            })
 
           const minuteAverageOutputFlows = outputMeasurements
-              .filter(m => {
-                const { mean } = m
-                return mean
-              })
-              .map(m => {
-                const { mean } = m
-                return parseLevelIntoFlow(mean)
-              })
+            .filter(m => {
+              const { mean } = m
+              return mean
+            })
+            .map(m => {
+              const { mean } = m
+              return parseLevelIntoFlow(mean)
+            })
 
           let volumeInput = 0
           minuteAverageInputFlows.forEach(flow => {
@@ -124,8 +124,26 @@
 
           const efficiency = volumeInput !== 0 ? parseInt(100 * didNotGoOut / volumeInput) : 0
 
+          const peakImputFlowQuery = `
+            SELECT max(value)
+            FROM level
+            WHERE time >= ${startDate} AND time <= ${finishDate}
+              AND sensorId= 'entrada'
+          `
+          const peakImputFlow = await influx.query(peakImputFlowQuery)
+
+          const peakOutputFlowQuery = `
+            SELECT max(value)
+            FROM level
+            WHERE time >= ${startDate} AND time <= ${finishDate}
+              AND sensorId= 'salida'
+          `
+          const peakOutputFlow = await influx.query(peakOutputFlowQuery)
+
+          const duration = ((startDate - finishDate) / 1000000000) / (60 * 60)
+
           await Events.updateOne({ _id: ObjectID(_id) }, {
-            $set: { volumeInput, volumeOutput, efficiency }
+            $set: { volumeInput, volumeOutput, efficiency, peakImputFlow, peakOutputFlow, duration }
           })
 
           client.close()
