@@ -13,12 +13,12 @@ module.exports = {
       consumer.connect()
 
       consumer
-      .on('ready', () => {
-        console.log('Aggregate data ready to consume')
-        consumer.subscribe([KAFKA_TOPIC])
-        consumer.consume()
-        resolve(consumer)
-      })
+        .on('ready', () => {
+          console.log('Aggregate data ready to consume')
+          consumer.subscribe([KAFKA_TOPIC])
+          consumer.consume()
+          resolve(consumer)
+        })
     })
   }
 }

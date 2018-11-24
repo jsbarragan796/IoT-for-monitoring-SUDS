@@ -1,14 +1,13 @@
 {
 	"info": {
 		"name": "suds",
-		"_postman_id": "6dea0d63-c476-3cc0-d81b-02e72185b062",
+		"_postman_id": "5653db0f-1f35-50d0-626f-bbd1aadfaab2",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "efficiency",
-			"description": "",
 			"item": [
 				{
 					"name": "0",
@@ -29,17 +28,16 @@
 							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528264800\n}"
 						},
 						"url": {
-							"raw": "http://localhost:4400/measurement",
+							"raw": "http://localhost:3500/measurement",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "4400",
+							"port": "3500",
 							"path": [
 								"measurement"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -62,17 +60,16 @@
 							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528264800\n}"
 						},
 						"url": {
-							"raw": "http://localhost:4400/measurement",
+							"raw": "http://localhost:3500/measurement",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "4400",
+							"port": "3500",
 							"path": [
 								"measurement"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -92,20 +89,19 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528264800\n}"
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528264900\n}"
 						},
 						"url": {
-							"raw": "http://localhost:4400/measurement",
+							"raw": "http://localhost:3500/measurement",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "4400",
+							"port": "3500",
 							"path": [
 								"measurement"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -125,17 +121,332 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528264800\n}"
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528264900\n}"
 						},
 						"url": {
-							"raw": "http://localhost:4400/measurement",
+							"raw": "http://localhost:3500/measurement",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "4400",
+							"port": "3500",
 							"path": [
 								"measurement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "authorization",
+								"value": "EFLSJS09870SFAKLJSDV9080DSV8SDLKJS57SAFKS654S5S7"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 2,\n\t\"timestamp\": 1528265000\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3500/measurement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"measurement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "authorization",
+								"value": "EFLSJS09870SFAKLJSDV9080DSV8SDLKJS57SAFKS654S5S7"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 1,\n\t\"timestamp\": 1528265000\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3500/measurement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"measurement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "99",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "authorization",
+								"value": "EFLSJS09870SFAKLJSDV9080DSV8SDLKJS57SAFKS654S5S7"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 99,\n\t\"timestamp\": 1528865800\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3500/measurement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"measurement"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "measurements",
+			"description": "",
+			"item": [
+				{
+					"name": "fromTypeFromDateRange",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3501/measurement?measurementType=level&fromDate='1800-06-06 02:00:00'&toDate='2080-06-06 09:00:00'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3501",
+							"path": [
+								"measurement"
+							],
+							"query": [
+								{
+									"key": "measurementType",
+									"value": "level",
+									"equals": true
+								},
+								{
+									"key": "fromDate",
+									"value": "'1800-06-06 02:00:00'",
+									"equals": true
+								},
+								{
+									"key": "toDate",
+									"value": "'2080-06-06 09:00:00'",
+									"equals": true
+								}
+							]
+						},
+						"description": "Las medidas de un tipo (nivel) de un rango de fechas"
+					},
+					"response": []
+				},
+				{
+					"name": "fromTypeFromSensorFromDateRange",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3501/measurement?measurementType=level&fromDate='2008-01-01'&toDate='2020-01-01'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3501",
+							"path": [
+								"measurement"
+							],
+							"query": [
+								{
+									"key": "measurementType",
+									"value": "level",
+									"equals": true
+								},
+								{
+									"key": "fromDate",
+									"value": "'2008-01-01'",
+									"equals": true
+								},
+								{
+									"key": "toDate",
+									"value": "'2020-01-01'",
+									"equals": true
+								}
+							]
+						},
+						"description": "Las medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
+					},
+					"response": []
+				},
+				{
+					"name": "aggregatesByTimeFromTypeFromDateRange",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3501/measurement?measurementType=level&aggregate=mean&timeRange=5m&fromDate='2018-06-06 02:00:00'&toDate='2018-06-06 09:00:00'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3501",
+							"path": [
+								"measurement"
+							],
+							"query": [
+								{
+									"key": "measurementType",
+									"value": "level",
+									"equals": true
+								},
+								{
+									"key": "aggregate",
+									"value": "mean",
+									"equals": true
+								},
+								{
+									"key": "timeRange",
+									"value": "5m",
+									"equals": true
+								},
+								{
+									"key": "fromDate",
+									"value": "'2018-06-06 02:00:00'",
+									"equals": true
+								},
+								{
+									"key": "toDate",
+									"value": "'2018-06-06 09:00:00'",
+									"equals": true
+								}
+							]
+						},
+						"description": "Agrupamiento por funcion (max) de medidas de un tipo (nivel) de un rango de fechas"
+					},
+					"response": []
+				},
+				{
+					"name": "aggregatesByTimeFromTypeFromSensorFromDateRange",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3501/measurement?measurementType=level&aggregate=mean&timeRange=5m&sensorId='0'&fromDate='2018-06-06 02:00:00'&toDate='2018-06-06 09:00:00'",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3501",
+							"path": [
+								"measurement"
+							],
+							"query": [
+								{
+									"key": "measurementType",
+									"value": "level",
+									"equals": true
+								},
+								{
+									"key": "aggregate",
+									"value": "mean",
+									"equals": true
+								},
+								{
+									"key": "timeRange",
+									"value": "5m",
+									"equals": true
+								},
+								{
+									"key": "sensorId",
+									"value": "'0'",
+									"equals": true
+								},
+								{
+									"key": "fromDate",
+									"value": "'2018-06-06 02:00:00'",
+									"equals": true
+								},
+								{
+									"key": "toDate",
+									"value": "'2018-06-06 09:00:00'",
+									"equals": true
+								}
+							]
+						},
+						"description": "Agrupamiento por funcion (max) de medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
+					},
+					"response": []
+				},
+				{
+					"name": "fromType",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:3501/measurement?measurementType=level",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3501",
+							"path": [
+								"measurement"
+							],
+							"query": [
+								{
+									"key": "measurementType",
+									"value": "level",
+									"equals": true
+								}
 							]
 						},
 						"description": ""
@@ -143,47 +454,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "measuresFromTypeFromSensorFromDateRange",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=level&fromDate='2008-01-01'&toDate='2020-01-01'",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4400",
-					"path": [
-						"measurement"
-					],
-					"query": [
-						{
-							"key": "measurementType",
-							"value": "level",
-							"equals": true
-						},
-						{
-							"key": "fromDate",
-							"value": "'2008-01-01'",
-							"equals": true
-						},
-						{
-							"key": "toDate",
-							"value": "'2020-01-01'",
-							"equals": true
-						}
-					]
-				},
-				"description": "Las medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
-			},
-			"response": []
 		},
 		{
 			"name": "post",
@@ -204,194 +474,16 @@
 					"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"1\",\n\t\"value\": 2.5,\n\t\"timestamp\": 1528264800\n}"
 				},
 				"url": {
-					"raw": "http://localhost:4400/measurement",
+					"raw": "http://localhost:3500/measurement",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4400",
+					"port": "3500",
 					"path": [
 						"measurement"
 					]
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "measuresFromTypeFromDateRange",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=level&fromDate='2000-06-06 02:00:00'&toDate='2030-06-06 09:00:00'",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4400",
-					"path": [
-						"measurement"
-					],
-					"query": [
-						{
-							"key": "measurementType",
-							"value": "level",
-							"equals": true
-						},
-						{
-							"key": "fromDate",
-							"value": "'2000-06-06 02:00:00'",
-							"equals": true
-						},
-						{
-							"key": "toDate",
-							"value": "'2030-06-06 09:00:00'",
-							"equals": true
-						}
-					]
-				},
-				"description": "Las medidas de un tipo (nivel) de un rango de fechas"
-			},
-			"response": []
-		},
-		{
-			"name": "aggregatesByTimeFromTypeFromDateRange",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=level&aggregate=mean&timeRange=5m&fromDate='2018-06-06 02:00:00'&toDate='2018-06-06 09:00:00'",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4400",
-					"path": [
-						"measurement"
-					],
-					"query": [
-						{
-							"key": "measurementType",
-							"value": "level",
-							"equals": true
-						},
-						{
-							"key": "aggregate",
-							"value": "mean",
-							"equals": true
-						},
-						{
-							"key": "timeRange",
-							"value": "5m",
-							"equals": true
-						},
-						{
-							"key": "fromDate",
-							"value": "'2018-06-06 02:00:00'",
-							"equals": true
-						},
-						{
-							"key": "toDate",
-							"value": "'2018-06-06 09:00:00'",
-							"equals": true
-						}
-					]
-				},
-				"description": "Agrupamiento por funcion (max) de medidas de un tipo (nivel) de un rango de fechas"
-			},
-			"response": []
-		},
-		{
-			"name": "aggregatesByTimeFromTypeFromSensorFromDateRange",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:4400/measurement?measurementType=level&aggregate=mean&timeRange=5m&sensorId='0'&fromDate='2018-06-06 02:00:00'&toDate='2018-06-06 09:00:00'",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4400",
-					"path": [
-						"measurement"
-					],
-					"query": [
-						{
-							"key": "measurementType",
-							"value": "level",
-							"equals": true
-						},
-						{
-							"key": "aggregate",
-							"value": "mean",
-							"equals": true
-						},
-						{
-							"key": "timeRange",
-							"value": "5m",
-							"equals": true
-						},
-						{
-							"key": "sensorId",
-							"value": "'0'",
-							"equals": true
-						},
-						{
-							"key": "fromDate",
-							"value": "'2018-06-06 02:00:00'",
-							"equals": true
-						},
-						{
-							"key": "toDate",
-							"value": "'2018-06-06 09:00:00'",
-							"equals": true
-						}
-					]
-				},
-				"description": "Agrupamiento por funcion (max) de medidas de un tipo (nivel) de un sensor (id = 0) de un rango de fechas"
-			},
-			"response": []
-		},
-		{
-			"name": "5",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "authorization",
-						"value": "EFLSJS09870SFAKLJSDV9080DSV8SDLKJS57SAFKS654S5S7"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"measurementType\": \"level\",\n\t\"sensorId\": \"0\",\n\t\"value\": 99,\n\t\"timestamp\": 1528264800\n}"
-				},
-				"url": {
-					"raw": "http://localhost:4400/measurement",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4400",
-					"path": [
-						"measurement"
-					]
-				},
-				"description": ""
 			},
 			"response": []
 		}

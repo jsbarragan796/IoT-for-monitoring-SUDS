@@ -13,5 +13,5 @@ module.exports = {
 
   NOTIFICATION_STARTED_RAINING: '0',
 
-  MONGODB_URI: process.env.MONGODB_URI
+  MONGODB_URI: isDev ? process.env.MONGODB_URI_DEV : process.env.MONGODB_URI
 }

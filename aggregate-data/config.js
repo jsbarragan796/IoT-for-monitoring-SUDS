@@ -9,7 +9,7 @@ module.exports = {
   KAFKA_TOPIC: isDev ? process.env.KAFKA_TOPIC_DEV : process.env.KAFKA_TOPIC,
   KAFKA_GROUP: isDev ? process.env.KAFKA_GROUP_DEV : process.env.KAFKA_GROUP,
 
-  MONGODB_URI: process.env.MONGODB_URI,
+  MONGODB_URI: isDev ? process.env.MONGODB_URI_DEV : process.env.MONGODB_URI,
 
   INFLUX_DB_URL: isDev ? process.env.INFLUX_DB_URL_DEV : process.env.INFLUX_DB_URL,
   INFLUX_DB_DATABASE: isDev ? process.env.INFLUX_DB_DATABASE_DEV : process.env.INFLUX_DB_DATABASE,

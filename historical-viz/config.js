@@ -3,7 +3,6 @@ const isDev = !!process.env.DEV
 module.exports = {
   PORT: process.env.PORT,
 
-  INFLUX_DB_URL: isDev ? process.env.INFLUX_DB_URL_DEV : process.env.INFLUX_DB_URL,
   INFLUX_DB_DATABASE: isDev ? process.env.INFLUX_DB_DATABASE_DEV : process.env.INFLUX_DB_DATABASE,
   INFLUX_DB_HOST: isDev ? process.env.INFLUX_DB_HOST_DEV : process.env.INFLUX_DB_HOST,
   INFLUX_DB_PORT: isDev ? process.env.INFLUX_DB_PORT_DEV : process.env.INFLUX_DB_PORT,
@@ -15,7 +14,7 @@ module.exports = {
 
   PORT: process.env.PORT,
 
-  MONGODB_URI: isDev ? process.env.MONGODB_URI : process.env.MONGODB_URI_Dev,
+  MONGODB_URI: isDev ? process.env.MONGODB_URI_DEV : process.env.MONGODB_URI,
 
   SENSOR_SECRET_TOKEN: process.env.SENSOR_SECRET_TOKEN,
   
