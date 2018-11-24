@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../logo.png';
+// import logo from 'logo.png';
 import Main from './Main';
 
 
@@ -22,7 +22,7 @@ class Home extends Component {
     return (
       <div className="main">
         <div className="inicio">       
-          <img className="logo" src={logo} alt="Logo"/>
+          {/* <img className="logo" src={logo} alt="Logo"/> */}
         </div>
         <div className="center-div">       
           {resp}

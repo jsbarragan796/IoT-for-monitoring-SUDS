@@ -59,7 +59,6 @@ router.get('/current-events', async (req, res, next) => {
     const pageNumber = parseInt(req.query.pageNumber)
     const numberOfEvents = await EventLogic.numberOfNotEndedEvents()
     const searchRange = await eventSearchRange(pageNumber,numberOfEvents)
-    
     const events = await EventLogic.findNotFinishedEvents(searchRange.indexFirstEventPage,searchRange.eventsInPage)
     const eventsWithMeasurements = await loadRealtimeMesuarementsEvents(events)
     const paginator = {"currentPage":pageNumber, "totalPages":searchRange.numberOfPages, "events":eventsWithMeasurements}
@@ -84,7 +83,6 @@ router.post('/filtered-data', async (req, res) => {
     const events = await EventLogic.findFinishedFilteredEvents(searchRange.indexFirstEventPage,searchRange.eventsInPage,filterData)
     const eventsWithMeasurements = await loadHistoricalMesuarementsEvents(events)
     const paginator = {"currentPage":pageNumber, "totalPages":searchRange.numberOfPages, "events":eventsWithMeasurements}
-
     res.send(paginator)
   } catch (e) {
     res.status(400).send(e.message)

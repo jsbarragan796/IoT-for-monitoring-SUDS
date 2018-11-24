@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Alike';
+  src: ('/assets/fonts/Alike.ttf') format('truetype');
+}
+
+
+.navbar-brand {
+  font-family: 'Alike', serif;
+  font-size: 130%
+}
+
+nav {
+  font-family: 'Alike', serif;
+  font-size: 130%
+}
+
+.logo {
+  height: 400px;
+}
+
+
+.inicio {
+  width: 100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.main {
+  padding: 0 15% 0 15%;
+}
+
+.center-div
+{
+  margin: auto;
+  padding: 10px;
+}

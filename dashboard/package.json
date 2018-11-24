@@ -1,0 +1,28 @@
+{
+  "name": "suds-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "DEV=1 nodemon index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.329.0",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "fast-csv": "^2.4.1",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "influx": "^5.0.7",
+    "mongodb": "^3.1.6",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
