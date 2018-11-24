@@ -10,6 +10,8 @@
 
   const Influx = require('influx')
 
+  console.log(INFLUX_DB_HOST)
+
   const influx = new Influx.InfluxDB({
     database: INFLUX_DB_DATABASE,
     host: INFLUX_DB_HOST,
@@ -50,13 +52,18 @@
       const value = Number(parts[2])
       const timestamp = Number(parts[3])
 
-      await influx.writePoints([{
+      const point = {
         measurement: measurementType,
         tags: { sensorId },
         fields: { value },
         timestamp
-      }])
+      }
+
+      console.log(point)
+
+      await influx.writePoints([point])
     } catch (e) {
+      console.log(e)
       log.error(e.message)
     }
   })

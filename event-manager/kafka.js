@@ -25,12 +25,12 @@ module.exports = {
       consumer.connect()
 
       consumer
-      .on('ready', () => {
-        console.log('Event manager ready to consume\n')
-        consumer.subscribe([KAFKA_TOPIC_CONSUMER])
-        consumer.consume()
-        resolve(consumer)
-      })
+        .on('ready', () => {
+          console.log('Event manager ready to consume\n')
+          consumer.subscribe([KAFKA_TOPIC_CONSUMER])
+          consumer.consume()
+          resolve(consumer)
+        })
     })
   }
 }

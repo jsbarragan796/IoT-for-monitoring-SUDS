@@ -4,10 +4,10 @@ module.exports = {
   PORT: process.env.PORT,
   LOG_DIRECTORY: process.env.LOG_DIRECTORY,
 
-  KAFKA_HOST: process.env.KAFKA_HOST,
-  KAFKA_PORT: process.env.KAFKA_PORT,
-  KAFKA_TOPIC: process.env.KAFKA_TOPIC,
-  KAFKA_GROUP: process.env.KAFKA_GROUP,
+  KAFKA_HOST: isDev ? process.env.KAFKA_HOST_DEV : process.env.KAFKA_HOST,
+  KAFKA_PORT: isDev ? process.env.KAFKA_PORT_DEV : process.env.KAFKA_PORT,
+  KAFKA_TOPIC: isDev ? process.env.KAFKA_TOPIC_DEV : process.env.KAFKA_TOPIC,
+  KAFKA_GROUP: isDev ? process.env.KAFKA_GROUP_DEV : process.env.KAFKA_GROUP,
 
   INFLUX_DB_URL: isDev ? process.env.INFLUX_DB_URL_DEV : process.env.INFLUX_DB_URL,
   INFLUX_DB_DATABASE: isDev ? process.env.INFLUX_DB_DATABASE_DEV : process.env.INFLUX_DB_DATABASE,

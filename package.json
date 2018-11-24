@@ -1,0 +1,20 @@
+{
+  "name": "suds-dev",
+  "version": "1.0.0",
+  "description": "## Introduction",
+  "main": "index.js",
+  "scripts": {
+    "first-deploy-local": "cd aggregate-data && npm run first-deploy && cd ../crude-data && npm run first-deploy && cd ../event-manager && npm run first-deploy && cd ../historical-viz && npm run first-deploy && cd ../notification-server && npm run first-deploy && cd ../reception && npm run first-deploy",
+    "deploy-local": "cd aggregate-data && npm run deploy && cd ../crude-data && npm run deploy && cd ../event-manager && npm run deploy && cd ../historical-viz && npm run deploy && cd ../notification-server && npm run deploy && cd ../reception && npm run deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsbarragan796/backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsbarragan796/backend/issues"
+  },
+  "homepage": "https://github.com/jsbarragan796/backend#readme"
+}

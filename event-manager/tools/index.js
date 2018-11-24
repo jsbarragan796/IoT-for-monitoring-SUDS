@@ -7,8 +7,10 @@ module.exports = (producer) => {
   const findMostRecentEvent = () => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
-        if (err) reject(err)
-        else {
+        if (err) {
+          console.log(err)
+          reject(err)
+        } else {
           let Events = client.db().collection('Event')
           const event = await Events.findOne({}, { sort: { startDate: -1 } })
 
