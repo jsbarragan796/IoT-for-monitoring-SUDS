@@ -9,3 +9,5 @@ logs/
 
 entrada.csv
 salida.csv
+*.js
+*.json

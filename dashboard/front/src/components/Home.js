@@ -1,89 +1,70 @@
-import React, { Component } from 'react'
-import logo from '../assets/logo.png'
-import navBarLogo from '../assets/navbar2.png'
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem } from 'reactstrap'
+import React, { Component } from 'react';
+import axios from 'axios';
+import { Alert } from 'reactstrap';
+import AppNavBar from './AppNavBar';
+import EventsRealTime from './EventsRealTime';
+import logo from '../assets/logo.png';
 
 class Home extends Component {
   constructor (props) {
-    super(props)
-
-    this.toggle = this.toggle.bind(this)
+    super(props);
     this.state = {
-      isOpen: false
-    }
+      data: null,
+      errorStatus: false,
+      errorMessage: ''
+    };
+    this.loadData = this.loadData.bind(this);
   }
-  toggle () {
-    this.setState({
-      isOpen: !this.state.isOpen
-    })
+
+  componentDidMount () {
+    this.loadData();
+  }
+
+  loadData () {
+    axios.get('events/current-events?pageNumber=1')
+      .then((response) => {
+        this.setState({ data: response.data });
+        const { data } = this.state;
+        console.log(data);
+      })
+      .catch((err) => {
+        this.setState({ errorStatus: true, errorMessage: err.message });
+      });
+  }
+
+  showErrorMessage () {
+    const { errorStatus, errorMessage } = this.state;
+    if (errorStatus) {
+      return (
+        <Alert color="danger">
+         Ha ocurrido un problema, comuniquese con el administrador del sistema.
+         Por favor comuníquele el siguinte mensaje :
+          {' '}
+          {errorMessage}
+        </Alert>);
+    }
+
+    return '';
   }
 
   render () {
+    let s = '';
+    if (this.state.data && this.state.data.events.length > 0) {
+      s = <EventsRealTime data={this.state.data.events[0].entry} />;
+    }
     return (
       <div>
-        <Navbar color='info' light expand='md' sticky='top' >
-          <NavbarBrand href='/'>
-            <img src={navBarLogo} width='100wv' alt='Logo' />
-          </NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className='ml-auto' navbar>
-              <NavItem>
-                <NavLink href='/' active>Inicio</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href='/events'>Eventos</NavLink>
-              </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Cuentas
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                    Mi Cuenta
-                  </DropdownItem>
-                  <DropdownItem>
-                    Administrar cuentas
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                  Cerrar Sesión
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </Nav>
-          </Collapse>
-        </Navbar>
-        <div className='main'>
-          <div className='inicio'>
-            <img className='logo' src={logo} alt='Logo' />
+        <AppNavBar optionActive="Inicio" />
+        {this.showErrorMessage()}
+        <div className="main">
+          <div className="inicio">
+            <img className="logo" src={logo} alt="Logo" />
           </div>
-          <div className='inicio'>
-            <img className='logo' src={logo} alt='Logo' />
-          </div>
-          <div className='inicio'>
-            <img className='logo' src={logo} alt='Logo' />
-          </div>
-          <div className='inicio'>
-            <img className='logo' src={logo} alt='Logo' />
-          </div>
-          <div className='center-div' />
-
+          {s}
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Home
+export default Home;
