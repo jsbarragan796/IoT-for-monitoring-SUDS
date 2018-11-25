@@ -2,8 +2,6 @@
 const { MONGODB_URI } = require('../config')
 const MongoClient = require('mongodb').MongoClient
 
-const { sendEventStartAlarm } = require('./alarm')
-
 module.exports = {
   findAllEvents: () => {
     return new Promise((resolve, reject) => {
@@ -67,8 +65,7 @@ module.exports = {
             volumeInput += flow * 60
           })
 
-          let 
-           = 0
+          let volumeOutput = 0
           minuteAverageOutputFlows.forEach(flow => {
             volumeOutput += flow * 60
           })
@@ -110,13 +107,13 @@ module.exports = {
       })
     })
   },
-  findFinishedEvents: (firstEventPage,eventsInPage) => {
+  findFinishedEvents: (firstEventPage, eventsInPage) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')
-          Events.find({ finishDate: { $exists: true }},{ sort: { _id: 1 },skip: firstEventPage, limit: eventsInPage }).toArray((err, points) => {
+          Events.find({ finishDate: { $exists: true } }, { sort: { _id: 1 }, skip: firstEventPage, limit: eventsInPage }).toArray((err, points) => {
             if (err) reject(err)
             else resolve(points)
             client.close()
@@ -133,7 +130,7 @@ module.exports = {
         else {
           let Events = client.db().collection('Event')
           const numberOfEvents = Events.find(
-            { finishDate: { $exists: false }}).count()
+            { finishDate: { $exists: false } }).count()
           client.close()
           resolve(numberOfEvents)
         }
@@ -141,13 +138,13 @@ module.exports = {
     })
   },
 
-  findNotFinishedEvents: (firstEventPage,eventsInPage) => {
+  findNotFinishedEvents: (firstEventPage, eventsInPage) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')
-          Events.find({ finishDate: { $exists: false }},{ sort: { _id: 1 },skip: firstEventPage, limit: eventsInPage }).toArray((err, points) => {
+          Events.find({ finishDate: { $exists: false } }, { sort: { _id: 1 }, skip: firstEventPage, limit: eventsInPage }).toArray((err, points) => {
             if (err) reject(err)
             else resolve(points)
             client.close()
@@ -165,16 +162,16 @@ module.exports = {
           let Events = client.db().collection('Event')
           const numberOfEvents = Events.find(
             { finishDate: { $exists: true },
-            startDate: { $gte: new Date(filter.beginStartDate).getTime()*1000000, 
-                         $lte: new Date(filter.endStartDate).getTime()*1000000},
-            efficiency: { $gte: filter.beginEfficiency,  $lte: filter.endEfficiency},
-            volumeInput: { $gte: filter.beginVolumeInput,  $lte: filter.endVolumeInput},
-            volumeOutput: { $gte: filter.beginVolumeOutput,  $lte: filter.endVolumeOutput},
-            peakInputFlow: { $gte: filter.beginPeakInputFlow,  $lte: filter.endPeakInputFlow},
-            peakOutFlow: { $gte: filter.beginPeakOutFlow,  $lte: filter.endPeakOutFlow} , 
-            reductionOfPeakFlow: { $gte: filter.beginReductionOfPeakFlow,  $lte: filter.endReductionOfPeakFlow},
-            duration: { $gte: filter.beginDuration,  $lte: filter.endDuration}
-           }).count()
+              startDate: { $gte: new Date(filter.beginStartDate).getTime() * 1000000,
+                $lte: new Date(filter.endStartDate).getTime() * 1000000 },
+              efficiency: { $gte: filter.beginEfficiency, $lte: filter.endEfficiency },
+              volumeInput: { $gte: filter.beginVolumeInput, $lte: filter.endVolumeInput },
+              volumeOutput: { $gte: filter.beginVolumeOutput, $lte: filter.endVolumeOutput },
+              peakInputFlow: { $gte: filter.beginPeakInputFlow, $lte: filter.endPeakInputFlow },
+              peakOutFlow: { $gte: filter.beginPeakOutFlow, $lte: filter.endPeakOutFlow },
+              reductionOfPeakFlow: { $gte: filter.beginReductionOfPeakFlow, $lte: filter.endReductionOfPeakFlow },
+              duration: { $gte: filter.beginDuration, $lte: filter.endDuration }
+            }).count()
           client.close()
           resolve(numberOfEvents)
         }
@@ -182,28 +179,28 @@ module.exports = {
     })
   },
 
-  findFinishedFilteredEvents: (firstEventPage,eventsInPage, filter) => {
+  findFinishedFilteredEvents: (firstEventPage, eventsInPage, filter) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')
-          console.log(new Date(filter.beginStartDate).getTime()*1000000)
-          console.log(new Date(filter.endStartDate).getTime()*1000000)
+          console.log(new Date(filter.beginStartDate).getTime() * 1000000)
+          console.log(new Date(filter.endStartDate).getTime() * 1000000)
           Events.find(
             { finishDate: { $exists: true },
-              startDate: { $gte: new Date(filter.beginStartDate).getTime()*1000000, 
-                           $lte: new Date(filter.endStartDate).getTime()*1000000},
-              efficiency: { $gte: filter.beginEfficiency,  $lte: filter.endEfficiency},
-              volumeInput: { $gte: filter.beginVolumeInput,  $lte: filter.endVolumeInput},
-              volumeOutput: { $gte: filter.beginVolumeOutput,  $lte: filter.endVolumeOutput},
-              peakInputFlow: { $gte: filter.beginPeakInputFlow,  $lte: filter.endPeakInputFlow},
-              peakOutFlow: { $gte: filter.beginPeakOutFlow,  $lte: filter.endPeakOutFlow} , 
-              reductionOfPeakFlow: { $gte: filter.beginReductionOfPeakFlow,  $lte: filter.endReductionOfPeakFlow},
-              duration: { $gte: filter.beginDuration,  $lte: filter.endDuration}  },
+              startDate: { $gte: new Date(filter.beginStartDate).getTime() * 1000000,
+                $lte: new Date(filter.endStartDate).getTime() * 1000000 },
+              efficiency: { $gte: filter.beginEfficiency, $lte: filter.endEfficiency },
+              volumeInput: { $gte: filter.beginVolumeInput, $lte: filter.endVolumeInput },
+              volumeOutput: { $gte: filter.beginVolumeOutput, $lte: filter.endVolumeOutput },
+              peakInputFlow: { $gte: filter.beginPeakInputFlow, $lte: filter.endPeakInputFlow },
+              peakOutFlow: { $gte: filter.beginPeakOutFlow, $lte: filter.endPeakOutFlow },
+              reductionOfPeakFlow: { $gte: filter.beginReductionOfPeakFlow, $lte: filter.endReductionOfPeakFlow },
+              duration: { $gte: filter.beginDuration, $lte: filter.endDuration } },
             { sort: { _id: 1 },
-            skip: firstEventPage, 
-            limit: eventsInPage }).toArray((err, points) => {
+              skip: firstEventPage,
+              limit: eventsInPage }).toArray((err, points) => {
             if (err) reject(err)
             else resolve(points)
             client.close()
@@ -211,8 +208,8 @@ module.exports = {
         }
       })
     })
-  },
-  
+  }
+
 }
 
 const parseLevelIntoFlow = (level) => {

@@ -120,6 +120,6 @@ const init = async (initialDate, events, eventDurationMins, timeBetweenEventsMin
 }
 
 init(initialDate, events, eventDurationMins, timeBetweenEventsMins, sensors, intervalSecs, batchPercent)
-.catch((e) => {
-  console.log(e)
-})
+  .catch((e) => {
+    console.log(e)
+  })

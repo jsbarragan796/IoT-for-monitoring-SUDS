@@ -30,7 +30,7 @@ routes.forEach(routeStr => {
   app.use('/' + routeName, route)
 })
 
-app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
-app.get('*', function (req, res) {
-  res.sendFile('index.html', {root: path.join(__dirname, PUBLIC_PATH)})
-})
+// app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
+// app.get('*', function (req, res) {
+//   res.sendFile('index.html', {root: path.join(__dirname, PUBLIC_PATH)})
+// })

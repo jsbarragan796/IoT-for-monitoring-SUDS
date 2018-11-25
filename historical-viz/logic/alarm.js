@@ -1,6 +1,6 @@
 
 const AWS = require('aws-sdk')
-AWS.config.update({region: 'us-east-1'})
+AWS.config.update({ region: 'us-east-1' })
 
 const { MONGODB_URI } = require('../config')
 const MongoCLient = require('mongodb').MongoClient
@@ -21,7 +21,7 @@ module.exports = {
                   Message: 'SUDS-SC -> Ha empezado a llover',
                   PhoneNumber: phone
                 }
-                var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise()
+                var publishTextPromise = new AWS.SNS({ apiVersion: '2010-03-31' }).publish(params).promise()
                 await publishTextPromise
               }
               resolve()
