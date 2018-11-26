@@ -57,7 +57,7 @@ module.exports = {
     FROM ${measurementType}
     ${whereClause || ''}
     ${groupClause || ''}
-    ORDER BY time desc
+    ORDER BY time asc
     `
     console.log(query)
     return influx.query(query)

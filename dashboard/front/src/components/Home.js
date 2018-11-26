@@ -50,7 +50,7 @@ class Home extends Component {
   render () {
     let s = '';
     if (this.state.data && this.state.data.events.length > 0) {
-      s = <EventsRealTime data={this.state.data.events[0].entry} />;
+      s = <EventsRealTime data={this.state.data.events[0].entry} data2={this.state.data.events[0].exit} />;
     }
     return (
       <div>

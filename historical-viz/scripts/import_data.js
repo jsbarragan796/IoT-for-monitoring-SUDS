@@ -3,7 +3,6 @@ const fs = require('fs')
 const { SENSOR_SECRET_TOKEN } = require('../config')
 const csv = require('fast-csv')
 const http = require('http')
-
 const fileNames = ['entrada', 'salida']
 
 const getDataFromFile = (fileName) => {

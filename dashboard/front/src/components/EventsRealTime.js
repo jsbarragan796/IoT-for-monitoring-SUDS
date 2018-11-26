@@ -14,7 +14,6 @@ class EventsRealTime extends Component {
       left: 40
     };
     this.drawGraph = this.drawGraph.bind(this);
-    // this.data = [{ date: '2007-04-23T05:00:00.000Z', value: 93.24 }, { date: '2007-04-24T05:00:00.000Z', value: 95.35 }, { date: '2007-04-25T05:00:00.000Z', value: 98.84 }, { date: '2007-04-26T05:00:00.000Z', value: 99.92 }, { date: '2007-04-29T05:00:00.000Z', value: 99.8 }, { date: '2007-05-01T05:00:00.000Z', value: 99.47 }, { date: '2007-05-02T05:00:00.000Z', value: 100.39 }, { date: '2007-05-03T05:00:00.000Z', value: 100.4 }, { date: '2007-05-04T05:00:00.000Z', value: 100.81 }, { date: '2007-05-07T05:00:00.000Z', value: 103.92 }, { date: '2007-05-08T05:00:00.000Z', value: 105.06 }, { date: '2007-05-09T05:00:00.000Z', value: 106.88 }, { date: '2007-05-09T05:00:00.000Z', value: 107.34 }, { date: '2007-05-10T05:00:00.000Z', value: 108.74 }, { date: '2007-05-13T05:00:00.000Z', value: 109.36 }, { date: '2007-05-14T05:00:00.000Z', value: 107.52 }, { date: '2007-05-15T05:00:00.000Z', value: 107.34 }, { date: '2007-05-16T05:00:00.000Z', value: 109.44 }, { date: '2007-05-17T05:00:00.000Z', value: 110.02 }, { date: '2007-05-20T05:00:00.000Z', value: 111.98 }, { date: '2007-05-21T05:00:00.000Z', value: 113.54 }, { date: '2007-05-22T05:00:00.000Z', value: 112.89 }, { date: '2007-05-23T05:00:00.000Z', value: 110.69 }, { date: '2007-05-24T05:00:00.000Z', value: 113.62 }, { date: '2007-05-28T05:00:00.000Z', value: 114.35 }, { date: '2007-05-29T05:00:00.000Z', value: 118.77 }, { date: '2007-05-30T05:00:00.000Z', value: 121.19 }, { date: '2007-06-01T05:00:00.000Z', value: 118.4 }, { date: '2007-06-04T05:00:00.000Z', value: 121.33 }, { date: '2007-06-05T05:00:00.000Z', value: 122.67 }, { date: '2007-06-06T05:00:00.000Z', value: 123.64 }, { date: '2007-06-07T05:00:00.000Z', value: 124.07 }, { date: '2007-06-08T05:00:00.000Z', value: 124.49 }, { date: '2007-06-10T05:00:00.000Z', value: 120.19 }, { date: '2007-06-11T05:00:00.000Z', value: 120.38 }, { date: '2007-06-12T05:00:00.000Z', value: 117.5 }, { date: '2007-06-13T05:00:00.000Z', value: 118.75 }, { date: '2007-06-14T05:00:00.000Z', value: 120.5 }, { date: '2007-06-17T05:00:00.000Z', value: 125.09 }, { date: '2007-06-18T05:00:00.000Z', value: 123.66 }, { date: '2007-06-19T05:00:00.000Z', value: 121.55 }, { date: '2007-06-20T05:00:00.000Z', value: 123.9 }, { date: '2007-06-21T05:00:00.000Z', value: 123 }, { date: '2007-06-24T05:00:00.000Z', value: 122.34 }, { date: '2007-06-25T05:00:00.000Z', value: 119.65 }, { date: '2007-06-26T05:00:00.000Z', value: 121.89 }, { date: '2007-06-27T05:00:00.000Z', value: 120.56 }, { date: '2007-06-28T05:00:00.000Z', value: 122.04 }, { date: '2007-07-02T05:00:00.000Z', value: 121.26 }, { date: '2007-07-03T05:00:00.000Z', value: 127.17 }, { date: '2007-07-05T05:00:00.000Z', value: 132.75 }, { date: '2007-07-06T05:00:00.000Z', value: 132.3 }, { date: '2007-07-09T05:00:00.000Z', value: 130.33 }, { date: '2007-07-09T05:00:00.000Z', value: 132.35 }];
   }
 
   // componentWillUpdate (newProps) {
@@ -25,17 +24,23 @@ class EventsRealTime extends Component {
   }
 
   drawGraph () {
-    const { data } = this.props;
+    const { data, data2 } = this.props;
+
+    const dates1 = data.map(d => new Date(d.time));
+    const dates2 = data2.map(d => new Date(d.time));
+    const allDates = dates1.concat(dates2).sort((a, b) => d3.ascending(a, b));
+    const dates = allDates.filter((elem, index, self) => index === self.indexOf(elem));
+    const series = [{ name: 'entrada', values: data }, { name: 'salida', values: data2 }];
     const svg = d3.select(this.svg);
     this.height = svg.attr('height') - this.margin.top - this.margin.bottom;
     this.width = svg.attr('width') - this.margin.left - this.margin.right;
 
     this.x = d3.scaleTime()
-      .domain(d3.extent(data, d => new Date(d.time)))
+      .domain(d3.extent(dates, d => d))
       .range([this.margin.left, this.width - this.margin.right]);
 
     this.y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)]).nice()
+      .domain([0, Math.max(d3.max(data, d => d.value), d3.max(data2, d => d.value))]).nice()
       .range([this.height - this.margin.bottom, this.margin.top]);
 
     this.line = d3.line()
@@ -54,17 +59,92 @@ class EventsRealTime extends Component {
       .call(g => g.select('.tick:last-of-type text').clone()
         .attr('x', 3)
         .attr('text-anchor', 'start')
-        .attr('font-weight', 'bold')
-        .text('HOLA'));
+        .attr('font-weight', 'bold'));
 
-    svg.append('path')
-      .datum(data)
+    const path = svg.append('g')
       .attr('fill', 'none')
       .attr('stroke', 'steelblue')
       .attr('stroke-width', 1.5)
       .attr('stroke-linejoin', 'round')
       .attr('stroke-linecap', 'round')
-      .attr('d', this.line);
+      .selectAll('path')
+      .data(series)
+      .enter()
+      .append('path')
+      .style('mix-blend-mode', 'multiply')
+      .attr('d', d => this.line(d.values));
+
+    const hover = () => {
+      svg.style('position', 'relative');
+
+      const dot = svg.append('g')
+        .attr('display', 'none');
+
+      dot.append('circle')
+        .attr('r', 2.5);
+
+      dot.append('text')
+        .style('font', '10px sans-serif')
+        .attr('text-anchor', 'middle')
+        .attr('y', -8);
+
+      const moved = () => {
+        d3.event.preventDefault();
+
+        const ym = this.y.invert(d3.event.layerY);
+        const xm = this.x.invert(d3.event.layerX);
+        const i1 = d3.bisectLeft(dates, xm, 1);
+        const i0 = i1 - 1;
+        const i = xm - dates[i0] > dates[i1] - xm ? i1 : i0;
+        const s = series.reduce((a, b) => {
+          const date = dates[i].getTime();
+          const closestA = a.values.reduce((ac, cv) => {
+            const cvTime = new Date(cv.time).getTime();
+            const acTime = new Date(ac.time).getTime();
+            if (date >= cvTime) {
+              return Math.max(cvTime, acTime) === acTime ? ac : cv;
+            }
+            return acTime === new Date(0).getTime() ? cv : ac;
+          },
+          { time: new Date(0), value: undefined });
+
+          const closestB = b.values.reduce((ac, cv) => {
+            const cvTime = new Date(cv.time).getTime();
+            const acTime = new Date(ac.time).getTime();
+            if (date >= cvTime) {
+              return Math.max(cvTime, acTime) === acTime ? ac : cv;
+            }
+            return acTime === new Date(0).getTime() ? cv : ac;
+          },
+          { time: new Date(0), value: undefined });
+          return (Math.abs(closestA.value - ym) < Math.abs(closestB.value - ym) ? { serie: a, value: closestA } : { serie: b, value: closestB });
+        });
+        path.attr('stroke', d => (d === s.serie ? null : '#ddd')).filter(d => d === s.serie).raise();
+        dot.attr('transform', `translate(${this.x(new Date(s.value.time))},${this.y(s.value.value)})`);
+        dot.select('text').text(Number(s.value.value).toFixed(3));
+      };
+      const entered = () => {
+        path.style('mix-blend-mode', null).attr('stroke', '#ddd');
+        dot.attr('display', null);
+      };
+
+      const left = () => {
+        path.style('mix-blend-mode', 'multiply').attr('stroke', null);
+        dot.attr('display', 'none');
+      };
+
+      if ('ontouchstart' in document) {
+        svg.style('-webkit-tap-highlight-color', 'transparent')
+          .on('touchmove', moved)
+          .on('touchstart', entered)
+          .on('touchend', left);
+      } else {
+        svg.on('mousemove', moved)
+          .on('mouseenter', entered)
+          .on('mouseleave', left);
+      }
+    };
+    svg.call(hover, path);
   }
 
   render () {
@@ -89,5 +169,6 @@ class EventsRealTime extends Component {
 export default EventsRealTime;
 
 EventsRealTime.propTypes = {
-  data: PropTypes.instanceOf(Array).isRequired
+  data: PropTypes.instanceOf(Array).isRequired,
+  data2: PropTypes.instanceOf(Array).isRequired
 };
