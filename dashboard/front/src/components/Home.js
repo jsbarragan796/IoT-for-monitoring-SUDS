@@ -57,8 +57,12 @@ class Home extends Component {
   render () {
     this.update();
     let s = '';
+    let w = '';
+    let e = '';
     if (this.state.data && this.state.data.events.length > 0) {
       s = <EventsRealTime data={this.state.data.events[0].entry} data2={this.state.data.events[0].exit} />;
+      w = new Date((this.state.data.events[0].startDate) / 1e6).toString();
+      e = new Date((this.state.data.events[0].lastMeasurementDate) / 1e6).toString();
     }
     return (
       <div>
@@ -66,9 +70,22 @@ class Home extends Component {
         {this.showErrorMessage()}
         <div className="main">
           <div className="inicio">
-            <img className="logo" src={logo} alt="Logo" />
+            <img className="logo" height="100" src={logo} alt="Logo" />
           </div>
+          <h2>
+            Datos evento en curso:
+          </h2>
           {s}
+          <p>
+            Fecha de inicio:
+            {' '}
+            {w}
+          </p>
+          <p>
+            Fecha último dato recibido:
+            {' '}
+            {e}
+          </p>
         </div>
       </div>
     );
