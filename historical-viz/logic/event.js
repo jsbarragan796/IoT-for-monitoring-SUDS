@@ -37,8 +37,8 @@ module.exports = {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
-        else {
-          const { _id, finishDate, inputMeasurements, outputMeasurements } = lastEventData
+        else {  
+          const { _id, finishDate, inputMeasurements, outputMeasurements, peakImputFlow, peakOutputFlow, duration } = lastEventData
           const Events = client.db().collection('Event')
 
           const minuteAverageInputFlows = inputMeasurements
@@ -74,8 +74,13 @@ module.exports = {
 
           const efficiency = volumeInput !== 0 ? parseInt(100 * didNotGoOut / volumeInput) : 0
 
+          let reductionOfPeakFlow = 0;
+          if (peakOutputFlow) {
+          reductionOfPeakFlow = peakOutputFlow.max / peakImputFlow.max 
+          }
+
           await Events.updateOne({ _id }, {
-            $set: { finishDate, volumeInput, volumeOutput, efficiency }
+            $set: { finishDate, volumeInput, volumeOutput, efficiency, peakImputFlow, peakOutputFlow, reductionOfPeakFlow, duration }
           })
 
           const { startDate } = newEventData
@@ -167,8 +172,8 @@ module.exports = {
               efficiency: { $gte: filter.beginEfficiency, $lte: filter.endEfficiency },
               volumeInput: { $gte: filter.beginVolumeInput, $lte: filter.endVolumeInput },
               volumeOutput: { $gte: filter.beginVolumeOutput, $lte: filter.endVolumeOutput },
-              peakInputFlow: { $gte: filter.beginPeakInputFlow, $lte: filter.endPeakInputFlow },
-              peakOutFlow: { $gte: filter.beginPeakOutFlow, $lte: filter.endPeakOutFlow },
+              "peakInputFlow.time": { $gte: filter.beginPeakInputFlow, $lte: filter.endPeakInputFlow },
+              "peakOutFlow.time": { $gte: filter.beginPeakOutFlow, $lte: filter.endPeakOutFlow },
               reductionOfPeakFlow: { $gte: filter.beginReductionOfPeakFlow, $lte: filter.endReductionOfPeakFlow },
               duration: { $gte: filter.beginDuration, $lte: filter.endDuration }
             }).count()

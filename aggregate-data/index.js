@@ -140,10 +140,14 @@
           `
           const peakOutputFlow = await influx.query(peakOutputFlowQuery)
 
-          const duration = ((startDate - finishDate) / 1000000000) / (60 * 60)
-
+          const duration = ((startDate - finishDate) / 1e9) / (60 * 60)
+          
+          let reductionOfPeakFlow = 0;
+          if (peakOutputFlow && peakOutputFlow.max){
+          reductionOfPeakFlow = peakOutputFlow.max / peakImputFlow.max 
+          }
           await Events.updateOne({ _id: ObjectID(_id) }, {
-            $set: { volumeInput, volumeOutput, efficiency, peakImputFlow, peakOutputFlow, duration }
+            $set: { volumeInput, volumeOutput, efficiency, peakImputFlow:peakImputFlow[0], peakOutputFlow:peakOutputFlow[0], duration, reductionOfPeakFlow}
           })
 
           client.close()
