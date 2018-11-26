@@ -23,7 +23,7 @@ module.exports = (producer) => {
     }
   }
   const getMessageValue = (message) => {
-    return String(message).substr(2, 6)
+    return Number(String(message).substr(2, 6))/100
   }
   const getCannel = (message) => {
     return String(message).substr(1, 1)

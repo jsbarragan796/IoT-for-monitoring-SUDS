@@ -3,7 +3,7 @@ const fs = require('fs')
 const { SENSOR_SECRET_TOKEN } = require('../config')
 const csv = require('fast-csv')
 const http = require('http')
-const fileNames = ['entrada', 'salida']
+const fileNames = ['4D10B3', '4D10B4']
 
 const getDataFromFile = (fileName) => {
   return new Promise((resolve, reject) => {
@@ -72,7 +72,6 @@ const postData = (body) => {
 
 const buildPostBody = (sensorId, value, timestamp) => {
   return JSON.stringify({
-    'measurementType': 'level',
     'sensorId': sensorId,
     'value': value,
     'timestamp': timestamp + future

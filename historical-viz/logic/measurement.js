@@ -79,7 +79,7 @@ module.exports = {
         SELECT MEAN(value)
         FROM level
         WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId = 'entrada'
+          AND sensorId = '4D10B3'
         GROUP BY time(1m)
       `
       const lastEventInputMeasurements = await influx.query(inputQuery)
@@ -88,7 +88,7 @@ module.exports = {
         SELECT MEAN(value)
         FROM level
         WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId= 'salida'
+          AND sensorId= '4D10B3'
         GROUP BY time(1m)
       `
       const lastEventOutputMeasurements = await influx.query(outputQuery)
@@ -98,7 +98,7 @@ module.exports = {
         SELECT max(value)
         FROM level
         WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId= 'entrada'
+          AND sensorId= '4D10B3'
       `
       const peakImputFlow = await influx.query(peakImputFlowQuery)
 
@@ -106,7 +106,7 @@ module.exports = {
       SELECT max(value)
       FROM level
       WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-        AND sensorId= 'salida'
+        AND sensorId= '4D10B3'
       `
       const peakOutputFlow = await influx.query(peakOutputFlowQuery)
 
