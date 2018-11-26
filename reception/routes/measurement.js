@@ -7,15 +7,15 @@ module.exports = (producer) => {
 
   const { SENSOR_SECRET_TOKEN } = require('../config')
 
-  const getMeasurementType = (sensorId, cannel) => {
+  const getMeasurementType = (sensorId, channel) => {
     if (sensorId === '4D1089') {
-      if (cannel === '2') return 'rain'
+      if (channel === '2') return 'rain'
       else { return 'NaN' }
     // 4D10B3
     } else {
-      if (cannel === '0') {
+      if (channel === '1') {
         return 'conductivity'
-      } else if (cannel === '1') {
+      } else if (channel === '0') {
         return 'level'
       } else {
         return 'NaN'
@@ -25,7 +25,7 @@ module.exports = (producer) => {
   const getMessageValue = (message) => {
     return Number(String(message).substr(2, 6))/100
   }
-  const getCannel = (message) => {
+  const getchannel = (message) => {
     return String(message).substr(1, 1)
   }
 
@@ -45,15 +45,15 @@ module.exports = (producer) => {
           const messagePart2 = String(value).substr(6, 11)
 
           const valM1 = getMessageValue(messagePart1)
-          const cannelM1 = getCannel(messagePart1)
-          const measurementTypeM1 = getMeasurementType(sensorId, cannelM1)
+          const channelM1 = getchannel(messagePart1)
+          const measurementTypeM1 = getMeasurementType(sensorId, channelM1)
 
           await sendMeasurementMessage(producer, sensorId, measurementTypeM1, valM1, ts)
 
           if (messagePart1 !== messagePart2) {
             const valM2 = getMessageValue(messagePart2)
-            const cannelM2 = getCannel(messagePart2)
-            const measurementTypeM2 = getMeasurementType(sensorId, cannelM2)
+            const channelM2 = getchannel(messagePart2)
+            const measurementTypeM2 = getMeasurementType(sensorId, channelM2)
             await sendMeasurementMessage(producer, sensorId, measurementTypeM2, valM2, ts)
           }
         }

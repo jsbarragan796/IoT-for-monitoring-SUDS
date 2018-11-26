@@ -114,7 +114,7 @@ const postEventData = async (event) => {
     // row[4] sensorId
     const valueLevel = String(Math.trunc(row[3] * 100)).padStart(4, '0')
     const valueConductivity = String(Math.trunc(row[1] * 100)).padStart(4, '0')
-    const codedValue = `10${valueConductivity}11${valueLevel}`
+    const codedValue = `11${valueConductivity}10${valueLevel}`
     // row[0] +18000 to convert to UTC (input data is in colombian time)
     const body = buildPostBody(row[4], codedValue, row[0] + 18000)
     await postData(body)
