@@ -59,5 +59,7 @@
     const routeName = routeStr.slice(0, -3)
     const route = require('./routes/' + routeName)(producer)
     app.use('/' + routeName, route)
+
+    console.log('ya')
   })
 })()

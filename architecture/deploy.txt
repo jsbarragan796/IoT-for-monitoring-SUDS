@@ -1,2 +1,5 @@
-suds-lb: 54.208.88.146
-suds-api1: 18.206.160.183
+web
+mensajeria x
+BD x
+recepción -> recepcion
+batch -> notification - aggregate-data - crude-data
