@@ -27,19 +27,20 @@ const getDataFromFile = (fileName) => {
   })
 }
 // // [inicio, fin, ajuste Entrada, ajuste salida  ]
-// const events = [
-//     [1494578400,1494605700, 0.95 , 0.4],
-//     [1494857340,1494929940, 0.95, 0.45 ],
-//     [1495012500,1495029000, 1, 1.35],
-//     [1496922300,1496965500, 0.32 , 1.33]
-//     ]
-// [inicio, fin, ajuste Entrada, ajuste salida  ]
 const events = [
-  [1494578400, 1494605700, 0.95, 0.4]
-]
+    [1494578400,1494605700, 0.95 , 0.4],
+    [1494857340,1494929940, 0.95, 0.45 ],
+    [1495012500,1495029000, 1, 1.35],
+    [1496922300,1496965500, 0.32 , 1.33]
+    ]
+// [inicio, fin, ajuste Entrada, ajuste salida  ]
+// const events = [
+//   [1494578400, 1494605700, 0.95, 0.4]
+// ]
 
-const future = 31536000
+// const future = 31536000
 
+const future = 0
 const postOptions = {
   hostname: 'localhost',
   port: 4400,
@@ -108,8 +109,8 @@ const postEventData = async (event) => {
       return 0
     }
   })
-
-  for (let index = 0; index < Math.ceil(allData.length / 8); index++) {
+  // Math.ceil(allData.length / 8)
+  for (let index = 0; index < allData.length; index++) {
     const row = allData[index]
     // row[4] sensorId
     // row[3] value

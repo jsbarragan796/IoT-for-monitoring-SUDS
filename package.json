@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/jsbarragan796/backend/issues"
   },
-  "homepage": "https://github.com/jsbarragan796/backend#readme"
+  "homepage": "https://github.com/jsbarragan796/backend#readme",
+  "dependencies": {
+    "pm2": "^3.2.2"
+  }
 }
