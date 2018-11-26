@@ -51,13 +51,19 @@
   app.use(morgan(':date[iso] :method :url :status - :response-time ms'))
   app.use(morgan(':date[iso] :method :url :status - :response-time ms', { stream: accessLogStream }))
 
+  console.log('jj')
+
   const { getProducer } = require('./kafka')
   const producer = await getProducer()
+
+  console.log('prod')
 
   const routes = fs.readdirSync('./routes')
   routes.forEach(routeStr => {
     const routeName = routeStr.slice(0, -3)
     const route = require('./routes/' + routeName)(producer)
     app.use('/' + routeName, route)
+
+    console.log('loaded route ' + routeName)
   })
 })()

@@ -20,6 +20,7 @@
       })
     }]
   })
+
   const { getConsumer } = require('./kafka')
 
   const consumer = await getConsumer()

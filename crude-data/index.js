@@ -10,8 +10,6 @@
 
   const Influx = require('influx')
 
-  console.log(INFLUX_DB_HOST)
-
   const influx = new Influx.InfluxDB({
     database: INFLUX_DB_DATABASE,
     host: INFLUX_DB_HOST,
