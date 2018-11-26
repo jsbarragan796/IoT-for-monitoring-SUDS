@@ -47,7 +47,15 @@ class Home extends Component {
     return '';
   }
 
+  update () {
+    setInterval(() => {
+      this.loadData();
+      console.log('getting data');
+    }, 7000);
+  }
+
   render () {
+    this.update();
     let s = '';
     if (this.state.data && this.state.data.events.length > 0) {
       s = <EventsRealTime data={this.state.data.events[0].entry} data2={this.state.data.events[0].exit} />;
