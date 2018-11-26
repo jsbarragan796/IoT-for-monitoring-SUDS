@@ -51,7 +51,7 @@ class Home extends Component {
     setInterval(() => {
       this.loadData();
       console.log('getting data');
-    }, 7000);
+    }, 15000);
   }
 
   render () {
