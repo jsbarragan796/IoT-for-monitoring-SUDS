@@ -6,8 +6,12 @@ module.exports = {
 
   KAFKA_HOST: isDev ? process.env.KAFKA_HOST_DEV : process.env.KAFKA_HOST,
   KAFKA_PORT: isDev ? process.env.KAFKA_PORT_DEV : process.env.KAFKA_PORT,
-  KAFKA_TOPIC: isDev ? process.env.KAFKA_TOPIC_DEV : process.env.KAFKA_TOPIC,
   KAFKA_GROUP: isDev ? process.env.KAFKA_GROUP_DEV : process.env.KAFKA_GROUP,
+
+  KAFKA_TOPIC_EVENT: 'event',
+  KAFKA_TOPIC_MEASUREMENT: 'measuerement',
+  KAFKA_TOPIC_HEALTHCHECK: 'healthcheck',
+  KAFKA_TOPIC_NOTIFICATION: 'notification',
 
   INFLUX_DB_URL: isDev ? process.env.INFLUX_DB_URL_DEV : process.env.INFLUX_DB_URL,
   INFLUX_DB_DATABASE: isDev ? process.env.INFLUX_DB_DATABASE_DEV : process.env.INFLUX_DB_DATABASE,

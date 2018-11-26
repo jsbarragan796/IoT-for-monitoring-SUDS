@@ -1,5 +1,5 @@
 
-const { MONGODB_URI, KAFKA_TOPIC_PRODUCER_CLOSING_EVENT, KAFKA_TOPIC_PRODUCER_NOTIFICATION, NOTIFICATION_STARTED_RAINING } = require('../config')
+const { MONGODB_URI, KAFKA_TOPIC_EVENT, KAFKA_TOPIC_NOTIFICATION, NOTIFICATION_STARTED_RAINING } = require('../config')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 
@@ -38,8 +38,8 @@ module.exports = (producer) => {
 
           console.log('va a mandar la notificación')
 
-          producer.produce(KAFKA_TOPIC_PRODUCER_CLOSING_EVENT, null, Buffer.from(_id.toString()))
-          producer.produce(KAFKA_TOPIC_PRODUCER_NOTIFICATION, null, Buffer.from(NOTIFICATION_STARTED_RAINING))
+          producer.produce(KAFKA_TOPIC_EVENT, null, Buffer.from(_id.toString()))
+          producer.produce(KAFKA_TOPIC_NOTIFICATION, null, Buffer.from(NOTIFICATION_STARTED_RAINING))
 
           client.close()
           resolve()

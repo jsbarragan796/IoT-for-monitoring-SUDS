@@ -1,6 +1,9 @@
 const Kafka = require('node-rdkafka')
 
-const { KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC, KAFKA_GROUP } = require('./config')
+const { KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC_EVENT, KAFKA_GROUP } = require('./config')
+
+console.log(KAFKA_HOST)
+console.log(KAFKA_PORT)
 
 module.exports = {
   getConsumer: () => {
@@ -15,7 +18,7 @@ module.exports = {
       consumer
         .on('ready', () => {
           console.log('Aggregate data ready to consume')
-          consumer.subscribe([KAFKA_TOPIC])
+          consumer.subscribe([KAFKA_TOPIC_EVENT])
           consumer.consume()
           resolve(consumer)
         })
