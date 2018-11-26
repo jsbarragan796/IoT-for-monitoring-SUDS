@@ -50,16 +50,12 @@
       const value = Number(parts[2])
       const timestamp = Number(parts[3])
 
-      const point = {
+      await influx.writePoints([{
         measurement: measurementType,
         tags: { sensorId },
         fields: { value },
         timestamp
-      }
-
-      console.log(point)
-
-      await influx.writePoints([point])
+      }])
     } catch (e) {
       console.log(e)
       log.error(e.message)

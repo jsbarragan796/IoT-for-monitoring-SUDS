@@ -19,7 +19,7 @@
       console.log(`Notification got message ${message}`)
 
       if (message === NOTIFICATION_STARTED_RAINING) {
-        await sendEventStartAlarm()
+        // await sendEventStartAlarm()
       }
     })
 })()

@@ -31,6 +31,7 @@ module.exports = (producer) => {
 
   router.post('/', async (req, res, next) => {
     const { body, headers: { authorization } } = req
+
     if (authorization !== SENSOR_SECRET_TOKEN) res.sendStatus(401)
     else {
       const { sensorId, value, timestamp } = body

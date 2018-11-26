@@ -1,6 +1,9 @@
 (async () => {
   require('dotenv').config()
 
+  const inputId = '4D10B3'
+  const outputId = '4D10B4'
+
   const fs = require('fs')
   const bunyan = require('bunyan')
   const RotatingFileStream = require('bunyan-rotating-file-stream')
@@ -78,7 +81,7 @@
               SELECT MEAN(value)
               FROM level
               WHERE time >= ${startDate} AND time <= ${finishDate}
-              AND sensorId = '0'
+              AND sensorId = '${inputId}'
               GROUP BY time(1m)
             `
           const inputMeasurements = await influx.query(inputQuery)
@@ -87,7 +90,7 @@
             SELECT MEAN(value)
             FROM level
             WHERE time >= ${startDate} AND time <= ${finishDate}
-            AND sensorId= '1'
+            AND sensorId= '${outputId}'
             GROUP BY time(1m)
           `
           const outputMeasurements = await influx.query(outputQuery)
@@ -129,7 +132,7 @@
             SELECT max(value)
             FROM level
             WHERE time >= ${startDate} AND time <= ${finishDate}
-              AND sensorId= 'entrada'
+              AND sensorId= '${inputId}'
           `
           const peakImputFlow = await influx.query(peakImputFlowQuery)
 
@@ -137,18 +140,18 @@
             SELECT max(value)
             FROM level
             WHERE time >= ${startDate} AND time <= ${finishDate}
-              AND sensorId= 'salida'
+              AND sensorId= '${outputId}'
           `
           const peakOutputFlow = await influx.query(peakOutputFlowQuery)
 
           const duration = ((startDate - finishDate) / 1e9) / (60 * 60)
-          
-          let reductionOfPeakFlow = 0;
-          if (peakOutputFlow && peakOutputFlow.max){
-          reductionOfPeakFlow = peakOutputFlow.max / peakImputFlow.max 
+
+          let reductionOfPeakFlow = 0
+          if (peakOutputFlow && peakOutputFlow.max) {
+            reductionOfPeakFlow = peakOutputFlow.max / peakImputFlow.max
           }
           await Events.updateOne({ _id: ObjectID(_id) }, {
-            $set: { volumeInput, volumeOutput, efficiency, peakImputFlow:peakImputFlow[0], peakOutputFlow:peakOutputFlow[0], duration, reductionOfPeakFlow}
+            $set: { volumeInput, volumeOutput, efficiency, peakImputFlow: peakImputFlow[0], peakOutputFlow: peakOutputFlow[0], duration, reductionOfPeakFlow }
           })
 
           client.close()

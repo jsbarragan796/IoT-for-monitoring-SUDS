@@ -10,7 +10,7 @@ module.exports = {
   KAFKA_PORT: isDev ? process.env.KAFKA_PORT_DEV : process.env.KAFKA_PORT,
 
   KAFKA_TOPIC_EVENT: 'event',
-  KAFKA_TOPIC_MEASUREMENT: 'measuerement',
+  KAFKA_TOPIC_MEASUREMENT: 'measurement',
   KAFKA_TOPIC_HEALTHCHECK: 'healthcheck',
   KAFKA_TOPIC_NOTIFICATION: 'notification'
 }

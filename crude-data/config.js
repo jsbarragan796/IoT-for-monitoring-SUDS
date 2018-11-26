@@ -9,7 +9,7 @@ module.exports = {
   KAFKA_GROUP: isDev ? process.env.KAFKA_GROUP_DEV : process.env.KAFKA_GROUP,
 
   KAFKA_TOPIC_EVENT: 'event',
-  KAFKA_TOPIC_MEASUREMENT: 'measuerement',
+  KAFKA_TOPIC_MEASUREMENT: 'measurement',
   KAFKA_TOPIC_HEALTHCHECK: 'healthcheck',
   KAFKA_TOPIC_NOTIFICATION: 'notification',
 

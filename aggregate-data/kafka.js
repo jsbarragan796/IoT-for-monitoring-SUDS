@@ -2,9 +2,6 @@ const Kafka = require('node-rdkafka')
 
 const { KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC_EVENT, KAFKA_GROUP } = require('./config')
 
-console.log(KAFKA_HOST)
-console.log(KAFKA_PORT)
-
 module.exports = {
   getConsumer: () => {
     return new Promise((resolve, reject) => {
