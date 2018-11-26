@@ -42,8 +42,8 @@ const events = [
 
 const future = 0
 const postOptions = {
-  hostname: 'localhost',
-  port: 4400,
+  hostname: '157.253.211.233',
+  port: 3500,
   path: '/measurement',
   method: 'POST',
   headers: {
@@ -112,9 +112,11 @@ const postEventData = async (event) => {
   for (let index = 0; index < allData.length; index++) {
     const row = allData[index]
     // row[4] sensorId
-    // row[3] value
+    const valueLevel = String(Math.trunc(row[3] * 100)).padStart(4, '0')
+    const valueConductivity = String(Math.trunc(row[1] * 100)).padStart(4, '0')
+    const codedValue = `10${valueConductivity}11${valueLevel}`
     // row[0] +18000 to convert to UTC (input data is in colombian time)
-    const body = buildPostBody(row[4], row[3], row[0] + 18000)
+    const body = buildPostBody(row[4], codedValue, row[0] + 18000)
     await postData(body)
   }
 }
