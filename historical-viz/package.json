@@ -7,8 +7,12 @@
     "first-deploy": "pm2 start index.js --name suds-historical",
     "deploy": "pm2 delete suds-historical && pm2 start index.js --name suds-historical",
     "dev": "DEV=1 nodemon --ignore scripts/ --ext js index.js",
-    "poblate": "DEV=1 node scripts/poblate.js",
-    "importdata": "node scripts/import_data.js"
+
+    "poblate": "node scripts/poblate.js",
+    "poblate-dev": "DEV=1 node scripts/poblate.js",
+
+    "import-data": "node scripts/import_data.js",
+    "import-data-dev": "DEV=1 node scripts/import_data.js"
   },
   "repository": {
     "type": "git",
