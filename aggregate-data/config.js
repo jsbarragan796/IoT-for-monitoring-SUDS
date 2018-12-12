@@ -6,7 +6,8 @@ module.exports = {
 
   KAFKA_HOST: isDev ? process.env.KAFKA_HOST_DEV : process.env.KAFKA_HOST,
   KAFKA_PORT: isDev ? process.env.KAFKA_PORT_DEV : process.env.KAFKA_PORT,
-  KAFKA_GROUP: isDev ? process.env.KAFKA_GROUP_DEV : process.env.KAFKA_GROUP,
+
+  KAFKA_GROUP: 'aggregate-data',
 
   KAFKA_TOPIC_EVENT_STARTED: 'event-started',
   KAFKA_TOPIC_EVENT_FINISHED: 'event-finished',
