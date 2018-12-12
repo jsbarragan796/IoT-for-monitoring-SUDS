@@ -5,7 +5,7 @@
 
   const { sendEventStartAlarm } = require('./tools')
 
-  const { NOTIFICATION_STARTED_RAINING } = require('./config')
+  const { KAFKA_TOPIC_EVENT_STARTED } = require('./config')
 
   const consumer = await getConsumer()
 
@@ -13,12 +13,12 @@
 
   consumer
     .on('data', async (data) => {
-      const { value } = data
+      const { value, topic } = data
       const message = value.toString()
 
-      console.log(`Notification got message ${message}`)
+      console.log(`Notification got message ${message} from topic ${topic}`)
 
-      if (message === NOTIFICATION_STARTED_RAINING) {
+      if (topic === KAFKA_TOPIC_EVENT_STARTED) {
         // await sendEventStartAlarm()
       }
     })

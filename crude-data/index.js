@@ -39,16 +39,18 @@
 
   consumer.on('data', async (data) => {
     try {
-      log.info(data.value.toString())
-      const { value: valueMsg } = data
+      const { value: valueMsg, topic } = data
 
       const message = valueMsg.toString()
-      console.log(`Crude data got ${message}`)
+      log.info(message)
+
+      console.log(`Crude data got ${message} from topic ${topic}`)
       const parts = message.split('_$_')
-      const sensorId = parts[0]
-      const measurementType = parts[1]
-      const value = Number(parts[2])
-      const timestamp = Number(parts[3])
+
+      const timestamp = Number(parts[0])
+      const sensorId = parts[1]
+      const measurementType = parts[2]
+      const value = Number(parts[3])
 
       await influx.writePoints([{
         measurement: measurementType,

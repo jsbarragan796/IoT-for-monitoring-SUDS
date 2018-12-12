@@ -3,7 +3,7 @@ module.exports = (producer) => {
   const express = require('express')
   const router = express.Router()
 
-  const { sendMeasurementMessage, sendHealdCheck, eventBegun } = require('../tools')
+  const { sendMeasurementMessage, sendHealthCheck, eventBegun } = require('../tools')(producer)
 
   const { SENSOR_SECRET_TOKEN } = require('../config')
 
@@ -23,7 +23,7 @@ module.exports = (producer) => {
     }
   }
   const getMessageValue = (message) => {
-    return Number(String(message).substr(2, 6))/100
+    return Number(String(message).substr(2, 6)) / 100
   }
   const getchannel = (message) => {
     return String(message).substr(1, 1)
@@ -37,9 +37,9 @@ module.exports = (producer) => {
       const { sensorId, value, timestamp } = body
       const ts = timestamp * 1000000000
       try {
-        if (Number(value) === 0) await sendHealdCheck(producer, sensorId, ts)
+        if (Number(value) === 0) await sendHealthCheck(sensorId, ts)
         else if (String(value).substr(0, 0) === '9' && String(value).substr(2, 2) === '1') {
-          await eventBegun(producer, sensorId, ts)
+          await eventBegun(sensorId, ts)
         } else {
           const messagePart1 = String(value).substr(0, 6)
           const messagePart2 = String(value).substr(6, 11)
@@ -48,13 +48,13 @@ module.exports = (producer) => {
           const channelM1 = getchannel(messagePart1)
           const measurementTypeM1 = getMeasurementType(sensorId, channelM1)
 
-          await sendMeasurementMessage(producer, sensorId, measurementTypeM1, valM1, ts)
+          await sendMeasurementMessage(sensorId, measurementTypeM1, valM1, ts)
 
           if (messagePart1 !== messagePart2) {
             const valM2 = getMessageValue(messagePart2)
             const channelM2 = getchannel(messagePart2)
             const measurementTypeM2 = getMeasurementType(sensorId, channelM2)
-            await sendMeasurementMessage(producer, sensorId, measurementTypeM2, valM2, ts)
+            await sendMeasurementMessage(sensorId, measurementTypeM2, valM2, ts)
           }
         }
         res.sendStatus(200)

@@ -66,10 +66,10 @@
   consumer.on('data', async (data) => {
     try {
       log.info(data.value.toString())
-      const { value: valueMsg } = data
+      const { value: valueMsg, topic } = data
 
       const _id = valueMsg.toString()
-      console.log(`Aggregate data got ${_id}`)
+      console.log(`Aggregate data got ${_id} from topic ${topic}`)
 
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) throw err

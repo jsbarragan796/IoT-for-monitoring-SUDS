@@ -132,6 +132,9 @@ const hola2 = (body) => {
 
 
 const loadEvents = async () => {
+  const body = buildPostBody("4D10B3", "910910910910", 1494578400)
+  hola2 = (body)
+
   for (let index = 0; index < events.length; index++) {
     const event = events[index]
     await postEventData(event).catch((e) => {});

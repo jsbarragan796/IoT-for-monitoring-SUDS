@@ -9,8 +9,8 @@ module.exports = {
   KAFKA_HOST: isDev ? process.env.KAFKA_HOST_DEV : process.env.KAFKA_HOST,
   KAFKA_PORT: isDev ? process.env.KAFKA_PORT_DEV : process.env.KAFKA_PORT,
 
-  KAFKA_TOPIC_EVENT: 'event',
+  KAFKA_TOPIC_EVENT_STARTED: 'event-started',
+  KAFKA_TOPIC_EVENT_FINISHED: 'event-finished',
   KAFKA_TOPIC_MEASUREMENT: 'measurement',
-  KAFKA_TOPIC_HEALTHCHECK: 'healthcheck',
-  KAFKA_TOPIC_NOTIFICATION: 'notification'
+  KAFKA_TOPIC_HEALTHCHECK: 'healthcheck'
 }

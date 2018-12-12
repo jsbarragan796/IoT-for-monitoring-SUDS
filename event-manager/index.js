@@ -5,7 +5,7 @@
   const bunyan = require('bunyan')
   const RotatingFileStream = require('bunyan-rotating-file-stream')
 
-  const { LOG_DIRECTORY } = require('./config')
+  const { LOG_DIRECTORY, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_MEASUREMENT } = require('./config')
 
   fs.existsSync(LOG_DIRECTORY) || fs.mkdirSync(LOG_DIRECTORY)
 
@@ -26,25 +26,29 @@
   const consumer = await getConsumer()
   const producer = await getProducer()
 
-  const { findMostRecentEvent, endEventAndCreateOne, updateLastMeasurementDate } = require('./tools')(producer)
+  const { findMostRecentEvent, createEvent, endEvent, updateLastMeasurementDate } = require('./tools')(producer)
 
   consumer.on('data', async (data) => {
     try {
       log.info(data.value.toString())
-      const { value: valueMsg } = data
+      const { value: valueMsg, topic } = data
 
-      const message = valueMsg.toString()
+      const message = Number(valueMsg.toString())
       const parts = message.split('_$_')
-      const timestamp = Number(parts[3])
+      const timestamp = Number(parts[0])
 
-      console.log(`Event manager got message ${message}`)
+      console.log(`Event manager got message ${message} from topic ${topic}`)
 
-      const { _id, lastMeasurementDate: mostRecentEventLastMeasurementDate } = await findMostRecentEvent()
+      if (topic === KAFKA_TOPIC_EVENT_STARTED) await createEvent(timestamp)
+      else if (topic === KAFKA_TOPIC_MEASUREMENT) {
+        const { _id } = await findMostRecentEvent()
 
-      if (mostRecentEventLastMeasurementDate + 1000000000 * 60 * 30 < timestamp) await endEventAndCreateOne(_id, timestamp, mostRecentEventLastMeasurementDate)
-      else await updateLastMeasurementDate(_id, timestamp)
+        await updateLastMeasurementDate(_id, timestamp)
+      }
     } catch (e) {
       log.error(e.message)
     }
   })
 })()
+
+// if (topic === EVENT_FINISHED) await endEvent(_id, timestamp)

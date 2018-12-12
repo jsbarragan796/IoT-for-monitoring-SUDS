@@ -2,4 +2,4 @@ web
 mensajeria x
 BD x
 recepción -> recepcion
-batch -> notification - aggregate-data - crude-data
+batch -> notification - aggregate-data - crude-data - event-manager
