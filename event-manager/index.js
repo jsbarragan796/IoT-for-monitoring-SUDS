@@ -33,7 +33,7 @@
       log.info(data.value.toString())
       const { value: valueMsg, topic } = data
 
-      const message = Number(valueMsg.toString())
+      const message = valueMsg.toString()
       const parts = message.split('_$_')
       const timestamp = Number(parts[0])
 
