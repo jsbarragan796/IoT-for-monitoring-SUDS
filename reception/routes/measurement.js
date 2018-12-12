@@ -36,9 +36,14 @@ module.exports = (producer) => {
     else {
       const { sensorId, value, timestamp } = body
       const ts = timestamp * 1000000000
+
       try {
+        console.log((String(value).substr(0, 1) === '9' && String(value).substr(1, 1) === '1'))
+        console.log(String(value).substr(0, 1))
+        console.log(String(value).substr(1, 1))
+
         if (Number(value) === 0) await sendHealthCheck(sensorId, ts)
-        else if (String(value).substr(0, 0) === '9' && String(value).substr(2, 2) === '1') {
+        else if (String(value).substr(0, 1) === '9' && String(value).substr(1, 1) === '1') {
           await eventBegun(sensorId, ts)
         } else {
           const messagePart1 = String(value).substr(0, 6)
