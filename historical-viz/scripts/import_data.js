@@ -132,7 +132,7 @@ const hola2 = (body) => {
 
 
 const loadEvents = async () => {
-  const body = buildPostBody("4D10B3", "911911911911", 1494578400)
+  const body = buildPostBody("sdf", "911911911911", 1494578400)
   await hola2(body)
   console.log("envia")
 
