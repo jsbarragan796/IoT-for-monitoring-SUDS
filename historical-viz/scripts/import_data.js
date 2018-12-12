@@ -132,8 +132,9 @@ const hola2 = (body) => {
 
 
 const loadEvents = async () => {
-  const body = buildPostBody("4D10B3", "910910910910", 1494578400)
-  hola2 = (body)
+  const body = buildPostBody("4D10B3", "911911911911", 1494578400)
+  await hola2(body)
+  console.log("envia")
 
   for (let index = 0; index < events.length; index++) {
     const event = events[index]
