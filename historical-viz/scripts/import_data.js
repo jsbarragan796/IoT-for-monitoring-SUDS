@@ -38,12 +38,12 @@ const events = [
 //   [1494578400, 1494605700, 0.95, 0.4]
 // ]
 
-// const future = 31536000
-
+// const future = 31536000 157.253.238.216
+// 157.253.211.233
 const future = 0
 const postOptions = {
-  hostname: '157.253.211.233',
-  port: 3500,
+  hostname: '157.253.238.216',
+  port: 8081,
   path: '/measurement',
   method: 'POST',
   headers: {
@@ -117,15 +117,25 @@ const postEventData = async (event) => {
     const codedValue = `11${valueConductivity}10${valueLevel}`
     // row[0] +18000 to convert to UTC (input data is in colombian time)
     const body = buildPostBody(row[4], codedValue, row[0] + 18000)
-    await postData(body)
+    // await postData(body)
+    await hola2(body)
   }
 }
+const hola2 = (body) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => { 
+      await postData(body);
+      resolve()
+   }, 5000)
+  })
+}
+
 
 const loadEvents = async () => {
   for (let index = 0; index < events.length; index++) {
     const event = events[index]
-    await postEventData(event).catch((e) => {})
-    console.log('Termino evento')
+    await postEventData(event).catch((e) => {});
+    console.log("End Evento");
   }
 }
 loadEvents()
