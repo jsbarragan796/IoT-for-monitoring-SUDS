@@ -1,11 +1,12 @@
 (async () => {
   require('dotenv').config()
 
+  const cron = require('node-cron')
   const fs = require('fs')
   const bunyan = require('bunyan')
   const RotatingFileStream = require('bunyan-rotating-file-stream')
 
-  const { LOG_DIRECTORY, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_MEASUREMENT } = require('./config')
+  const { LOG_DIRECTORY, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_MEASUREMENT, CRON_SCHEDULE } = require('./config')
 
   fs.existsSync(LOG_DIRECTORY) || fs.mkdirSync(LOG_DIRECTORY)
 
@@ -48,6 +49,13 @@
     } catch (e) {
       log.error(e.message)
     }
+  })
+
+  cron.schedule(CRON_SCHEDULE, async () => {
+    const { _id, lastMeasurementDate } = await findMostRecentEvent()
+    const timestamp = new Date().getTime() * 1000
+
+    if (lastMeasurementDate + 1000000000 * 60 * 30 < timestamp) await endEvent(_id, timestamp)
   })
 })()
 

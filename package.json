@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jsbarragan796/backend#readme",
   "dependencies": {
+    "node-cron": "^2.0.3",
     "pm2": "^3.2.2"
   }
 }
