@@ -1,5 +1,5 @@
 
-const { MONGODB_URI, KAFKA_TOPIC_EVENT } = require('../config')
+const { MONGODB_URI, KAFKA_TOPIC_EVENT_FINISHED } = require('../config')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 
@@ -32,7 +32,7 @@ module.exports = (producer) => {
             $set: { finishDate: timestamp }
           })
 
-          producer.produce(KAFKA_TOPIC_EVENT, null, Buffer.from(_id.toString()))
+          producer.produce(KAFKA_TOPIC_EVENT_FINISHED, null, Buffer.from(_id.toString()))
 
           client.close()
           resolve()
