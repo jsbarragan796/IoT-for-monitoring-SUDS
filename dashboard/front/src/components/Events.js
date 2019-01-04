@@ -1,9 +1,41 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Alert } from 'reactstrap';
+import {
+  Alert
+} from 'reactstrap';
+
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Filter from './Filter';
+import HistoricalEvent from './HistoricalEvent';
 import AppNavBar from './AppNavBar';
-import EventsRealTime from './EventsRealTime';
-import logo from '../assets/logo.png';
+
+const styles = {
+  root: {
+    flexGrow: 1
+  },
+  filter: {
+    'max-width': '25%',
+    'min-width': 200
+
+  },
+  events: {
+    'max-width': '75%',
+    'min-width': 300
+  }
+};
 
 class Events extends Component {
   constructor (props) {
@@ -11,9 +43,11 @@ class Events extends Component {
     this.state = {
       data: null,
       errorStatus: false,
-      errorMessage: ''
+      errorMessage: '',
+      filter: { pageNumber: 1 }
     };
     this.loadData = this.loadData.bind(this);
+    this.allEvents = this.allEvents.bind(this);
   }
 
   componentDidMount () {
@@ -21,11 +55,10 @@ class Events extends Component {
   }
 
   loadData () {
-    axios.get('events/current-events?pageNumber=1')
+    const { filter } = this.state;
+    axios.post('events/filtered-data', filter)
       .then((response) => {
         this.setState({ data: response.data });
-        const { data } = this.state;
-        console.log(data);
       })
       .catch((err) => {
         this.setState({ errorStatus: true, errorMessage: err.message });
@@ -47,29 +80,54 @@ class Events extends Component {
     return '';
   }
 
-  allEvents (events) {
-    const eventsG = events.map(event => (<EventsRealTime data={event.entry} data2={event.exit} />));
-    return eventsG;
+  allEvents () {
+    const { data } = this.state;
+    return data.events.map(
+      event => (<HistoricalEvent key={event._id} event={event} />)
+    );
   }
 
   render () {
-    let s = '';
-    if (this.state.data && this.state.data.events.length > 0) {
-      s = <EventsRealTime data={this.state.data.events[0].entry} data2={this.state.data.events[0].exit} />;
+    let events = '';
+    const { data } = this.state;
+    const { classes } = this.props;
+    if (data && data.events.length > 0) {
+      events = this.allEvents();
     }
     return (
       <div>
         <AppNavBar optionActive="Eventos" />
         {this.showErrorMessage()}
         <div className="main">
-          <div className="inicio">
-            <img className="logo" src={logo} alt="Logo" />
-          </div>
-          {s}
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6" color="inherit">
+                  Filtros
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Filter />
+            </ExpansionPanelDetails>
+            <Divider />
+            <ExpansionPanelActions>
+              <Button size="small">
+                Cancel
+              </Button>
+              <Button size="small" color="primary">
+            Save
+              </Button>
+            </ExpansionPanelActions>
+          </ExpansionPanel>
+          <Grid container spacing={8}>
+            {events}
+          </Grid>
         </div>
       </div>
     );
   }
 }
 
-export default Events;
+Events.propTypes = {
+  classes: PropTypes.instanceOf(Object).isRequired
+};
+export default withStyles(styles)(Events);

@@ -53,7 +53,7 @@ module.exports = {
     }
 
     const query = `
-    SELECT ${aggregate ? `${aggregate}(${'value'})` : '*'} 
+    SELECT ${aggregate ? `${aggregate}(${'value'})` : '*'} as value
     FROM ${measurementType}
     ${whereClause || ''}
     ${groupClause || ''}

@@ -47,22 +47,22 @@ class Home extends Component {
     return '';
   }
 
-  update () {
-    setInterval(() => {
-      this.loadData();
-      console.log('getting data');
-    }, 15000);
-  }
+  // update () {
+  //   setInterval(() => {
+  //     this.loadData();
+  //     console.log('getting data');
+  //   }, 15000);
+  // }
 
   render () {
-    this.update();
     let s = '';
     let w = '';
     let e = '';
-    if (this.state.data && this.state.data.events.length > 0) {
-      s = <EventsRealTime data={this.state.data.events[0].entry} data2={this.state.data.events[0].exit} />;
-      w = new Date((this.state.data.events[0].startDate) / 1e6).toString();
-      e = new Date((this.state.data.events[0].lastMeasurementDate) / 1e6).toString();
+    const { data } = this.state;
+    if (data && data.events.length > 0) {
+      s = <EventsRealTime data={data.events[0].entry} data2={data.events[0].exit} />;
+      w = new Date((data.events[0].startDate) / 1e6).toString();
+      e = new Date((data.events[0].lastMeasurementDate) / 1e6).toString();
     }
     return (
       <div>

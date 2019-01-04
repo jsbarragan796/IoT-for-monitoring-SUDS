@@ -26,7 +26,8 @@ nav {
   justify-content:center;
 }
 .main {
-  padding: 0 15% 0 15%;
+  margin-top: 68px;
+  padding: 0 3% 0 3%;
 }
 
 .center-div

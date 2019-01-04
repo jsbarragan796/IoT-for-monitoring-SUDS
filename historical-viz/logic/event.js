@@ -1,6 +1,56 @@
 
 const { MONGODB_URI } = require('../config')
 const MongoClient = require('mongodb').MongoClient
+const MIN_INT = Number.MIN_SAFE_INTEGER
+const MAX_INT = Number.MAX_SAFE_INTEGER
+
+const getDateNanoSeconds = (date) => {
+  return new Date(date).getTime() * 1000000
+}
+const getNowNanoSeconds = () => {
+  return new Date().getTime() * 1000000
+}
+const getFilterData = (filter) => {
+  const {
+    beginStartDate, endStartDate, beginEfficiency, endEfficiency,
+    beginVolumeInput, endVolumeInput, beginVolumeOutput, endVolumeOutput,
+    beginPeakInputFlow, endPeakInputFlow, beginPeakOutFlow, endPeakOutFlow,
+    beginReductionOfPeakFlow, endReductionOfPeakFlow, beginDuration, endDuration
+  } = filter
+  return { 
+    finishDate: { $exists: true },
+    startDate: { 
+      $gte: beginStartDate ? getDateNanoSeconds(beginStartDate) : 0 ,
+      $lte: endStartDate ? getDateNanoSeconds(endStartDate): getNowNanoSeconds(),
+    },
+    efficiency: { 
+      $gte: beginEfficiency ? beginEfficiency : MIN_INT, 
+      $lte: endEfficiency ? endEfficiency : MAX_INT
+    },
+    volumeInput: { 
+      $gte: beginVolumeInput ? beginVolumeInput  : MIN_INT, 
+      $lte: endVolumeInput ?  endVolumeInput : MAX_INT
+    },
+    volumeOutput: { 
+      $gte: beginVolumeOutput ? beginVolumeOutput : MIN_INT, 
+      $lte: endVolumeOutput ? endVolumeOutput : MAX_INT
+    },
+    peakInputFlow: { 
+      $gte: beginPeakInputFlow ? beginPeakInputFlow : MIN_INT, 
+      $lte: endPeakInputFlow ? endPeakInputFlow : MAX_INT
+    },
+    peakOutFlow: { 
+      $gte: beginPeakOutFlow ? beginPeakOutFlow : MIN_INT, 
+      $lte: endPeakOutFlow ? endPeakOutFlow : MAX_INT},
+    reductionOfPeakFlow: { 
+      $gte: beginReductionOfPeakFlow? beginReductionOfPeakFlow : MIN_INT, 
+      $lte: endReductionOfPeakFlow ? endReductionOfPeakFlow : MAX_INT},
+    duration: { 
+      $gte: beginDuration? beginDuration : MIN_INT, 
+      $lte: endDuration ? endDuration : MAX_INT
+    }
+  }
+}
 
 module.exports = {
   findAllEvents: () => {
@@ -166,17 +216,8 @@ module.exports = {
         else {
           let Events = client.db().collection('Event')
           const numberOfEvents = Events.find(
-            { finishDate: { $exists: true },
-              startDate: { $gte: new Date(filter.beginStartDate).getTime() * 1000000,
-                $lte: new Date(filter.endStartDate).getTime() * 1000000 },
-              efficiency: { $gte: filter.beginEfficiency, $lte: filter.endEfficiency },
-              volumeInput: { $gte: filter.beginVolumeInput, $lte: filter.endVolumeInput },
-              volumeOutput: { $gte: filter.beginVolumeOutput, $lte: filter.endVolumeOutput },
-              "peakInputFlow.time": { $gte: filter.beginPeakInputFlow, $lte: filter.endPeakInputFlow },
-              "peakOutFlow.time": { $gte: filter.beginPeakOutFlow, $lte: filter.endPeakOutFlow },
-              reductionOfPeakFlow: { $gte: filter.beginReductionOfPeakFlow, $lte: filter.endReductionOfPeakFlow },
-              duration: { $gte: filter.beginDuration, $lte: filter.endDuration }
-            }).count()
+            getFilterData(filter)
+            ).count()
           client.close()
           resolve(numberOfEvents)
         }
@@ -190,19 +231,8 @@ module.exports = {
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')
-          console.log(new Date(filter.beginStartDate).getTime() * 1000000)
-          console.log(new Date(filter.endStartDate).getTime() * 1000000)
           Events.find(
-            { finishDate: { $exists: true },
-              startDate: { $gte: new Date(filter.beginStartDate).getTime() * 1000000,
-                $lte: new Date(filter.endStartDate).getTime() * 1000000 },
-              efficiency: { $gte: filter.beginEfficiency, $lte: filter.endEfficiency },
-              volumeInput: { $gte: filter.beginVolumeInput, $lte: filter.endVolumeInput },
-              volumeOutput: { $gte: filter.beginVolumeOutput, $lte: filter.endVolumeOutput },
-              peakInputFlow: { $gte: filter.beginPeakInputFlow, $lte: filter.endPeakInputFlow },
-              peakOutFlow: { $gte: filter.beginPeakOutFlow, $lte: filter.endPeakOutFlow },
-              reductionOfPeakFlow: { $gte: filter.beginReductionOfPeakFlow, $lte: filter.endReductionOfPeakFlow },
-              duration: { $gte: filter.beginDuration, $lte: filter.endDuration } },
+            getFilterData(filter),
             { sort: { _id: 1 },
               skip: firstEventPage,
               limit: eventsInPage }).toArray((err, points) => {
