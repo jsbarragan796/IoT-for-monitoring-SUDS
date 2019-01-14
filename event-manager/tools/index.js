@@ -58,14 +58,34 @@ module.exports = (producer) => {
     })
   }
 
-  const updateLastMeasurementDate = (_id, timestamp) => {
+  const updateLastMeasurementDate = (timestamp) => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
           const Events = client.db().collection('Event')
+          const event = await Events.findOne({}, { sort: { startDate: -1 } })
+          const { _id } = event
 
           await Events.updateOne({ _id }, {
+            $set: { lastMeasurementDate: timestamp }
+          })
+
+          client.close()
+          resolve()
+        }
+      })
+    })
+  }
+
+  const healthCheck = (sensorId, timestamp) => {
+    return new Promise((resolve, reject) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
+        if (err) reject(err)
+        else {
+          const Events = client.db().collection('Sensor')
+
+          await Events.updateOne({ id: sensorId }, {
             $set: { lastMeasurementDate: timestamp }
           })
 
@@ -80,6 +100,7 @@ module.exports = (producer) => {
     findMostRecentEvent,
     endEvent,
     createEvent,
-    updateLastMeasurementDate
+    updateLastMeasurementDate,
+    healthCheck
   }
 }

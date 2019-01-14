@@ -1,5 +1,5 @@
 
-module.exports = (producer) => {
+module.exports = (producer, redis) => {
   const express = require('express')
   const router = express.Router()
 
@@ -8,20 +8,19 @@ module.exports = (producer) => {
   const { SENSOR_SECRET_TOKEN } = require('../config')
 
   const getMeasurementType = (sensorId, channel) => {
-    if (sensorId === '4D1089') {
-      if (channel === '2') return 'rain'
-      else { return 'NaN' }
-    // 4D10B3
-    } else {
-      if (channel === '1') {
-        return 'conductivity'
-      } else if (channel === '0') {
-        return 'level'
-      } else {
-        return 'NaN'
-      }
-    }
+    return redis.get(`${sensorId}-${channel}`)
+
+    // if (sensorId === '4D1089') {
+    //   if (channel === '2') return 'rain'
+    //   else return 'NaN'
+    // // 4D10B3
+    // } else {
+    //   if (channel === '1') return 'conductivity'
+    //   else if (channel === '0') return 'level'
+    //   else return 'NaN'
+    // }
   }
+
   const getMessageValue = (message) => {
     return Number(String(message).substr(2, 6)) / 100
   }
@@ -47,14 +46,14 @@ module.exports = (producer) => {
 
           const valM1 = getMessageValue(messagePart1)
           const channelM1 = getchannel(messagePart1)
-          const measurementTypeM1 = getMeasurementType(sensorId, channelM1)
+          const measurementTypeM1 = await getMeasurementType(sensorId, channelM1)
 
           await sendMeasurementMessage(sensorId, measurementTypeM1, valM1, ts)
 
           if (messagePart1 !== messagePart2) {
             const valM2 = getMessageValue(messagePart2)
             const channelM2 = getchannel(messagePart2)
-            const measurementTypeM2 = getMeasurementType(sensorId, channelM2)
+            const measurementTypeM2 = await getMeasurementType(sensorId, channelM2)
             await sendMeasurementMessage(sensorId, measurementTypeM2, valM2, ts)
           }
         }

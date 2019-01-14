@@ -15,7 +15,15 @@ const influx = new Influx.InfluxDB({
   protocol: INFLUX_DB_PROTOCOL
 }, {
   schema: [ {
-    measurement: 'ph',
+    measurement: 'conductivity',
+    fields: {
+      value: Influx.FieldType.FLOAT
+    },
+    tags: [
+      'sensorId'
+    ]
+  }, {
+    measurement: 'rain',
     fields: {
       value: Influx.FieldType.FLOAT
     },
@@ -93,7 +101,6 @@ module.exports = {
       `
       const lastEventOutputMeasurements = await influx.query(outputQuery)
 
-
       const peakImputFlowQuery = `
         SELECT max(value)
         FROM level
@@ -117,9 +124,9 @@ module.exports = {
         startDate: mostRecentEventStartDate,
         inputMeasurements: lastEventInputMeasurements,
         outputMeasurements: lastEventOutputMeasurements,
-        peakImputFlow:peakImputFlow[0],
-        peakOutputFlow:peakOutputFlow[0],
-        duration:duration }
+        peakImputFlow: peakImputFlow[0],
+        peakOutputFlow: peakOutputFlow[0],
+        duration: duration }
 
       const newEventData = { startDate: timestamp }
       await eventLogic.endEventAndCreateOne(lastEventData, newEventData)

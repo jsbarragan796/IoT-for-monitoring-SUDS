@@ -28,11 +28,11 @@ const getDataFromFile = (fileName) => {
 }
 // // [inicio, fin, ajuste Entrada, ajuste salida  ]
 const events = [
-    [1494578400,1494605700, 0.95 , 0.4],
-    [1494857340,1494929940, 0.95, 0.45 ],
-    [1495012500,1495029000, 1, 1.35],
-    [1496922300,1496965500, 0.32 , 1.33]
-    ]
+  [ 1494578400, 1494605700, 0.95, 0.4 ],
+  [ 1494857340, 1494929940, 0.95, 0.45 ],
+  [ 1495012500, 1495029000, 1, 1.35 ],
+  [ 1496922300, 1496965500, 0.32, 1.33 ]
+]
 // [inicio, fin, ajuste Entrada, ajuste salida  ]
 // const events = [
 //   [1494578400, 1494605700, 0.95, 0.4]
@@ -123,23 +123,22 @@ const postEventData = async (event) => {
 }
 const hola2 = (body) => {
   return new Promise((resolve, reject) => {
-    setTimeout(async () => { 
-      await postData(body);
+    setTimeout(async () => {
+      await postData(body)
       resolve()
-   }, 5000)
+    }, 5000)
   })
 }
 
-
 const loadEvents = async () => {
-  const body = buildPostBody("sdf", "911911911911", 1494578400)
+  const body = buildPostBody('sdf', '911911911911', 1494578400)
   await hola2(body)
-  console.log("envia")
+  console.log('envia')
 
   for (let index = 0; index < events.length; index++) {
     const event = events[index]
-    await postEventData(event).catch((e) => {});
-    console.log("End Evento");
+    await postEventData(event).catch((e) => {})
+    console.log('End Evento')
   }
 }
 loadEvents()

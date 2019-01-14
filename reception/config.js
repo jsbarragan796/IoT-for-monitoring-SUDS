@@ -12,5 +12,9 @@ module.exports = {
   KAFKA_TOPIC_EVENT_STARTED: 'event-started',
   KAFKA_TOPIC_EVENT_FINISHED: 'event-finished',
   KAFKA_TOPIC_MEASUREMENT: 'measurement',
-  KAFKA_TOPIC_HEALTHCHECK: 'healthcheck'
+  KAFKA_TOPIC_HEALTHCHECK: 'healthcheck',
+
+  REDIS_URL: process.env.REDIS_URL,
+
+  MONGODB_URI: isDev ? process.env.MONGODB_URI_DEV : process.env.MONGODB_URI
 }

@@ -9,6 +9,9 @@
   const fs = require('fs')
   const rfs = require('rotating-file-stream')
 
+  const getRedis = require('./redis')
+  const redis = await getRedis()
+
   const { PORT, LOG_DIRECTORY } = require('./config')
 
   const app = express()
@@ -57,9 +60,7 @@
   const routes = fs.readdirSync('./routes')
   routes.forEach(routeStr => {
     const routeName = routeStr.slice(0, -3)
-    const route = require('./routes/' + routeName)(producer)
+    const route = require('./routes/' + routeName)(producer, redis)
     app.use('/' + routeName, route)
-
-    console.log('ya')
   })
 })()

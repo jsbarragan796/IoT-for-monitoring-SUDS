@@ -6,7 +6,7 @@
   const bunyan = require('bunyan')
   const RotatingFileStream = require('bunyan-rotating-file-stream')
 
-  const { LOG_DIRECTORY, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_MEASUREMENT, CRON_SCHEDULE } = require('./config')
+  const { LOG_DIRECTORY, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_MEASUREMENT, KAFKA_TOPIC_HEALTHCHECK, CRON_SCHEDULE } = require('./config')
 
   fs.existsSync(LOG_DIRECTORY) || fs.mkdirSync(LOG_DIRECTORY)
 
@@ -27,7 +27,7 @@
   const consumer = await getConsumer()
   const producer = await getProducer()
 
-  const { findMostRecentEvent, createEvent, endEvent, updateLastMeasurementDate } = require('./tools')(producer)
+  const { findMostRecentEvent, createEvent, endEvent, updateLastMeasurementDate, healtcheck } = require('./tools')(producer)
 
   consumer.on('data', async (data) => {
     try {
@@ -42,9 +42,10 @@
 
       if (topic === KAFKA_TOPIC_EVENT_STARTED) await createEvent(timestamp)
       else if (topic === KAFKA_TOPIC_MEASUREMENT) {
-        const { _id } = await findMostRecentEvent()
-
-        await updateLastMeasurementDate(_id, timestamp)
+        await updateLastMeasurementDate(timestamp)
+      } else if (topic === KAFKA_TOPIC_HEALTHCHECK) {
+        const sensorId = parts[1]
+        await healtcheck(sensorId, timestamp)
       }
     } catch (e) {
       log.error(e.message)
