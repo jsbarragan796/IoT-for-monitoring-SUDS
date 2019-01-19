@@ -1,9 +1,6 @@
 (async () => {
   require('dotenv').config()
 
-  const inputId = '4D10B3'
-  const outputId = '4D10B4'
-
   const fs = require('fs')
   const bunyan = require('bunyan')
   const RotatingFileStream = require('bunyan-rotating-file-stream')
@@ -74,6 +71,19 @@
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) throw err
         else {
+          const Sensor = client.db().collection('Sensor')
+          const inputSensor = Sensor.findOne({
+            isEntrance: true
+          })
+
+          const inputId = inputSensor.id.split('-')[0]
+
+          const outputSensor = Sensor.findOne({
+            isEntrance: true
+          })
+
+          const outputId = outputSensor.id.split('-')[0]
+
           const Events = client.db().collection('Event')
           const { finishDate, startDate } = await Events.findOne({ _id: ObjectID(_id) })
 

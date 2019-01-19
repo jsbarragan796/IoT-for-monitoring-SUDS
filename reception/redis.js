@@ -2,7 +2,8 @@
 const { REDIS_URL, MONGODB_URI } = require('./config')
 
 const Redis = require('ioredis')
-const redis = new Redis(REDIS_URL)
+// const redis = new Redis(REDIS_URL)
+const redis = new Redis(6379, '172.24.99.37')
 
 const MongoClient = require('mongodb').MongoClient
 
@@ -31,7 +32,8 @@ module.exports = async () => {
       return sensor.type.toString() === _id.toString()
     })[0]
 
-    if (type) await redis.set(sensor.id, type._id.toString())
+    if (type) await redis.set(sensor.id, type.name)
+    console.log(`${sensor.id} - ${type.name} - isEntrance: ${sensor.isEntrance}`)
   }
 
   return redis

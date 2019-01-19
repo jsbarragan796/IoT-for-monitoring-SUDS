@@ -53,10 +53,11 @@
   })
 
   cron.schedule(CRON_SCHEDULE, async () => {
+    console.log('Cron started')
     const { _id, lastMeasurementDate } = await findMostRecentEvent()
-    const timestamp = new Date().getTime() * 1000
+    const now = new Date().getTime() * 1000
 
-    if (lastMeasurementDate + 1000000000 * 60 * 30 < timestamp) await endEvent(_id, timestamp)
+    if (lastMeasurementDate + 1000000000 * 60 * 30 < now) await endEvent(_id, lastMeasurementDate)
   })
 })()
 

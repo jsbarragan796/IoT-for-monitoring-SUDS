@@ -14,7 +14,7 @@ module.exports = {
   KAFKA_TOPIC_MEASUREMENT: 'measurement',
   KAFKA_TOPIC_HEALTHCHECK: 'healthcheck',
 
-  REDIS_URL: process.env.REDIS_URL,
+  REDIS_URL: isDev ? process.env.REDIS_URL_DEV : process.env.REDIS_URL,
 
   MONGODB_URI: isDev ? process.env.MONGODB_URI_DEV : process.env.MONGODB_URI
 }

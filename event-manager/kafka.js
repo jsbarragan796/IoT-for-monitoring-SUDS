@@ -1,6 +1,6 @@
 const Kafka = require('node-rdkafka')
 
-const { KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC_MEASUREMENT, KAFKA_TOPIC_EVENT_STARTED, KAFKA_GROUP } = require('./config')
+const { KAFKA_HOST, KAFKA_PORT, KAFKA_TOPIC_MEASUREMENT, KAFKA_TOPIC_EVENT_STARTED, KAFKA_GROUP, KAFKA_TOPIC_HEALTHCHECK } = require('./config')
 
 module.exports = {
   getProducer: () => {
@@ -27,7 +27,7 @@ module.exports = {
       consumer
         .on('ready', () => {
           console.log('Event manager ready to consume\n')
-          consumer.subscribe([KAFKA_TOPIC_MEASUREMENT, KAFKA_TOPIC_EVENT_STARTED])
+          consumer.subscribe([KAFKA_TOPIC_MEASUREMENT, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_HEALTHCHECK])
           consumer.consume()
           resolve(consumer)
         })

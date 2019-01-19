@@ -12,12 +12,10 @@ module.exports = {
 
   PUBLIC_PATH: process.env.PUBLIC_PATH,
 
-  PORT: process.env.PORT,
-
   MONGODB_URI: isDev ? process.env.MONGODB_URI_DEV : process.env.MONGODB_URI,
 
   SENSOR_SECRET_TOKEN: process.env.SENSOR_SECRET_TOKEN,
-  
+
   QUERY_MUST_HAVE_MEASUREMENT_TYPE: 'Debe especificar el tipo de medición',
   QUERY_MUST_HAVE_FUNCTION_AND_TIME_RANGE: 'Debe especificar función e intervalos de agrupamiento'
 }

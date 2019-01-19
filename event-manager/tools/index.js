@@ -64,15 +64,18 @@ module.exports = (producer) => {
         if (err) reject(err)
         else {
           const Events = client.db().collection('Event')
-          const event = await Events.findOne({}, { sort: { startDate: -1 } })
-          const { _id } = event
+          const event = await Events.findOne({ finishDate: null }, { sort: { startDate: -1 } })
 
-          await Events.updateOne({ _id }, {
-            $set: { lastMeasurementDate: timestamp }
-          })
+          if (event) {
+            const { _id } = event
 
-          client.close()
-          resolve()
+            await Events.updateOne({ _id }, {
+              $set: { lastMeasurementDate: timestamp }
+            })
+
+            client.close()
+            resolve()
+          }
         }
       })
     })
@@ -83,9 +86,9 @@ module.exports = (producer) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
-          const Events = client.db().collection('Sensor')
+          const Sensor = client.db().collection('Sensor')
 
-          await Events.updateOne({ id: sensorId }, {
+          await Sensor.updateOne({ id: sensorId }, {
             $set: { lastMeasurementDate: timestamp }
           })
 

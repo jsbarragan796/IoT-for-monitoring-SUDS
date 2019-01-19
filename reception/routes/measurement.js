@@ -7,19 +7,7 @@ module.exports = (producer, redis) => {
 
   const { SENSOR_SECRET_TOKEN } = require('../config')
 
-  const getMeasurementType = (sensorId, channel) => {
-    return redis.get(`${sensorId}-${channel}`)
-
-    // if (sensorId === '4D1089') {
-    //   if (channel === '2') return 'rain'
-    //   else return 'NaN'
-    // // 4D10B3
-    // } else {
-    //   if (channel === '1') return 'conductivity'
-    //   else if (channel === '0') return 'level'
-    //   else return 'NaN'
-    // }
-  }
+  const getMeasurementType = (sensorId, channel) => redis.get(`${sensorId}-${channel}`)
 
   const getMessageValue = (message) => {
     return Number(String(message).substr(2, 6)) / 100
