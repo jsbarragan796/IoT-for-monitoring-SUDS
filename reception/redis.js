@@ -2,8 +2,7 @@
 const { REDIS_URL, MONGODB_URI } = require('./config')
 
 const Redis = require('ioredis')
-// const redis = new Redis(REDIS_URL)
-const redis = new Redis(6379, '172.24.99.37')
+const redis = new Redis(REDIS_URL)
 
 const MongoClient = require('mongodb').MongoClient
 
