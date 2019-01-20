@@ -52,6 +52,7 @@ module.exports = (producer) => {
             startDate: timestamp, lastMeasurementDate: timestamp
           })
 
+          client.close()
           resolve()
         }
       })
