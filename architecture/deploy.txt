@@ -1,5 +1,5 @@
 web
-mensajeria x
-BD x
-recepción -> recepcion
-batch -> notification - aggregate-data - crude-data - event-manager
+message-broker
+DB -> document time-series
+reception -> reception in-memory
+batch -> notification aggregate-data crude-data event-manager

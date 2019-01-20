@@ -7,7 +7,7 @@ module.exports = {
   KAFKA_HOST: isDev ? process.env.KAFKA_HOST_DEV : process.env.KAFKA_HOST,
   KAFKA_PORT: isDev ? process.env.KAFKA_PORT_DEV : process.env.KAFKA_PORT,
 
-  CRON_SCHEDULE: '* * */6 * * *',
+  CRON_SCHEDULE: isDev ? '* * * * *' : '* * */6 * *',
 
   KAFKA_GROUP: 'event-manager',
 

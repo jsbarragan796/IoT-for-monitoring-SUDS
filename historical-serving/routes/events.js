@@ -8,10 +8,8 @@ const measurementLogic = require('./../logic/measurement')
 const EVENT_PAGINATION = 3
 const TIME_INTERVAL_MINUTES = '5m'
 const AGGREGATION_FUNCTION = 'max'
-const ENTRY_SENSOR_ID = '4D10B3'
-const EXIT_SENSOR_ID = '4D10B4'
-// const ENTRY_SENSOR_ID = 'entrada'
-// const EXIT_SENSOR_ID = 'salida'
+const ENTRY_SENSOR_ID = '4D1089'
+const EXIT_SENSOR_ID = '4D1080'
 const MEASUREMENT = 'level'
 
 const eventSearchRange = async (pageNumber, numberOfEvents) => {

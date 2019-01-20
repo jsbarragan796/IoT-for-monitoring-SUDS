@@ -31,7 +31,8 @@ module.exports = async () => {
       return sensor.type.toString() === _id.toString()
     })[0]
 
-    if (type) await redis.set(sensor.id, type._id.toString())
+    if (type) await redis.set(sensor.id, type.name)
+    console.log(`${sensor.id} - ${type.name} - isEntrance: ${sensor.isEntrance}`)
   }
 
   return redis
