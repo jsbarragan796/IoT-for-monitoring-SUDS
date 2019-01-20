@@ -1,5 +1,5 @@
-web in-memory-db
+web
 message-broker
 DB -> document time-series
-receptin -> reception
+reception -> reception in-memory
 batch -> notification aggregate-data crude-data event-manager
