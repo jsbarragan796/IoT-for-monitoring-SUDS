@@ -10,3 +10,7 @@ logs/
 entrada.csv
 salida.csv
 *.json
+
+\.DS_Store
+
+dashboard/front/yarn\.lock
