@@ -35,5 +35,7 @@ module.exports = async () => {
     console.log(`${sensor.id} - ${type.name} - isEntrance: ${sensor.isEntrance}`)
   }
 
+  mongo.close()
+
   return redis
 }
