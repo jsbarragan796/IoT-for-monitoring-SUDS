@@ -4,12 +4,11 @@ require('dotenv').config()
 const http = require('http')
 const cors = require('cors')
 const express = require('express')
-const path = require('path')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 
-const { PORT, PUBLIC_PATH } = require('./config')
+const { PORT } = require('./config')
 
 const app = express()
 app.use(bodyParser.json())

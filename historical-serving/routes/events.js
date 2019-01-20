@@ -84,9 +84,9 @@ router.post('/filtered-data', async (req, res) => {
     res.send(paginator)
   } catch (e) {
     res.status(200).send({
-    currentPage: 1,
-    totalPages: 1,
-    events: [ ]
+      currentPage: 1,
+      totalPages: 1,
+      events: [ ]
     }
     )
   }
