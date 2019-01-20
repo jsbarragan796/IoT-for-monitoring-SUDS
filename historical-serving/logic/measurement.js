@@ -96,7 +96,7 @@ module.exports = {
         SELECT MEAN(value)
         FROM level
         WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId= '4D10B3'
+          AND sensorId= '4D10B4'
         GROUP BY time(1m)
       `
       const lastEventOutputMeasurements = await influx.query(outputQuery)
@@ -113,7 +113,7 @@ module.exports = {
       SELECT max(value)
       FROM level
       WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-        AND sensorId= '4D10B3'
+        AND sensorId= '4D10B4'
       `
       const peakOutputFlow = await influx.query(peakOutputFlowQuery)
 
@@ -134,7 +134,7 @@ module.exports = {
       const eventToUpdate = { _id, lastMeasurementDate: timestamp }
       await eventLogic.updateLastMeasurementDate(eventToUpdate)
     }
-
+    console.log("save: ", measurementType, " ",sensorId, " ", value)
     await influx.writePoints([{
       measurement: measurementType,
       tags: { sensorId },

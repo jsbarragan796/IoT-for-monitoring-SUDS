@@ -8,10 +8,10 @@ const measurementLogic = require('./../logic/measurement')
 const EVENT_PAGINATION = 3
 const TIME_INTERVAL_MINUTES = '5m'
 const AGGREGATION_FUNCTION = 'max'
-// const ENTRY_SENSOR_ID = '4D10B3'
-// const EXIT_SENSOR_ID = '4D10B3'
-const ENTRY_SENSOR_ID = 'entrada'
-const EXIT_SENSOR_ID = 'salida'
+const ENTRY_SENSOR_ID = '4D10B3'
+const EXIT_SENSOR_ID = '4D10B4'
+// const ENTRY_SENSOR_ID = 'entrada'
+// const EXIT_SENSOR_ID = 'salida'
 const MEASUREMENT = 'level'
 
 const eventSearchRange = async (pageNumber, numberOfEvents) => {
@@ -77,14 +77,20 @@ router.post('/filtered-data', async (req, res) => {
     const { pageNumber } = req.body
     const filterData = req.body
     const numberOfEvents = await EventLogic.numberOfFilteredEvents(filterData)
-    console.log("numberOfEvents",numberOfEvents)
+    console.log('bodue ', req.body)
     const searchRange = await eventSearchRange(pageNumber, numberOfEvents)
     const events = await EventLogic.findFinishedFilteredEvents(searchRange.indexFirstEventPage, searchRange.eventsInPage, filterData)
     const eventsWithMeasurements = await loadHistoricalMesuarementsEvents(events)
     const paginator = { 'currentPage': pageNumber, 'totalPages': searchRange.numberOfPages, 'events': eventsWithMeasurements }
+
     res.send(paginator)
   } catch (e) {
-    res.status(400).send(e.message)
+    res.status(200).send({
+    currentPage: 1,
+    totalPages: 1,
+    events: [ ]
+    }
+    )
   }
 })
 
