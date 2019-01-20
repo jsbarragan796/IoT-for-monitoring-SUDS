@@ -1,7 +1,7 @@
 
 const { MONGODB_URI } = require('../config')
 const MongoClient = require('mongodb').MongoClient
-const MIN_INT = Number.MIN_SAFE_INTEGER
+const MIN_INT = 0
 const MAX_INT = Number.MAX_SAFE_INTEGER
 
 const getDateNanoSeconds = (date) => {
@@ -12,16 +12,15 @@ const getNowNanoSeconds = () => {
 }
 const getFilterData = (filter) => {
   const {
-    beginStartDate, endStartDate, beginEfficiency, endEfficiency,
+    beginDate, endDate, beginEfficiency, endEfficiency,
     beginVolumeInput, endVolumeInput, beginVolumeOutput, endVolumeOutput,
-    beginPeakInputFlow, endPeakInputFlow, beginPeakOutFlow, endPeakOutFlow,
     beginReductionOfPeakFlow, endReductionOfPeakFlow, beginDuration, endDuration
   } = filter
   return {
     finishDate: { $exists: true },
     startDate: {
-      $gte: beginStartDate ? getDateNanoSeconds(beginStartDate) : 0,
-      $lte: endStartDate ? getDateNanoSeconds(endStartDate) : getNowNanoSeconds()
+      $gte: beginDate ? getDateNanoSeconds(beginDate) : 0,
+      $lte: endDate ? getDateNanoSeconds(endDate) + 8.64e13 : getNowNanoSeconds()
     },
     efficiency: {
       $gte: beginEfficiency || MIN_INT,
@@ -35,16 +34,10 @@ const getFilterData = (filter) => {
       $gte: beginVolumeOutput || MIN_INT,
       $lte: endVolumeOutput || MAX_INT
     },
-    peakInputFlow: {
-      $gte: beginPeakInputFlow || MIN_INT,
-      $lte: endPeakInputFlow || MAX_INT
-    },
-    peakOutFlow: {
-      $gte: beginPeakOutFlow || MIN_INT,
-      $lte: endPeakOutFlow || MAX_INT },
     reductionOfPeakFlow: {
       $gte: beginReductionOfPeakFlow || MIN_INT,
-      $lte: endReductionOfPeakFlow || MAX_INT },
+      $lte: endReductionOfPeakFlow || MAX_INT
+    },
     duration: {
       $gte: beginDuration || MIN_INT,
       $lte: endDuration || MAX_INT

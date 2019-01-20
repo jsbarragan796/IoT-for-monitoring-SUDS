@@ -1,7 +1,6 @@
 {
   "name": "suds-dashboard",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "DEV=1 nodemon index.js"
@@ -10,6 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.329.0",
+    "babel-eslint": "^10.0.1",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -23,7 +23,18 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-airbnb-standard": "^2.1.6",
-    "nodemon": "^1.18.4"
-  }
+    "eslint-config-prettier": "^3.5.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "nodemon": "^1.18.4",
+    "prettier": "^1.15.3"
+  },
+  "keywords": [],
+  "description": ""
 }

@@ -4,6 +4,8 @@ const { SENSOR_SECRET_TOKEN } = require('../config')
 const csv = require('fast-csv')
 const http = require('http')
 const fileNames = ['4D10B3', '4D10B4']
+const ENTRY_SENSOR_ID = '4D10B3'
+const EXIT_SENSOR_ID = '4D10B4'
 
 const getDataFromFile = (fileName) => {
   return new Promise((resolve, reject) => {
@@ -15,7 +17,7 @@ const getDataFromFile = (fileName) => {
         data[1] = Number(data[1])
         data[2] = Number(data[2])
         data[3] = Number(data[3])
-        data[4] = fileName
+        data[4] = fileName === '4D10B3' ? '4D1089' : '4D1080'
         allData.push(data)
       })
       .on('end', function () {
@@ -27,20 +29,22 @@ const getDataFromFile = (fileName) => {
   })
 }
 // // [inicio, fin, ajuste Entrada, ajuste salida  ]
-const events = [
-  [ 1494578400, 1494605700, 0.95, 0.4 ],
-  [ 1494857340, 1494929940, 0.95, 0.45 ],
-  [ 1495012500, 1495029000, 1, 1.35 ],
-  [ 1496922300, 1496965500, 0.32, 1.33 ]
-]
-// [inicio, fin, ajuste Entrada, ajuste salida  ]
 // const events = [
-//   [1494578400, 1494605700, 0.95, 0.4]
+//   [ 1494578400, 1494605700, 0.95, 0.4 ],
+//   [ 1494857340, 1494929940, 0.95, 0.45 ],
+//   [ 1495012500, 1495029000, 1, 1.35 ],
+//   [ 1496922300, 1496965500, 0.32, 1.33 ]
 // ]
+// [inicio, fin, ajuste Entrada, ajuste salida  ]
+const events = [
+  [1494578400, 1494605700, 0.95, 0.4]
+]              
 
 // const future = 31536000 157.253.238.216
 // 157.253.211.233
-const future = 0
+
+let future = 84600
+
 const postOptions = {
   hostname: '157.253.238.216',
   port: 8081,
@@ -51,7 +55,16 @@ const postOptions = {
     'Content-Type': 'application/json'
   }
 }
-
+// const postOptions = {
+//   hostname: 'localhost',
+//   port: 4400,
+//   path: '/measurement',
+//   method: 'POST',
+//   headers: {
+//     'authorization': SENSOR_SECRET_TOKEN,
+//     'Content-Type': 'application/json'
+//   }
+// }
 const postData = (body) => {
   return new Promise((resolve, reject) => {
     const req = http.request(postOptions, (res) => {
@@ -72,6 +85,7 @@ const postData = (body) => {
 
 const buildPostBody = (sensorId, value, timestamp) => {
   return JSON.stringify({
+    'measurementType': 'level',
     'sensorId': sensorId,
     'value': value,
     'timestamp': timestamp + future
@@ -79,6 +93,7 @@ const buildPostBody = (sensorId, value, timestamp) => {
 }
 
 const postEventData = async (event) => {
+  let inicio  = true
   let entry = await getDataFromFile(fileNames[0])
   let exit = await getDataFromFile(fileNames[1])
 
@@ -109,15 +124,22 @@ const postEventData = async (event) => {
     }
   })
   // Math.ceil(allData.length / 8)
+  console.log("dd")
   for (let index = 0; index < allData.length; index++) {
     const row = allData[index]
-    // row[4] sensorId
+    row[4] //sensorId
     const valueLevel = String(Math.trunc(row[3] * 100)).padStart(4, '0')
     const valueConductivity = String(Math.trunc(row[1] * 100)).padStart(4, '0')
     const codedValue = `11${valueConductivity}10${valueLevel}`
-    // row[0] +18000 to convert to UTC (input data is in colombian time)
-    const body = buildPostBody(row[4], codedValue, row[0] + 18000)
+    row[0] +18000  // to convert to UTC (input data is in colombian time)
+    // const body = buildPostBody(row[4], row[3], row[0] + 18000)
+    if (inicio) {
+      const body = buildPostBody('4D10B5', '910910910910910', row[0] + 17900)
+      await hola3(body)
+      inicio = false
+    }
     // await postData(body)
+    const body = buildPostBody(row[4], codedValue, row[0] + 18000)
     await hola2(body)
   }
 }
@@ -126,15 +148,19 @@ const hola2 = (body) => {
     setTimeout(async () => {
       await postData(body)
       resolve()
-    }, 5000)
+    }, 400)
+  })
+}
+const hola3 = (body) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      await postData(body)
+      resolve()
+    }, 2000)
   })
 }
 
 const loadEvents = async () => {
-  const body = buildPostBody('sdf', '911911911911', 1494578400)
-  await hola2(body)
-  console.log('envia')
-
   for (let index = 0; index < events.length; index++) {
     const event = events[index]
     await postEventData(event).catch((e) => {})

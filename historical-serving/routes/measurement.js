@@ -30,6 +30,7 @@ router.get('/events', async (req, res, next) => {
   const { measurementType, sensorId, fromDate, toDate, aggregate, timeRange } = req.query
 
   try {
+    const time = new Date().getTime()
     const measurements = await measurementLogic.getMeasurements(measurementType, sensorId, fromDate, toDate, aggregate, timeRange)
     res.send({
       time: `${Math.round((new Date().getTime() - time) / 1000)} secs`,

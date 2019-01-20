@@ -75,14 +75,20 @@ router.post('/filtered-data', async (req, res) => {
     const { pageNumber } = req.body
     const filterData = req.body
     const numberOfEvents = await EventLogic.numberOfFilteredEvents(filterData)
-    console.log('numberOfEvents', numberOfEvents)
+    console.log('bodue ', req.body)
     const searchRange = await eventSearchRange(pageNumber, numberOfEvents)
     const events = await EventLogic.findFinishedFilteredEvents(searchRange.indexFirstEventPage, searchRange.eventsInPage, filterData)
     const eventsWithMeasurements = await loadHistoricalMesuarementsEvents(events)
     const paginator = { 'currentPage': pageNumber, 'totalPages': searchRange.numberOfPages, 'events': eventsWithMeasurements }
+
     res.send(paginator)
   } catch (e) {
-    res.status(400).send(e.message)
+    res.status(200).send({
+    currentPage: 1,
+    totalPages: 1,
+    events: [ ]
+    }
+    )
   }
 })
 

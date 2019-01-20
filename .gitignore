@@ -2,11 +2,13 @@
 .env
 *.pem
 
-package-lock.json
 node_modules/
 
 logs/
 
 entrada.csv
 salida.csv
-*.json
+
+\.DS_Store
+
+dashboard/front/yarn\.lock

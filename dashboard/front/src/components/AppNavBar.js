@@ -18,7 +18,7 @@ import navBarLogo from '../assets/navbar2.png';
 
 const styles = theme => ({
   root: {
-    width: '100%'
+    width: '100%'  
   },
   grow: {
     flexGrow: 1
