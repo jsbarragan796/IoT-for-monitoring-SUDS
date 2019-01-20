@@ -5,8 +5,9 @@
   const fs = require('fs')
   const bunyan = require('bunyan')
   const RotatingFileStream = require('bunyan-rotating-file-stream')
+  const MongoClient = require('mongodb').MongoClient
 
-  const { LOG_DIRECTORY, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_MEASUREMENT, KAFKA_TOPIC_HEALTHCHECK, CRON_SCHEDULE } = require('./config')
+  const { LOG_DIRECTORY, KAFKA_TOPIC_EVENT_STARTED, KAFKA_TOPIC_MEASUREMENT, KAFKA_TOPIC_HEALTHCHECK, CRON_SCHEDULE, MONGODB_URI } = require('./config')
 
   fs.existsSync(LOG_DIRECTORY) || fs.mkdirSync(LOG_DIRECTORY)
 
@@ -27,7 +28,20 @@
   const consumer = await getConsumer()
   const producer = await getProducer()
 
-  const { findMostRecentOpenEvent, createEvent, endEvent, updateLastMeasurementDate, healtcheck } = require('./tools')(producer)
+  const mongoConnect = () => {
+    return new Promise((resolve, reject) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
+        if (err) reject(err)
+        else {
+          resolve(client)
+        }
+      })
+    })
+  }
+
+  const client = await mongoConnect()
+
+  const { findMostRecentOpenEvent, createEvent, endEvent, updateLastMeasurementDate, healtcheck } = require('./tools')(producer, client)
 
   consumer.on('data', async (data) => {
     try {

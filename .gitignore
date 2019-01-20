@@ -12,3 +12,5 @@ salida.csv
 \.DS_Store
 
 dashboard/front/yarn\.lock
+
+package-lock.json

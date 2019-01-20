@@ -1,0 +1,20 @@
+{
+  "name": "notification-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "DEV=1 nodemon index.js",
+    "first-deploy": "pm2 start index.js --name suds-notification",
+    "deploy": "pm2 delete suds-notification && pm2 start index.js --name suds-notification"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.354.0",
+    "dotenv": "^6.1.0",
+    "mongodb": "^3.1.9",
+    "node-rdkafka": "^2.4.2",
+    "standard": "^12.0.1"
+  }
+}

@@ -60,6 +60,19 @@
     }]
   })
 
+  const mongoConnect = () => {
+    return new Promise((resolve, reject) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
+        if (err) reject(err)
+        else {
+          resolve(client)
+        }
+      })
+    })
+  }
+
+  const client = await mongoConnect()
+
   consumer.on('data', async (data) => {
     try {
       log.info(data.value.toString())
@@ -68,104 +81,97 @@
       const _id = valueMsg.toString()
       console.log(`Aggregate data got ${_id} from topic ${topic}`)
 
-      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
-        if (err) throw err
-        else {
-          const Sensor = client.db().collection('Sensor')
-          const inputSensor = await Sensor.findOne({
-            isEntrance: true
-          })
+      const Sensor = client.db().collection('Sensor')
+      const inputSensor = await Sensor.findOne({
+        isEntrance: true
+      })
 
-          const inputId = inputSensor.id.split('-')[0]
+      const inputId = inputSensor.id.split('-')[0]
 
-          const outputSensor = await Sensor.findOne({
-            isEntrance: false
-          })
+      const outputSensor = await Sensor.findOne({
+        isEntrance: false
+      })
 
-          const outputId = outputSensor.id.split('-')[0]
+      const outputId = outputSensor.id.split('-')[0]
 
-          const Events = client.db().collection('Event')
-          const { lastMeasurementDate, startDate } = await Events.findOne({ _id: ObjectID(_id) })
+      const Events = client.db().collection('Event')
+      const { lastMeasurementDate, startDate } = await Events.findOne({ _id: ObjectID(_id) })
 
-          const inputQuery = `
+      const inputQuery = `
               SELECT MEAN(value)
               FROM level
               WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
               AND sensorId = '${inputId}'
               GROUP BY time(1m)
             `
-          const inputMeasurements = await influx.query(inputQuery)
+      const inputMeasurements = await influx.query(inputQuery)
 
-          const outputQuery = `
+      const outputQuery = `
             SELECT MEAN(value)
             FROM level
             WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
             AND sensorId= '${outputId}'
             GROUP BY time(1m)
           `
-          const outputMeasurements = await influx.query(outputQuery)
+      const outputMeasurements = await influx.query(outputQuery)
 
-          const minuteAverageInputFlows = inputMeasurements
-            .filter(m => {
-              const { mean } = m
-              return mean
-            }).map(m => {
-              const { mean } = m
-              return parseLevelIntoFlow(mean)
-            })
+      const minuteAverageInputFlows = inputMeasurements
+        .filter(m => {
+          const { mean } = m
+          return mean
+        }).map(m => {
+          const { mean } = m
+          return parseLevelIntoFlow(mean)
+        })
 
-          const minuteAverageOutputFlows = outputMeasurements
-            .filter(m => {
-              const { mean } = m
-              return mean
-            })
-            .map(m => {
-              const { mean } = m
-              return parseLevelIntoFlow(mean)
-            })
+      const minuteAverageOutputFlows = outputMeasurements
+        .filter(m => {
+          const { mean } = m
+          return mean
+        })
+        .map(m => {
+          const { mean } = m
+          return parseLevelIntoFlow(mean)
+        })
 
-          let volumeInput = 0
-          minuteAverageInputFlows.forEach(flow => {
-            volumeInput += flow * 60
-          })
+      let volumeInput = 0
+      minuteAverageInputFlows.forEach(flow => {
+        volumeInput += flow * 60
+      })
 
-          let volumeOutput = 0
-          minuteAverageOutputFlows.forEach(flow => {
-            volumeOutput += flow * 60
-          })
+      let volumeOutput = 0
+      minuteAverageOutputFlows.forEach(flow => {
+        volumeOutput += flow * 60
+      })
 
-          const didNotGoOut = volumeInput - volumeOutput
+      const didNotGoOut = volumeInput - volumeOutput
 
-          const efficiency = volumeInput !== 0 ? parseInt(100 * didNotGoOut / volumeInput) : 0
+      const efficiency = volumeInput !== 0 ? parseInt(100 * didNotGoOut / volumeInput) : 0
 
-          const peakImputFlowQuery = `
+      const peakImputFlowQuery = `
             SELECT max(value)
             FROM level
             WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
               AND sensorId= '${inputId}'
           `
-          const peakImputFlow = await influx.query(peakImputFlowQuery)
+      const peakImputFlow = await influx.query(peakImputFlowQuery)
 
-          const peakOutputFlowQuery = `
+      const peakOutputFlowQuery = `
             SELECT max(value)
             FROM level
             WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
               AND sensorId= '${outputId}'
           `
-          const peakOutputFlow = await influx.query(peakOutputFlowQuery)
+      const peakOutputFlow = await influx.query(peakOutputFlowQuery)
 
-          const duration = ((startDate - lastMeasurementDate) / 1e9) / (60 * 60)
+      const duration = ((startDate - lastMeasurementDate) / 1e9) / (60 * 60)
 
-          let reductionOfPeakFlow = 0
-          if (peakOutputFlow && peakOutputFlow.max) {
-            reductionOfPeakFlow = peakOutputFlow.max / peakImputFlow.max
-          }
-          await Events.updateOne({ _id: ObjectID(_id) }, {
-            $set: { volumeInput, volumeOutput, efficiency, peakImputFlow: peakImputFlow[0], peakOutputFlow: peakOutputFlow[0], duration, reductionOfPeakFlow }
-          })
-
-          client.close()
-        }
+      let reductionOfPeakFlow = 0
+      if (peakOutputFlow && peakOutputFlow.max) {
+        reductionOfPeakFlow = peakOutputFlow.max / peakImputFlow.max
+      }
+      await Events.updateOne({ _id: ObjectID(_id) }, {
+        $set: { volumeInput, volumeOutput, efficiency, peakImputFlow: peakImputFlow[0], peakOutputFlow: peakOutputFlow[0], duration, reductionOfPeakFlow }
       })
     } catch (e) {
       log.error(e.message)
