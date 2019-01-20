@@ -27,7 +27,7 @@
   const consumer = await getConsumer()
   const producer = await getProducer()
 
-  const { findMostRecentEvent, createEvent, endEvent, updateLastMeasurementDate, healtcheck } = require('./tools')(producer)
+  const { findMostRecentOpenEvent, createEvent, endEvent, updateLastMeasurementDate, healtcheck } = require('./tools')(producer)
 
   consumer.on('data', async (data) => {
     try {
@@ -54,11 +54,12 @@
 
   cron.schedule(CRON_SCHEDULE, async () => {
     console.log('Cron started')
-    const { _id, lastMeasurementDate } = await findMostRecentEvent()
-    const now = new Date().getTime() * 1000
+    const event = await findMostRecentOpenEvent()
+    if (event) {
+      const { _id, lastMeasurementDate } = event
+      const now = new Date().getTime() * 1000000
 
-    if (lastMeasurementDate + 1000000000 * 60 * 30 < now) await endEvent(_id, lastMeasurementDate)
+      if (lastMeasurementDate < now + 1000000000 * 60 * 60 * 6) await endEvent(_id, lastMeasurementDate)
+    }
   })
 })()
-
-// if (topic === EVENT_FINISHED) await endEvent(_id, timestamp)

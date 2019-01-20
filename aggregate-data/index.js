@@ -72,25 +72,25 @@
         if (err) throw err
         else {
           const Sensor = client.db().collection('Sensor')
-          const inputSensor = Sensor.findOne({
+          const inputSensor = await Sensor.findOne({
             isEntrance: true
           })
 
           const inputId = inputSensor.id.split('-')[0]
 
-          const outputSensor = Sensor.findOne({
-            isEntrance: true
+          const outputSensor = await Sensor.findOne({
+            isEntrance: false
           })
 
           const outputId = outputSensor.id.split('-')[0]
 
           const Events = client.db().collection('Event')
-          const { finishDate, startDate } = await Events.findOne({ _id: ObjectID(_id) })
+          const { lastMeasurementDate, startDate } = await Events.findOne({ _id: ObjectID(_id) })
 
           const inputQuery = `
               SELECT MEAN(value)
               FROM level
-              WHERE time >= ${startDate} AND time <= ${finishDate}
+              WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
               AND sensorId = '${inputId}'
               GROUP BY time(1m)
             `
@@ -99,7 +99,7 @@
           const outputQuery = `
             SELECT MEAN(value)
             FROM level
-            WHERE time >= ${startDate} AND time <= ${finishDate}
+            WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
             AND sensorId= '${outputId}'
             GROUP BY time(1m)
           `
@@ -141,7 +141,7 @@
           const peakImputFlowQuery = `
             SELECT max(value)
             FROM level
-            WHERE time >= ${startDate} AND time <= ${finishDate}
+            WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
               AND sensorId= '${inputId}'
           `
           const peakImputFlow = await influx.query(peakImputFlowQuery)
@@ -149,12 +149,12 @@
           const peakOutputFlowQuery = `
             SELECT max(value)
             FROM level
-            WHERE time >= ${startDate} AND time <= ${finishDate}
+            WHERE time >= ${startDate} AND time <= ${lastMeasurementDate}
               AND sensorId= '${outputId}'
           `
           const peakOutputFlow = await influx.query(peakOutputFlowQuery)
 
-          const duration = ((startDate - finishDate) / 1e9) / (60 * 60)
+          const duration = ((startDate - lastMeasurementDate) / 1e9) / (60 * 60)
 
           let reductionOfPeakFlow = 0
           if (peakOutputFlow && peakOutputFlow.max) {

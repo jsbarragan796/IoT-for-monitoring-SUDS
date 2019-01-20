@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 
 module.exports = (producer) => {
-  const findMostRecentEvent = () => {
+  const findMostRecentOpenEvent = () => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) {
@@ -12,7 +12,7 @@ module.exports = (producer) => {
           reject(err)
         } else {
           let Events = client.db().collection('Event')
-          const event = await Events.findOne({}, { sort: { startDate: -1 } })
+          const event = await Events.findOne({ finishDate: null }, { sort: { startDate: -1 } })
 
           client.close()
           resolve(event)
@@ -100,7 +100,7 @@ module.exports = (producer) => {
   }
 
   return {
-    findMostRecentEvent,
+    findMostRecentOpenEvent,
     endEvent,
     createEvent,
     updateLastMeasurementDate,
