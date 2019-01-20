@@ -8,7 +8,6 @@ logs/
 
 entrada.csv
 salida.csv
-*.json
 
 \.DS_Store
 
