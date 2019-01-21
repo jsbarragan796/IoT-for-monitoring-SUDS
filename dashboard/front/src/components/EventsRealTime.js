@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as d3 from 'd3'
 import { Row, Col } from 'reactstrap'
+
 // import { map } from 'd3-collection';
 
 class EventsRealTime extends Component {
@@ -14,9 +15,20 @@ class EventsRealTime extends Component {
 			left: 40
 		}
 		this.drawGraph = this.drawGraph.bind(this)
+		this.updateGraph = this.updateGraph.bind(this)
 	}
 
 	componentDidMount () {
+		this.drawGraph()
+
+	}
+	componentWillUpdate () {
+		this.updateGraph()
+
+	}
+	updateGraph () {
+		const svg = d3.select(this.svg).selectAll("*")
+		svg.remove()
 		this.drawGraph()
 	}
 

@@ -5,6 +5,7 @@ import { Alert } from 'reactstrap'
 import AppNavBar from './AppNavBar'
 import EventsRealTime from './EventsRealTime'
 import logo from '../assets/logo.png'
+import Snackbar from '@material-ui/core/Snackbar'
 
 class Home extends Component {
 	constructor(props) {
@@ -18,43 +19,51 @@ class Home extends Component {
 	}
 
 	componentDidMount() {
-		this.loadData()
+		this.update()
 	}
 
 	loadData() {
 		axios
 			.get('/events/current-events?pageNumber=1')
 			.then((response) => {
-				this.setState({ data: response.data })
-				const { data } = this.state
-				console.log(data)
+				this.setState({ data: response.data, errorStatus: false })
 			})
 			.catch((err) => {
 				this.setState({ errorStatus: true, errorMessage: err.message })
 			})
 	}
 
-	showErrorMessage() {
+	showErrorMessage () {
 		const { errorStatus, errorMessage } = this.state
 		if (errorStatus) {
 			return (
-				<Alert color="danger">
-          Ha ocurrido un problema, comuniquese con el administrador del sistema.
-          Por favor comuníquele el siguinte mensaje :
+				<Snackbar
+					anchorOrigin={{
+						vertical: 'bottom',
+						horizontal: 'center',
+					}}
+					open={true}
+					variant="error"
+					autoHideDuration={6000}
+					message={<span id="message-id"> Ha ocurrido un problema, comuniquese con el administrador del sistema y 
+            por favor comuníquele el siguinte mensaje :
 					{' '}
-					{errorMessage}
-				</Alert>
-			)
+					{errorMessage}</span>}
+          
+				/>)
 		}
-		return ''
+		else { 
+			return ''
+		}
 	}
 
-	// update () {
-	//   setInterval(() => {
-	//     this.loadData();
-	//     console.log('getting data');
-	//   }, 15000);
-	// }
+	update () {
+		this.loadData()
+		setInterval(() => {
+			this.loadData()}
+		, 2000)
+		
+	}
 
 	render() {
 
@@ -86,8 +95,8 @@ class Home extends Component {
 			if (data && data.events.length > 0) {
 				s = (
 					<EventsRealTime
-						data={data.events[0].entry}
-						data2={data.events[0].exit}
+						data={data.events[0].entrylevel}
+						data2={data.events[0].exitlevel}
 					/>
 				)
 				const options = {

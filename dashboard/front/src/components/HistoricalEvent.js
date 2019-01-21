@@ -8,6 +8,14 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
+import axios from 'axios'
+import AppNavBar from './AppNavBar'
+import Button from '@material-ui/core/Button';
+import {
+	Link
+  } from 'react-router-dom'
+
+import FileDownload from 'js-file-download'
 
 const styles = {
 	bullet: {
@@ -25,45 +33,68 @@ const styles = {
 
 class HistoricalEvent extends Component {
 	constructor (props) {
-		super(props)
+    super(props)
+    this.state = {
+      event:{}
+    }
 		this.margin = {
 			top: 20,
 			right: 30,
 			bottom: 30,
 			left: 40
 		}
-		this.drawGraph = this.drawGraph.bind(this)
+    this.drawGraph = this.drawGraph.bind(this)
+	this.loadData = this.loadData.bind(this)
+	this.csv = this.csv.bind(this)
 	}
 
 	componentDidMount () {
-		this.drawGraph()
-	}
+		this.loadData()
+  }
+
+	loadData () {
+    const { eventId } = this.props.match.params
+
+		axios.get('/events/data?eventId='+eventId)
+			.then((response) => {
+        this.setState({ event: response.data, errorStatus: false })
+        this.drawGraph()
+			})
+			.catch((err) => {
+				this.setState({ errorStatus: true, errorMessage: err.message })
+    }) 
+  }
+
+	csv () {
+			const { eventId } = this.props.match.params
+			axios.get('/events/get-csv?eventId='+eventId)
+				.then((response) => {
+					FileDownload(response.data,response.headers.filename)})
+				.catch((err) => {
+					this.setState({ errorStatus: true, errorMessage: err.message })
+				}) 
+		}	
+		
 
 	drawGraph () {
-		const { event } = this.props
-		const { entry, exit } = event
-		const dates1 = entry.map(d => new Date(d.time))
-		const dates2 = exit.map(d => new Date(d.time))
+		const { event } = this.state
+		const { entrylevel, exitlevel } = event
+		const dates1 = entrylevel.map(d => new Date(d.time))
+		const dates2 = exitlevel.map(d => new Date(d.time))
 		const allDates = dates1.concat(dates2).sort((a, b) => d3.ascending(a, b))
 		const dates = allDates.filter((elem, index, self) => index === self.indexOf(elem))
-		const series = [{ name: 'entrada', values: entry }, { name: 'salida', values: exit }]
+		const series = [{ name: 'entrada', values: entrylevel }, { name: 'salida', values: exitlevel }]
 		const svg = d3.select(this.svg)
 		this.height = svg.attr('height') - this.margin.top - this.margin.bottom
 		this.width = svg.attr('width') - this.margin.left - this.margin.right
-		this.aspect = this.width / this.height
+
 		this.x = d3.scaleTime()
 			.domain(d3.extent(dates, d => d))
 			.range([this.margin.left, this.width - this.margin.right])
 
-		d3.select(window)
-			.on('resize', () => {
-				const targetWidth = svg.node().getBoundingClientRect().width
-				svg.attr('width', targetWidth)
-				svg.attr('height', targetWidth / this.aspect)
-			})
 
 		this.y = d3.scaleLinear()
-			.domain([0, Math.max(d3.max(entry, d => d.value), d3.max(exit, d => d.value))]).nice()
+			.domain([0, Math.max(d3.max(entrylevel, d => d.value), d3.max(exitlevel, d => d.value))]).nice()
 			.range([this.height - this.margin.bottom, this.margin.top])
 
 		this.line = d3.line()
@@ -185,13 +216,16 @@ class HistoricalEvent extends Component {
 	}
 
 	render () {
-		const { event } = this.props
+		const { event } = this.state
 		const { classes } = this.props
+		const { eventId } = this.props.match.params
 		const options = {
 			weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
 		}
 		const date = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options)
 		return (
+      <div>
+      <AppNavBar optionActive="Inicio" />
 			<Grid item sx={6}>
 
 				<Card>
@@ -202,8 +236,8 @@ class HistoricalEvent extends Component {
 					<CardContent>
 						<Paper>
 							<svg
-								width="300"
-								height="300"
+								width="1200"
+								height="600"
 								ref={(svg) => { this.svg = svg; return this.svg }}
 							>
               vizualización
@@ -214,56 +248,58 @@ class HistoricalEvent extends Component {
 							<Grid item xs={12}>
 								<Grid item container direction="row">
 									<Grid item container xs={6} direction="column">
-										<Typography variant="h5" color="inherit">
+										<Typography  color="inherit">
                       Entrada
 										</Typography>
-										<Typography variant="h6" color="inherit">
+										<Typography  color="inherit">
 											<strong>
                           Volumen :
 											</strong>
 											{` ${Math.ceil(event.volumeInput)} l³`}
 										</Typography>
-										<Typography variant="h6" color="inherit">
+										<Typography  color="inherit">
 											<strong>
                           Caudal pico :
 											</strong>
-											{` ${Math.ceil(event.peakInputFlow)} l/s`}
+											{` ${Math.ceil(event.peakImputFlow)} l/s`}
 										</Typography>
 									</Grid>
 									<Grid item container xs={6} direction="column">
-										<Typography variant="h5" color="inherit">
+										<Typography  color="inherit">
                       Salida
 										</Typography>
-										<Typography variant="h6" color="inherit">
+										<Typography  color="inherit">
 											<strong>
                           Volumen :
 											</strong>
 											{` ${Math.ceil(event.volumeOutput)} l³`}
 										</Typography>
-										<Typography variant="h6" color="inherit">
+										<Typography  color="inherit">
 											<strong>
                           Caudal pico :
 											</strong>
-											{` ${Math.ceil(event.peakOutFlow)} l/s`}
+											{` ${Math.ceil(event.peakOutputFlow)} l/s`}
 										</Typography>
-
+										<Button className={classes.left} size="small" onClick={this.csv} color="primary" >
+											 Descargar datos 
+										</Button>
 									</Grid>
 									<Grid item container xs={12} direction="column">
-										<Typography variant="h6" color="inherit">
+										<Typography  color="inherit">
 											<strong>
                           Eficiencia :
 											</strong>
 											{` ${Math.ceil(event.efficiency)} %`}
 										</Typography>
 
-										<Typography variant="h6" color="inherit">
+										<Typography  color="inherit">
 											<strong>
                           Reducción del caudal pico :
 											</strong>
 											{` ${Math.ceil(event.reductionOfPeakFlow)} %`}
 										</Typography>
 
-										<Typography variant="h6" color="inherit">
+										<Typography  color="inherit">
 											<strong>
                           Duración:
 											</strong>
@@ -278,12 +314,12 @@ class HistoricalEvent extends Component {
 					</CardContent>
 				</Card>
 			</Grid>
+      </div>
 		)
 	}
 }
 
 HistoricalEvent.propTypes = {
-	event: PropTypes.instanceOf(Object).isRequired,
 	classes: PropTypes.instanceOf(Object).isRequired
 }
 

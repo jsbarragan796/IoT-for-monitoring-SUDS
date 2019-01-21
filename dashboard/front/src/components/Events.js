@@ -2,18 +2,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import {
-	Alert
-} from 'reactstrap'
-
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-
-
 import Filter from './Filter'
-import HistoricalEvent from './HistoricalEvent'
+import EventResult from './EventResult'
 import AppNavBar from './AppNavBar'
 import logo from '../assets/logo.png'
+import Snackbar from '@material-ui/core/Snackbar';
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button';
 
 const styles = {
 	root: {
@@ -27,7 +27,10 @@ const styles = {
 	events: {
 		'max-width': '75%',
 		'min-width': 300
-	}
+  },
+  card: {
+		minWidth: '75%'
+	},
 }
 
 class Events extends Component {
@@ -40,7 +43,9 @@ class Events extends Component {
 			filter: { pageNumber: 1 }
 		}
 		this.loadData = this.loadData.bind(this)
-		this.allEvents = this.allEvents.bind(this)
+    this.allEvents = this.allEvents.bind(this)
+    this.paginador = this.paginador.bind(this)
+    this.changePage = this.changePage.bind(this)
 	}
 
 	componentDidMount () {
@@ -49,42 +54,102 @@ class Events extends Component {
 	}
 
 	loadData (filter) {
-
 		axios.post('events/filtered-data', filter)
 			.then((response) => {
-				this.setState({ data: response.data })
+				this.setState({ data: response.data, errorStatus: false })
 			})
 			.catch((err) => {
 				this.setState({ errorStatus: true, errorMessage: err.message })
-			})}
+    })
+  }
 
 	setFilter (filter) {
 		this.setState({
 			filter: filter
 		})
 		this.loadData(filter)
-	}
+  }
 
 	showErrorMessage () {
 		const { errorStatus, errorMessage } = this.state
 		if (errorStatus) {
 			return (
-				<Alert color="danger">
-         Ha ocurrido un problema, comuniquese con el administrador del sistema.
-         Por favor comuníquele el siguinte mensaje :
-					{' '}
-					{errorMessage}
-				</Alert>)
-		}
-
-		return ''
-	}
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          open={true}
+          variant="error"
+          autoHideDuration={6000}
+          message={<span id="message-id"> Ha ocurrido un problema, comuniquese con el administrador del sistema y 
+          por favor comuníquele el siguinte mensaje :
+          {' '}
+          {errorMessage}</span>}    
+        />)
+    }
+    else { 
+      return ''
+    }
+  }
+  
+  changePage (pageNumber) {
+		const { filter } = this.state
+    filter.pageNumber = pageNumber
+    this.loadData(filter)
+    this.setState({ filter: filter})
+  }
+  
 
 	allEvents () {
 		const { data } = this.state
 		return data.events.map(
-			event => (<HistoricalEvent key={event._id} event={event} />)
+			event => (<EventResult key={event._id} event={event} />)
 		)
+  }
+  
+  paginador () {
+    const { totalPages, currentPage } = this.state.data
+    if ( totalPages === 1 ){
+        return ""
+    }
+    if (totalPages > 1) {
+      if (currentPage === 1){
+        return (<Grid item >
+          <Card  >
+          <CardContent>
+            <Button size="small" onClick={() => { this.changePage(2) }} color="primary">
+              Siguiente 
+            </Button>
+          </CardContent>
+          </Card>
+        </Grid>);
+      }
+      else if (currentPage === totalPages){
+        return (<Grid item >
+          <Card  >
+          <CardContent>
+            <Button size="small" onClick={() => { this.changePage(totalPages-1) }}  color="primary">
+              Atrás 
+            </Button>
+          </CardContent>
+          </Card>
+        </Grid>);
+      } else  {
+        return (<Grid item >
+          <Card  >
+          <CardContent>
+            <Button size="small" onClick={() => { this.changePage(currentPage-1) }}  color="primary">
+              Atrás 
+            </Button>
+            <Button size="small" onClick={() => { this.changePage(currentPage+1) }} color="primary">
+              Siguiente 
+            </Button>
+          </CardContent>
+          </Card>
+        </Grid>);
+      }
+    }
 	}
 
 	render () {
@@ -101,19 +166,23 @@ class Events extends Component {
 								this.props.auth.login()
 							}}
 							className="btn btn-dark btn-lg btn-block"
-						>
-          Iniciar sesión
+					  >
+            Iniciar sesión
 						</button>
 					</div>		
 				</div>
 			)
 		}
 		else {
-			let events = ''
+      let events = ''
+      let totalEventos = ''
+      let paginador = ''
 			const { data } = this.state
-			const { classes } = this.props
+      const { classes } = this.props;
 			if (data && data.events.length > 0) {
-				events = this.allEvents()
+        events = this.allEvents() 
+        paginador = this.paginador()
+        totalEventos = data.numberOfEvents
 			}
 			return (
 				<div>
@@ -121,9 +190,20 @@ class Events extends Component {
 					{this.showErrorMessage()}
 					<div className="main">
 						<Filter setFilter = {(filter) => this.setFilter(filter)} />
-						<Grid container spacing={8}>
-							{events}
-						</Grid>
+            <br />
+  						<Grid container direction="column" justify="center" alignItems="center" spacing={40}>
+                <Grid item >
+                  <Card  className={classes.card}>
+                  <CardContent>
+                    <Typography  color="inherit">
+                        Eventos encontrados: {totalEventos}
+                    </Typography>
+                  </CardContent>
+                  </Card>
+			          </Grid>
+              {events}
+              {paginador}
+              </Grid>
 					</div>
 				</div>
 			)

@@ -8,6 +8,7 @@ import Events from './components/Events'
 import ErrorPage from './components/ErrorPage'
 import Auth from './auth/Auth0.js'
 import Callback from './auth/Callback'
+import HistoricalEvent from './components/HistoricalEvent'
 
 const theme = createMuiTheme({
 	palette: {
@@ -48,6 +49,7 @@ class App extends Component {
 						<Route exact path="/" render={() => <Home user={this.state.user} auth={this.state.auth}/>} />
 						<Route exact path="/eventos" render={() => <Events user={this.state.user} auth={this.state.auth}/>}/>
 						<Route path="/callback" render={()=><Callback login = {(user) => this.setUser(user)}/>}/>
+						<Route path='/eventos/:eventId' component={HistoricalEvent}/>
 						<Route component={ErrorPage} />
 					</Switch>
 				</BrowserRouter>

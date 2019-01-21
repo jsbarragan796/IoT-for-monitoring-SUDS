@@ -195,7 +195,7 @@ class Filter extends Component {
       <ExpansionPanelDetails>
       <Grid container spacing={8}>
       	<Grid item xs={12}>
-           <Grid item container direction="row">
+           <Grid item container direction="column" justify="center" alignItems="center" >
            <Grid item  xs={12}>
               <TextField
               id="beginDate"
