@@ -155,12 +155,7 @@ class AppNavBar extends Component {
           </IconButton>
             Eventos
         </MenuItem>
-        <MenuItem>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          Cuentas
-        </MenuItem>
+
       </Menu>
     );
 
