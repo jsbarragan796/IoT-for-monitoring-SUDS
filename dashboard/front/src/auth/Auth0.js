@@ -5,7 +5,7 @@ export default class Auth0 {
     auth0 = new auth0.WebAuth({
         domain: 'sudsbogota.auth0.com',
         clientID: 'UXJMlMN3G7u47GuS1uxjobeQR4i-RbH0',
-        redirectUri: 'http://192.168.0.4:3000/callback',
+        redirectUri: 'http://172.24.99.37:3000/callback',
         responseType: 'token id_token',
         scope: 'openid'
       });
