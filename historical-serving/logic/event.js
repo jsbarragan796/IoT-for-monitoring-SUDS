@@ -46,17 +46,22 @@ const getFilterData = (filter) => {
 }
 
 module.exports = {
-  findAllEvents: () => {
+  findEvent: (enventId) => {
     return new Promise((resolve, reject) => {
-      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, (err, client) => {
+      MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
+        let ObjectId = require('mongodb').ObjectId
         if (err) reject(err)
         else {
           let Events = client.db().collection('Event')
-          Events.find({}).toArray((err, points) => {
-            if (err) reject(err)
-            else resolve(points)
-            client.close()
-          })
+          try {
+            Events.findOne(ObjectId(enventId), (err, result) => {
+              if (err) reject(err)
+              client.close()
+              resolve(result)
+            })
+          } catch (err) {
+            reject(err)
+          }
         }
       })
     })
@@ -229,9 +234,9 @@ module.exports = {
             { sort: { _id: 1 },
               skip: firstEventPage,
               limit: eventsInPage }).toArray((err, points) => {
+            client.close()
             if (err) reject(err)
             else resolve(points)
-            client.close()
           })
         }
       })
