@@ -134,7 +134,6 @@ module.exports = {
       const eventToUpdate = { _id, lastMeasurementDate: timestamp }
       await eventLogic.updateLastMeasurementDate(eventToUpdate)
     }
-    console.log("save: ", measurementType, " ",sensorId, " ", value)
     await influx.writePoints([{
       measurement: measurementType,
       tags: { sensorId },
