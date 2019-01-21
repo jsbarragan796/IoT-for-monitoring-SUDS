@@ -38,12 +38,12 @@ const getDataFromFile = (fileName) => {
 // [inicio, fin, ajuste Entrada, ajuste salida  ]
 const events = [
   [1494578400, 1494605700, 0.95, 0.4]
-]              
+]
 
 // const future = 31536000 157.253.238.216
 // 157.253.211.233
 
-let future = 84600
+let future = 0
 
 const postOptions = {
   hostname: '157.253.238.216',
@@ -93,7 +93,7 @@ const buildPostBody = (sensorId, value, timestamp) => {
 }
 
 const postEventData = async (event) => {
-  let inicio  = true
+  let inicio = true
   let entry = await getDataFromFile(fileNames[0])
   let exit = await getDataFromFile(fileNames[1])
 
@@ -124,17 +124,17 @@ const postEventData = async (event) => {
     }
   })
   // Math.ceil(allData.length / 8)
-  console.log("dd")
+  console.log('dd')
   for (let index = 0; index < allData.length; index++) {
     const row = allData[index]
-    row[4] //sensorId
+    row[4] // sensorId
     const valueLevel = String(Math.trunc(row[3] * 100)).padStart(4, '0')
     const valueConductivity = String(Math.trunc(row[1] * 100)).padStart(4, '0')
     const codedValue = `11${valueConductivity}10${valueLevel}`
-    row[0] +18000  // to convert to UTC (input data is in colombian time)
+    row[0] + 18000 // to convert to UTC (input data is in colombian time)
     // const body = buildPostBody(row[4], row[3], row[0] + 18000)
     if (inicio) {
-      const body = buildPostBody('4D10B5', '910910910910910', row[0] + 17900)
+      const body = buildPostBody('4D10B5', '910910910910910', row[0] + 17000)
       await hola3(body)
       inicio = false
     }

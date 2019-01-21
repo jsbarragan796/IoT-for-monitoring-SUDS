@@ -14,9 +14,9 @@ const AGGREGATION_FUNCTION = 'max'
 // const ENTRY_SENSOR_ID = '4D10B3'
 // const EXIT_SENSOR_ID = '4D10B4'
 const MEASUREMENT = [
-  { name: 'level', entry: '4D10B3', exit: '4D10B4' },
-  { name: 'rain', entry: '4D10B3' },
-  { name: 'conductivity', entry: '4D10B3', exit: '4D10B4' }
+  { name: 'level', entry: '4D1089', exit: '4D1080' },
+  { name: 'rain', entry: '4D10B5' },
+  { name: 'conductivity', entry: '4D1089', exit: '4D1080' }
 ]
 
 let realtimeEventPaginator = {}
@@ -75,13 +75,19 @@ router.get('/current-events', async (req, res) => {
     if (currentDate - dateGotRealtimeEvent > 2500) {
       const pageNumber = parseInt(req.query.pageNumber)
       const numberOfEvents = await EventLogic.numberOfNotEndedEvents()
-      const searchRange = await eventSearchRange(pageNumber, numberOfEvents)
-      const events = await EventLogic.findNotFinishedEvents(searchRange.indexFirstEventPage, searchRange.eventsInPage)
-      const eventsWithMeasurements = await loadRealtimeMesuarementsEvents(events)
-      const paginator = { 'currentPage': pageNumber, 'totalPages': searchRange.numberOfPages, 'events': eventsWithMeasurements }
-      realtimeEventPaginator = paginator
-      dateGotRealtimeEvent = currentDate
-      res.send(paginator)
+      if (numberOfEvents > 0) {
+        const searchRange = await eventSearchRange(pageNumber, numberOfEvents)
+        const events = await EventLogic.findNotFinishedEvents(searchRange.indexFirstEventPage, searchRange.eventsInPage)
+        const eventsWithMeasurements = await loadRealtimeMesuarementsEvents(events)
+
+        const paginator = { 'currentPage': pageNumber, 'totalPages': searchRange.numberOfPages, 'events': eventsWithMeasurements }
+        realtimeEventPaginator = paginator
+        dateGotRealtimeEvent = currentDate
+        res.send(paginator)
+      } else {
+        const paginator = { 'currentPage': 0, 'totalPages': 0, 'events': [] }
+        res.send(paginator)
+      }
     } else {
       res.send(realtimeEventPaginator)
     }
@@ -95,7 +101,9 @@ router.post('/filtered-data', async (req, res) => {
     const { pageNumber } = req.body
     const filterData = req.body
     const numberOfEvents = await EventLogic.numberOfFilteredEvents(filterData)
+
     const searchRange = await eventSearchRange(pageNumber, numberOfEvents)
+
     const events = await EventLogic.findFinishedFilteredEvents(searchRange.indexFirstEventPage, searchRange.eventsInPage, filterData)
     const paginator = { 'numberOfEvents': numberOfEvents, 'currentPage': pageNumber, 'totalPages': searchRange.numberOfPages, 'events': events }
     res.send(paginator)

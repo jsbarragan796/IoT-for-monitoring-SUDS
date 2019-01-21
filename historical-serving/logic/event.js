@@ -1,7 +1,7 @@
 
 const { MONGODB_URI } = require('../config')
 const MongoClient = require('mongodb').MongoClient
-const MIN_INT = 0
+const MIN_INT = Number.MIN_SAFE_INTEGER
 const MAX_INT = Number.MAX_SAFE_INTEGER
 
 const getDateNanoSeconds = (date) => {
