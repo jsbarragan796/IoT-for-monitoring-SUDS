@@ -95,7 +95,8 @@ class HistoricalEvent extends Component {
               comuníquele el siguinte mensaje :
               {' '}
               {errorMessage}
-            </span>)}
+            </span>
+)}
         />
       );
     }

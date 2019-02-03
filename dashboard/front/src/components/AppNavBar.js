@@ -10,8 +10,10 @@ import Menu from '@material-ui/core/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import Timeline from '@material-ui/icons/Timeline';
 import RssFeed from '@material-ui/icons/RssFeed';
-import WbCloudy from '@material-ui/icons/WbCloudy';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import Badge from '@material-ui/core/Badge';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Auth from '../auth/Auth0';
 import navBarLogo from '../assets/navbar2.png';
 
 const styles = theme => ({
@@ -49,19 +51,9 @@ class AppNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      anchorEl: null,
       mobileMoreAnchorEl: null
     };
   }
-
-  handleEventMenuOpen = (event) => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
 
   handleMobileMenuOpen = (event) => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
@@ -72,32 +64,10 @@ class AppNavBar extends Component {
   };
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
+    const { mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const renderEventMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMenuClose} component={Link} to="/">
-          <IconButton color="inherit">
-            <RssFeed />
-          </IconButton>
-          Tiempo real
-        </MenuItem>
-        <MenuItem onClick={this.handleMenuClose} component={Link} to="/eventos">
-          <IconButton color="inherit">
-            <Timeline />
-          </IconButton>
-          Histórico
-        </MenuItem>
-      </Menu>
-    );
+    const auth = new Auth();
 
     const renderMobileMenu = (
       <Menu
@@ -107,11 +77,23 @@ class AppNavBar extends Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem onClick={this.handleEventMenuOpen}>
+        <MenuItem component={Link} to="/">
           <IconButton color="inherit">
-            <WbCloudy />
+            <RssFeed />
           </IconButton>
-          Eventos
+          Tiempo Real
+        </MenuItem>
+        <MenuItem component={Link} to="/eventos">
+          <IconButton color="inherit">
+            <Timeline />
+          </IconButton>
+            Histórico
+        </MenuItem>
+        <MenuItem onClick={auth.logout}>
+          <IconButton color="inherit">
+            <ExitToApp />
+          </IconButton>
+            Cerrar Sesión
         </MenuItem>
       </Menu>
     );
@@ -129,18 +111,34 @@ class AppNavBar extends Component {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleEventMenuOpen}
                 color="inherit"
+                component={Link}
+                to="/"
               >
+                <Badge variant="dot" color="secondary">
+                  <RssFeed />
+                  <Typography variant="h6" color="inherit" className={classes.grow}>
+                    {'Tiempo real'}
+                  </Typography>
+                </Badge>
+              </IconButton>
+              <IconButton
+                color="inherit"
+                component={Link}
+                to="/eventos"
+              >
+                <Timeline />
                 <Typography variant="h6" color="inherit" className={classes.grow}>
-                  {'Eventos'}
+                  {'Histórico'}
                 </Typography>
               </IconButton>
-              <IconButton color="inherit">
+              <IconButton
+                onClick={auth.logout}
+                color="inherit"
+              >
+                <ExitToApp />
                 <Typography variant="h6" color="inherit" className={classes.grow}>
-                  {'Cuentas'}
+                  {'Cerrar Sesión'}
                 </Typography>
               </IconButton>
             </div>
@@ -151,14 +149,12 @@ class AppNavBar extends Component {
             </div>
           </Toolbar>
         </AppBar>
-        {renderEventMenu}
         {renderMobileMenu}
       </div>
     );
   }
 }
 
-// export default AppNavBar;
 AppNavBar.propTypes = {
   classes: PropTypes.instanceOf(Object).isRequired
 };

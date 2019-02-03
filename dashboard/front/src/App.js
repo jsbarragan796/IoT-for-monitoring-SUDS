@@ -9,9 +9,9 @@ import Home from './components/Home';
 import Events from './components/Events';
 import ErrorPage from './components/ErrorPage';
 import Auth from './auth/Auth0';
-import Callback from './auth/Callback';
 import HistoricalEvent from './components/HistoricalEvent';
 import Welcome from './components/Welcome';
+import Callback from './auth/Callback';
 
 const theme = createMuiTheme({
   palette: {
@@ -26,17 +26,17 @@ const theme = createMuiTheme({
     useNextVariants: true
   }
 });
-
+const auth = new Auth();
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      user: null,
-      auth: new Auth(),
-      width: null,
-      height: null
+      user: {},
+      width: 600,
+      height: 300
     };
     this.currentSize = this.currentSize.bind(this);
+    this.handleAuth = this.handleAuth.bind(this);
   }
 
   componentDidMount() {
@@ -54,16 +54,25 @@ class App extends Component {
     });
   }
 
+  handleAuth() {
+    this.user = '';
+    // const { userProfile, getProfile } = auth;
+    // if (!userProfile) {
+    //   getProfile((err, user) => {
+    //     this.setState({ user });
+    //   });
+    // } else {
+    //   this.setState({ user: userProfile });
+    // }
+  }
+
   currentSize() {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
   render() {
-    const {
-      user, auth, width, height
-    } = this.state;
+    const { user, width, height } = this.state;
     let switchRoute = '';
-
     if (auth.isAuthenticated()) {
       switchRoute = (
         <Switch>
@@ -91,11 +100,8 @@ class App extends Component {
     } else {
       switchRoute = (
         <Switch>
-          <Route exact path="/" render={() => <Welcome auth={auth} />} />
-          <Route
-            path="/callback"
-            render={() => <Callback login={newUser => this.setUser(newUser)} />}
-          />
+          <Route exact path="/" render={() => <Welcome auth={auth} loggingIn={false} />} />
+          <Route path="/callback" render={() => <Callback auth={auth} />} />
           <Redirect to="/" />
         </Switch>
       );

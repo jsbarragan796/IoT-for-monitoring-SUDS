@@ -8,8 +8,17 @@ class Welcome extends Component {
   constructor() {
     super();
     this.state = {
-      width: null,
-      height: null
+      top: 50,
+      left: 50
+    };
+  }
+
+  getModalStyle() {
+    const { top, left } = this.state;
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`
     };
   }
 
@@ -20,9 +29,9 @@ class Welcome extends Component {
         <WelcomeAppBar optionActive="Inicio" auth={auth} />
         <div className="main">
           <div className="inicio">
-            <img className="logo" height="100" src={logo} alt="Logo" />
+            <img className="logo" src={logo} alt="Logo" height="42" width="42" />
           </div>
-          <h1>hola</h1>
+          <h1>Bienvenido a motitoreo de SUDS Uniandes</h1>
         </div>
       </div>
     );

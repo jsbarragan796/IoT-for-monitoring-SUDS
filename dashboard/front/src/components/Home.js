@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Snackbar from '@material-ui/core/Snackbar';
 import AppNavBar from './AppNavBar';
 import EventsRealTime from './EventsRealTime';
-import logo from '../assets/logo.png';
 
 class Home extends Component {
   constructor(props) {
@@ -20,6 +18,10 @@ class Home extends Component {
 
   componentDidMount() {
     this.update();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
 
   loadData() {
@@ -62,7 +64,7 @@ class Home extends Component {
 
   update() {
     this.loadData();
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.loadData();
     }, 2000);
   }
