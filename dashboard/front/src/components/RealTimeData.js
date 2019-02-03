@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
-import EventsRealTime from './EventsRealTime';
+import HistogramGraph from './HistogramGraph';
 
 class RealTimeData extends Component {
   constructor(props) {
@@ -74,12 +74,7 @@ class RealTimeData extends Component {
     let final = '';
     const { data } = this.state;
     if (data && data.events.length > 0) {
-      s = (
-        <EventsRealTime
-          data={data.events[0].entrylevel}
-          data2={data.events[0].exitlevel}
-        />
-      );
+      s = <HistogramGraph data={data.events[0].entrylevel} data2={data.events[0].exitlevel} />;
       const options = {
         weekday: 'long',
         year: 'numeric',

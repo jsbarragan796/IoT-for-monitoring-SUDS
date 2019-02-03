@@ -102,7 +102,6 @@ class AppNavBar extends Component {
     const { mobileMoreAnchorEl, RTEvnets } = this.state;
     const { classes, auth } = this.props;
     const userdata = auth.getProfile();
-    console.log('userdata', userdata);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const renderMobileMenu = (
       <Menu

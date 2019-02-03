@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-import { Row, Col } from 'reactstrap';
 
-class EventsRealTime extends Component {
+
+class HistogramGraph extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -208,29 +208,23 @@ class EventsRealTime extends Component {
     const widthSvg = width < 400 ? width * 0.9 : width * 0.7;
     const heightSvg = height < 690 ? height * 0.7 : height * 0.6;
     return (
-      <div className="center-div">
-        <Row>
-          <Col sm="12" className="centered">
-            <svg
-              width={widthSvg}
-              height={heightSvg}
-              ref={(svg) => {
-                this.svg = svg;
-                return this.svg;
-              }}
-            >
-              vizualización
-            </svg>
-          </Col>
-        </Row>
-      </div>
+      <svg
+        width={widthSvg}
+        height={heightSvg}
+        ref={(svg) => {
+          this.svg = svg;
+          return this.svg;
+        }}
+      >
+          vizualización
+      </svg>
     );
   }
 }
 
-export default EventsRealTime;
+export default HistogramGraph;
 
-EventsRealTime.propTypes = {
+HistogramGraph.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   data2: PropTypes.instanceOf(Array).isRequired
 };
