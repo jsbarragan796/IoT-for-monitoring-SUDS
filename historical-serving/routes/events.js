@@ -14,9 +14,9 @@ const AGGREGATION_FUNCTION = 'max'
 // const ENTRY_SENSOR_ID = '4D10B3'
 // const EXIT_SENSOR_ID = '4D10B4'
 const MEASUREMENT = [
-  { name: 'level', entry: '4D1089', exit: '4D1080' },
+  { name: 'level', entry: '4D10B3', exit: '4D10B4' },
   { name: 'rain', entry: '4D10B5' },
-  { name: 'conductivity', entry: '4D1089', exit: '4D1080' }
+  { name: 'conductivity', entry: '4D10B3', exit: '4D10B4' }
 ]
 
 let realtimeEventPaginator = {}

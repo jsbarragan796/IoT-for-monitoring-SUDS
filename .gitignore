@@ -13,4 +13,6 @@ salida.csv
 
 dashboard/front/yarn\.lock
 
-package-lock.json
+dashboard/.vscode/settings.json
+dashboard/front/package-lock.json
+
