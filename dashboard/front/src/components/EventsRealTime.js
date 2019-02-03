@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import { Row, Col } from 'reactstrap';
 
-// import { map } from 'd3-collection';
-
 class EventsRealTime extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      width: 600,
+      height: 300
+    };
     this.margin = {
       top: 10,
       right: 10,
@@ -16,14 +18,25 @@ class EventsRealTime extends Component {
     };
     this.drawGraph = this.drawGraph.bind(this);
     this.updateGraph = this.updateGraph.bind(this);
+    this.currentSize = this.currentSize.bind(this);
   }
 
   componentDidMount() {
     this.drawGraph();
+    this.currentSize();
+    window.addEventListener('resize', this.currentSize);
   }
 
   componentWillUpdate() {
     this.updateGraph();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.currentSize);
+  }
+
+  currentSize() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
   updateGraph() {
@@ -191,7 +204,7 @@ class EventsRealTime extends Component {
   }
 
   render() {
-    const { height, width } = this.props;
+    const { height, width } = this.state;
     const widthSvg = width < 400 ? width * 0.9 : width * 0.7;
     const heightSvg = height < 690 ? height * 0.7 : height * 0.6;
     return (
@@ -219,7 +232,5 @@ export default EventsRealTime;
 
 EventsRealTime.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
-  data2: PropTypes.instanceOf(Array).isRequired,
-  height: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired
+  data2: PropTypes.instanceOf(Array).isRequired
 };

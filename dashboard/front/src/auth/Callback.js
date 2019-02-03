@@ -32,7 +32,7 @@ class Callback extends Component {
 
   componentDidMount() {
     const { auth } = this.props;
-    auth.handleAuthentication();
+    setTimeout(auth.handleAuthentication, 1700);
   }
 
   getModalStyle() {

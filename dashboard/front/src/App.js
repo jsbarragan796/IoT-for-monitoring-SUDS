@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import './App.css';
 import 'typeface-roboto';
@@ -28,71 +29,16 @@ const theme = createMuiTheme({
 });
 const auth = new Auth();
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      user: {},
-      width: 600,
-      height: 300
-    };
-    this.currentSize = this.currentSize.bind(this);
-    this.handleAuth = this.handleAuth.bind(this);
-  }
-
-  componentDidMount() {
-    this.currentSize();
-    window.addEventListener('resize', this.currentSize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.currentSize);
-  }
-
-  setUser(user) {
-    this.setState({
-      user
-    });
-  }
-
-  handleAuth() {
-    this.user = '';
-    // const { userProfile, getProfile } = auth;
-    // if (!userProfile) {
-    //   getProfile((err, user) => {
-    //     this.setState({ user });
-    //   });
-    // } else {
-    //   this.setState({ user: userProfile });
-    // }
-  }
-
-  currentSize() {
-    this.setState({ width: window.innerWidth, height: window.innerHeight });
-  }
-
   render() {
-    const { user, width, height } = this.state;
     let switchRoute = '';
     if (auth.isAuthenticated()) {
       switchRoute = (
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => <Home width={width} height={height} user={user} auth={auth} />}
-          />
-          <Route exact path="/eventos" component={() => <Events user={user} auth={auth} />} />
+          <Route exact path="/" render={() => <Home auth={auth} />} />
+          <Route exact path="/eventos" component={() => <Events auth={auth} />} />
           <Route
             path="/eventos/:eventId"
-            component={match => (
-              <HistoricalEvent
-                match={match}
-                width={width}
-                height={height}
-                user={user}
-                auth={auth}
-              />
-            )}
+            component={match => <HistoricalEvent match={match} auth={auth} />}
           />
           <Route render={ErrorPage} />
         </Switch>
@@ -100,9 +46,9 @@ class App extends Component {
     } else {
       switchRoute = (
         <Switch>
-          <Route exact path="/" render={() => <Welcome auth={auth} loggingIn={false} />} />
+          <Route exact path="/inicio" render={() => <Welcome auth={auth} loggingIn={false} />} />
           <Route path="/callback" render={() => <Callback auth={auth} />} />
-          <Redirect to="/" />
+          <Redirect to="/inicio" />
         </Switch>
       );
     }

@@ -18,17 +18,20 @@ export default class Auth0 {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
-    this.handleAuthenticationSlow = this.handleAuthenticationSlow.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.getProfile = this.getProfile.bind(this);
   }
 
-  getProfile(cb) {
-    this.auth0.client.userInfo(this.accessToken, (err, profile) => {
+  getProfile() {
+    if (this.userProfile) {
+      return this.userProfile;
+    }
+    return this.auth0.client.userInfo(localStorage.getItem('access_token'), (err, profile) => {
       if (profile) {
         this.userProfile = profile;
+        return this.userProfile;
       }
-      cb(err, profile);
+      return {};
     });
   }
 
@@ -36,7 +39,7 @@ export default class Auth0 {
     this.auth0.authorize();
   }
 
-  handleAuthenticationSlow() {
+  handleAuthentication() {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
@@ -45,10 +48,6 @@ export default class Auth0 {
         location.pathname = '/';
       }
     });
-  }
-
-  handleAuthentication() {
-    setTimeout(this.handleAuthenticationSlow, 1700);
   }
 
   setSession(authResult) {
@@ -70,7 +69,7 @@ export default class Auth0 {
     localStorage.removeItem('expires_at');
     localStorage.clear();
     // navigate to the home route
-    location.pathname = '/';
+    location.pathname = '/inicio';
   }
 
   isAuthenticated() {

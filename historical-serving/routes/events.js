@@ -96,6 +96,19 @@ router.get('/current-events', async (req, res) => {
   }
 })
 
+router.get('/are-current-events', async (req, res) => {
+  try {
+    const numberOfEvents = await EventLogic.numberOfNotEndedEvents()
+    if (numberOfEvents > 0) {
+      res.send({ RTEvnets: true })
+    } else {
+      res.send({ RTEvnets: false })
+    }
+  } catch (e) {
+    res.status(400).send(e.message)
+  }
+})
+
 router.post('/filtered-data', async (req, res) => {
   try {
     const { pageNumber } = req.body

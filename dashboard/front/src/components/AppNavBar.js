@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,7 +14,6 @@ import RssFeed from '@material-ui/icons/RssFeed';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Badge from '@material-ui/core/Badge';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Auth from '../auth/Auth0';
 import navBarLogo from '../assets/navbar2.png';
 
 const styles = theme => ({
@@ -51,9 +51,25 @@ class AppNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mobileMoreAnchorEl: null
+      mobileMoreAnchorEl: null,
+      RTEvnets: false
     };
   }
+
+  componentDidMount() {
+    const { optionActive } = this.props;
+    if (optionActive !== 'realtime') {
+      this.update();
+    }
+  }
+
+  componentWillUnmount() {
+    const { optionActive } = this.props;
+    if (optionActive !== 'realtime') {
+      clearInterval(this.timer);
+    }
+  }
+
 
   handleMobileMenuOpen = (event) => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
@@ -63,12 +79,31 @@ class AppNavBar extends Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
-  render() {
-    const { mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const auth = new Auth();
+  checkRealTimeEvent() {
+    axios
+      .get('/events/are-current-events')
+      .then((response) => {
+        const { RTEvnets } = this.state;
+        if (RTEvnets !== response.data.RTEvnets) {
+          this.setState({ RTEvnets: !RTEvnets });
+        }
+      })
+      .catch();
+  }
 
+  update() {
+    this.checkRealTimeEvent();
+    this.timer = setInterval(() => {
+      this.checkRealTimeEvent();
+    }, 1500);
+  }
+
+  render() {
+    const { mobileMoreAnchorEl, RTEvnets } = this.state;
+    const { classes, auth } = this.props;
+    const userdata = auth.getProfile();
+    console.log('userdata', userdata);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const renderMobileMenu = (
       <Menu
         anchorEl={mobileMoreAnchorEl}
@@ -115,7 +150,7 @@ class AppNavBar extends Component {
                 component={Link}
                 to="/"
               >
-                <Badge variant="dot" color="secondary">
+                <Badge variant="dot" invisible={!RTEvnets} color="secondary">
                   <RssFeed />
                   <Typography variant="h6" color="inherit" className={classes.grow}>
                     {'Tiempo real'}
@@ -156,7 +191,9 @@ class AppNavBar extends Component {
 }
 
 AppNavBar.propTypes = {
-  classes: PropTypes.instanceOf(Object).isRequired
+  classes: PropTypes.instanceOf(Object).isRequired,
+  auth: PropTypes.instanceOf(Object).isRequired,
+  optionActive: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(AppNavBar);

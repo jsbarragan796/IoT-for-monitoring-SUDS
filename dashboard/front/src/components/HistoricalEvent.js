@@ -34,7 +34,9 @@ class HistoricalEvent extends Component {
     this.state = {
       event: {},
       errorStatus: false,
-      errorMessage: ''
+      errorMessage: '',
+      width: 800,
+      height: 690
     };
     this.margin = {
       top: 20,
@@ -45,10 +47,24 @@ class HistoricalEvent extends Component {
     this.drawGraph = this.drawGraph.bind(this);
     this.loadData = this.loadData.bind(this);
     this.csv = this.csv.bind(this);
+    this.currentSize = this.currentSize.bind(this);
+  }
+
+  componentWillMount() {
+    this.currentSize();
+    window.addEventListener('resize', this.currentSize);
   }
 
   componentDidMount() {
     this.loadData();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.currentSize);
+  }
+
+  currentSize() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
   loadData() {
@@ -246,8 +262,8 @@ class HistoricalEvent extends Component {
   }
 
   render() {
-    const { event } = this.state;
-    const { classes, height, width } = this.props;
+    const { event, height, width } = this.state;
+    const { classes } = this.props;
     const options = {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     };
@@ -256,7 +272,7 @@ class HistoricalEvent extends Component {
     const heightSvg = height < 690 ? height * 0.7 : height * 0.6;
     return (
       <div>
-        <AppNavBar optionActive="Inicio" />
+        <AppNavBar optionActive="eventDetail" />
         {this.showErrorMessage()}
         <Grid item sx={6}>
 
@@ -353,8 +369,6 @@ class HistoricalEvent extends Component {
 
 HistoricalEvent.propTypes = {
   classes: PropTypes.instanceOf(Object).isRequired,
-  height: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
   match: PropTypes.instanceOf(Object).isRequired
 };
 
