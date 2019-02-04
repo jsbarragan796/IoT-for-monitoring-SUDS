@@ -7,7 +7,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-class HistogramGraph extends Component {
+class ConductivityGraph extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -84,7 +84,7 @@ class HistogramGraph extends Component {
 
     this.color = d3.scaleOrdinal()
       .domain(['Cámara de entrada', 'Cámara de salida'])
-      .range(['red', 'steelblue']);
+      .range(['olivedrab', 'midnightblue']);
 
 
     const gw = svg.selectAll('g')
@@ -136,22 +136,22 @@ class HistogramGraph extends Component {
       .attr('transform',
         `translate(${this.margin.left / 2} ,${this.height / 2})rotate(-90)`)
       .style('text-anchor', 'middle')
-      .text('Caudal l/s');
+      .text('Conductividad μS/cm ');
 
     svg.append('text')
       .attr('transform', `translate(${this.width / 2} ,${this.margin.top + 10})`)
       .attr('text-anchor', 'middle')
       .style('font-size', '24px')
-      .text('Caudal de escorrentía');
+      .text('Conductividad de la escorrentía');
 
     this.color = (name) => {
       switch (name) {
         case 'entrada':
-          return 'red';
+          return 'olivedrab';
         case 'salida':
-          return 'steelblue';
+          return 'midnightblue';
         default:
-          return 'steelblue';
+          return 'olivedrab';
       }
     };
 
@@ -260,7 +260,7 @@ class HistogramGraph extends Component {
       <Grid container direction="column" alignItems="center" spacing={0}>
         <Grid item xs={10}>
           <svg
-            id="level"
+            id="conductivity"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
             className="graph-svg-component"
@@ -275,7 +275,7 @@ class HistogramGraph extends Component {
           </svg>
           <Tooltip title="Descargar gráfica" placement="bottom">
             <IconButton
-              onClick={() => { saveSvgAsPng(document.querySelector('#level'), 'caudal', { scale: 3 }); }}
+              onClick={() => { saveSvgAsPng(document.querySelector('#conductivity'), 'conductividad', { scale: 3 }); }}
               className="marginRight: 'auto'"
               aria-label="descargar"
             >
@@ -288,9 +288,9 @@ class HistogramGraph extends Component {
   }
 }
 
-export default HistogramGraph;
+export default ConductivityGraph;
 
-HistogramGraph.propTypes = {
+ConductivityGraph.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
   data2: PropTypes.instanceOf(Array).isRequired
 };

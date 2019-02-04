@@ -13,6 +13,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Divider from '@material-ui/core/Divider';
 import AppNavBar from './AppNavBar';
 import HistogramGraph from './HistogramGraph';
+import ConductivityGraph from './ConductivityGraph';
+import logo from '../assets/logo.png';
 
 const styles = theme => ({
   left: {
@@ -58,9 +60,10 @@ class HistoricalEvent extends Component {
 
   csv() {
     const { match } = this.props;
-    const { eventId } = match.params;
+    const { eventId } = match.match.params;
     axios.get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/get-csv?eventId=${eventId}`)
       .then((response) => {
+        console.log("headeras", response);
         FileDownload(response.data, response.headers.filename);
       })
       .catch((err) => {
@@ -97,12 +100,50 @@ class HistoricalEvent extends Component {
 
   render() {
     const { event } = this.state;
-    const { entrylevel, exitlevel } = event;
+    const {
+      entrylevel, exitlevel, entryconductivity, exitconductivity, entryrain
+    } = event;
     let histogramGraph = '';
-    if (event.entrylevel) {
+    let conductivityGraph = '';
+    let rainGraph = '';
+
+    if (entrylevel) {
       histogramGraph = (<HistogramGraph data={entrylevel} data2={exitlevel} />);
     } else {
-      histogramGraph = (<h1>CArgando</h1>);
+      histogramGraph = (<h1>Cargando</h1>);
+    }
+    if (entryconductivity && entryconductivity.length > 0) {
+      conductivityGraph = (<ConductivityGraph data={entryconductivity} data2={exitconductivity} />);
+    } else {
+      conductivityGraph = (
+        <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
+          <Grid item xs={4}>
+            <img src={logo} alt="Logo" width="200" />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography color="inherit" variant="h5">
+                  Lo sentimos, este evento no cuenta con datos de conductividad
+            </Typography>
+          </Grid>
+          
+        </Grid>
+      );
+    }
+    if (event.entryrain && entryrain.length > 0) {
+      rainGraph = (<ConductivityGraph data={entryconductivity} data2={exitconductivity} />);
+    } else {
+      rainGraph = (
+        <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
+          <Grid item xs={4}>
+            <img src={logo} alt="Logo" width="200" />
+          </Grid>
+          <Grid item xs={8}>
+            <Typography color="inherit" variant="h5">
+                  Lo sentimos, este evento no cuenta con datos de precipitación
+            </Typography>
+          </Grid>
+        </Grid>
+      );
     }
     const { classes, auth } = this.props;
     const options = {
@@ -195,7 +236,14 @@ class HistoricalEvent extends Component {
                     </Grid>
                   </Grid>
                 </Grid>
-
+                <br />
+                <Divider />
+                <br />
+                {conductivityGraph}
+                <br />
+                <Divider />
+                <br />
+                {rainGraph}
               </CardContent>
             </Card>
           </Grid>
