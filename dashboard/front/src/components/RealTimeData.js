@@ -75,7 +75,6 @@ class RealTimeData extends Component {
   }
 
   render() {
-    console.log(process.env.REACT_APP_HISTORICAL_SERVING);
     let s = '';
     let w = '';
     let e = '';
