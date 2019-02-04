@@ -81,7 +81,7 @@ class AppNavBar extends Component {
 
   checkRealTimeEvent() {
     axios
-      .get('/events/are-current-events')
+      .get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/are-current-events`)
       .then((response) => {
         const { RTEvnets } = this.state;
         if (RTEvnets !== response.data.RTEvnets) {

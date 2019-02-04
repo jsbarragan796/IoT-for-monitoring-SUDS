@@ -2,9 +2,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import 'typeface-roboto';
-import {
-  BrowserRouter, Route, Switch, Redirect
-} from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from './components/Home';
 import Events from './components/Events';
@@ -53,11 +51,7 @@ class App extends Component {
       );
     }
 
-    return (
-      <MuiThemeProvider theme={theme}>
-        <BrowserRouter>{switchRoute}</BrowserRouter>
-      </MuiThemeProvider>
-    );
+    return <MuiThemeProvider theme={theme}>{switchRoute}</MuiThemeProvider>;
   }
 }
 

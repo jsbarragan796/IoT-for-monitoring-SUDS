@@ -10,9 +10,9 @@
     "ajv-keywords": "^3.2.0",
     "auth0-js": "^9.7.3",
     "axios": "^0.18.0",
-    "bootstrap": "^4.1.3",
     "d3": "^5.7.0",
     "date-fns": "^2.0.0-alpha.25",
+    "dotenv": "^6.2.0",
     "jquery": "^3.3.1",
     "js-file-download": "^0.4.4",
     "material-ui-flat-pagination": "^3.2.0",
@@ -24,7 +24,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
-    "reactstrap": "^6.5.0",
+    "save-svg-as-png": "^1.4.7",
     "typeface-roboto": "0.0.54"
   },
   "scripts": {
@@ -33,7 +33,6 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:4400",
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^5.3.0",

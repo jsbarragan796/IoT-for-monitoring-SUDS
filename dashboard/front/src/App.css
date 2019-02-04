@@ -35,3 +35,7 @@ nav {
   margin: auto;
   padding: 10px;
 }
+
+.graph-svg-component {
+  background-color: white;
+}

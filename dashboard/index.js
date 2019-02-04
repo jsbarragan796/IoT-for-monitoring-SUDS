@@ -1,4 +1,3 @@
-
 require('dotenv').config()
 
 const http = require('http')
@@ -7,24 +6,22 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const fs = require('fs')
 
-const { BACKEND_PORT, PUBLIC_PATH } = require('./config')
+const { PORT } = require('./config')
 
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(cors())
+app.use(express.static(path.join(__dirname, './front/build/')))
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './front/build/', 'index.html'))
+})
 
 const server = http.createServer(app)
-server.listen(BACKEND_PORT)
+server.listen(PORT)
 server.on('listening', () => {
-  console.log('Server is running on port ' + BACKEND_PORT)
+  console.log('Web client is running on port ' + PORT)
 })
-
-app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
-app.get('*', function (req, res) {
-  res.sendFile('index.html', {root: path.join(__dirname, PUBLIC_PATH)})
-})
-

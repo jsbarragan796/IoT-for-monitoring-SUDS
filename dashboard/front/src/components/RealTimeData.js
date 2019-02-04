@@ -31,7 +31,7 @@ class RealTimeData extends Component {
 
   loadData() {
     axios
-      .get('/events/current-events?pageNumber=1')
+      .get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/current-events?pageNumber=1`)
       .then((response) => {
         this.setState({ data: response.data, errorStatus: false });
       })
@@ -75,13 +75,14 @@ class RealTimeData extends Component {
   }
 
   render() {
+    console.log(process.env.REACT_APP_HISTORICAL_SERVING);
     let s = '';
     let w = '';
     let e = '';
     let dif = '';
     let final = '';
     const { data } = this.state;
-    if (data && data.events.length > 0) {
+    if (data && data.events && data.events.length > 0) {
       s = <HistogramGraph data={data.events[0].entrylevel} data2={data.events[0].exitlevel} />;
       const options = {
         year: 'numeric',
@@ -99,9 +100,7 @@ class RealTimeData extends Component {
         Number(String(data.events[0].lastMeasurementDate).substr(0, 13))
       ).toLocaleDateString('es-US', options);
       dif = Number(String(data.events[0].lastMeasurementDate - data.events[0].startDate));
-      console.log(dif)
       dif /= 1e11;
-      console.log(dif)
       dif = `${Math.round(dif / 60)}:${Math.round(dif % 60)}`;
       final = (
         <div className="main">

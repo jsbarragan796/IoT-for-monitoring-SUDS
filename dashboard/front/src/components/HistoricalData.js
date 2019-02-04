@@ -55,7 +55,7 @@ class HistoricalData extends Component {
 
   loadData(filter) {
     axios
-      .post('events/filtered-data', filter)
+      .post(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/filtered-data`, filter)
       .then((response) => {
         this.setState({ data: response.data, errorStatus: false });
       })

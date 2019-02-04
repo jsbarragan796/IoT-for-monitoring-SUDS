@@ -46,7 +46,7 @@ class HistoricalEvent extends Component {
     const { match } = this.props;
     if (match.match && match.match.params) {
       const { eventId } = match.match.params;
-      axios.get(`/events/data?eventId=${eventId}`)
+      axios.get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/data?eventId=${eventId}`)
         .then((response) => {
           this.setState({ event: response.data, errorStatus: false });
         })
@@ -59,7 +59,7 @@ class HistoricalEvent extends Component {
   csv() {
     const { match } = this.props;
     const { eventId } = match.params;
-    axios.get(`/events/get-csv?eventId=${eventId}`)
+    axios.get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/get-csv?eventId=${eventId}`)
       .then((response) => {
         FileDownload(response.data, response.headers.filename);
       })
