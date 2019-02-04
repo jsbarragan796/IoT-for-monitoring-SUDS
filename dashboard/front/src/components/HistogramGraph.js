@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-
+import { saveSvgAsPng } from 'save-svg-as-png';
+import Grid from '@material-ui/core/Grid';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class HistogramGraph extends Component {
   constructor(props) {
@@ -12,9 +16,9 @@ class HistogramGraph extends Component {
     };
     this.margin = {
       top: 10,
-      right: 10,
+      right: 8,
       bottom: 20,
-      left: 30
+      left: 80
     };
     this.drawGraph = this.drawGraph.bind(this);
     this.updateGraph = this.updateGraph.bind(this);
@@ -78,6 +82,28 @@ class HistogramGraph extends Component {
       .x(d => this.x(new Date(d.time)))
       .y(d => this.y(d.value));
 
+    this.color = d3.scaleOrdinal()
+      .domain(['Cámara de entrada', 'Cámara de salida'])
+      .range(['steelblue', 'red']);
+
+
+    const gw = svg.selectAll('g')
+      .data(this.color.domain())
+      .enter().append('g')
+      .attr('transform', (d, i) => `translate(${this.width - this.margin.left * 2},${this.height * 0.1 + i * 26})`);
+
+    gw.append('rect')
+      .attr('width', 18)
+      .attr('height', 18)
+      .attr('fill', this.color);
+
+    gw.append('text')
+      .attr('x', 24)
+      .attr('y', 9)
+      .attr('dy', '0.35em')
+      .text(d => d);
+
+
     svg
       .append('g')
       .attr('transform', `translate(0,${this.height - this.margin.bottom})`)
@@ -99,6 +125,24 @@ class HistogramGraph extends Component {
         .attr('x', 3)
         .attr('text-anchor', 'start')
         .attr('font-weight', 'bold'));
+
+    svg.append('text')
+      .attr('transform',
+        `translate(${this.width / 2} ,${this.height + this.margin.top + 6})`)
+      .style('text-anchor', 'middle')
+      .text('Hora');
+
+    svg.append('text')
+      .attr('transform',
+        `translate(${this.margin.left / 2} ,${this.height / 2})rotate(-90)`)
+      .style('text-anchor', 'middle')
+      .text('Caudal l/s');
+
+    svg.append('text')
+      .attr('transform', `translate(${this.width / 2} ,${this.margin.top + 10})`)
+      .attr('text-anchor', 'middle')
+      .style('font-size', '24px')
+      .text('Caudal de escorrentía');
 
     this.color = (name) => {
       switch (name) {
@@ -213,16 +257,33 @@ class HistogramGraph extends Component {
     const widthSvg = width < 400 ? width * 0.9 : width * 0.7;
     const heightSvg = height < 690 ? height * 0.7 : height * 0.6;
     return (
-      <svg
-        width={widthSvg}
-        height={heightSvg}
-        ref={(svg) => {
-          this.svg = svg;
-          return this.svg;
-        }}
-      >
+      <Grid container direction="column" alignItems="center" spacing={0}>
+        <Grid item xs={10}>
+          <svg
+            id="d3"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            className="graph-svg-component"
+            width={widthSvg}
+            height={heightSvg}
+            ref={(svg) => {
+              this.svg = svg;
+              return this.svg;
+            }}
+          >
           vizualización
-      </svg>
+          </svg>
+          <Tooltip title="Descargar gráfica" placement="bottom">
+            <IconButton
+              onClick={() => { saveSvgAsPng(document.querySelector('#d3'), 'grafica', { scale: 3 }); }}
+              className="marginRight: 'auto'"
+              aria-label="descargar"
+            >
+              <SaveAlt />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+      </Grid>
     );
   }
 }

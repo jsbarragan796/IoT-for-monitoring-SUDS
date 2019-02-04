@@ -5,28 +5,20 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import FileDownload from 'js-file-download';
 import Snackbar from '@material-ui/core/Snackbar';
+import Divider from '@material-ui/core/Divider';
 import AppNavBar from './AppNavBar';
 import HistogramGraph from './HistogramGraph';
 
-const styles = {
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)'
-  },
-  title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
+const styles = theme => ({
+  left: {
+    margin: theme.spacing.unit
   }
-};
+});
 
 class HistoricalEvent extends Component {
   constructor(props) {
@@ -121,87 +113,94 @@ class HistoricalEvent extends Component {
       <div>
         <AppNavBar auth={auth} optionActive="eventDetail" />
         {this.showErrorMessage()}
-        <Grid item sx={6}>
-
-          <Card>
-            <CardHeader
-              title={`Evento registrado el ${date}`}
-            />
-
-            <CardContent>
-              <Paper>
+        <div className="main">
+          <Grid item sx={6}>
+            <Card>
+              <CardHeader
+                title={`Evento registrado el ${date}`}
+              />
+              <CardContent>
                 {histogramGraph}
-              </Paper>
-              <Grid container spacing={8}>
-                <Grid item xs={12}>
-                  <Grid item container direction="row">
-                    <Grid item container xs={6} direction="column">
-                      <Typography color="inherit">
+                <br />
+                <Divider />
+                <br />
+                <Grid container justify="center" alignItems="center" spacing={8}>
+                  <Grid item xs={8}>
+                    <Typography color="inherit" variant="h5">
+                        Resumen
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Grid item container direction="row">
+                      <Grid item container xs={6} direction="column">
+                        <Typography color="inherit">
                         Entrada
-                      </Typography>
-                      <Typography color="inherit">
-                        <strong>
+                        </Typography>
+                        <Typography color="inherit">
+                          <strong>
                           Volumen :
-                        </strong>
-                        {` ${Math.ceil(event.volumeInput)} l³`}
-                      </Typography>
-                      <Typography color="inherit">
-                        <strong>
+                          </strong>
+                          {` ${Math.ceil(event.volumeInput)} l³`}
+                        </Typography>
+                        <Typography color="inherit">
+                          <strong>
                           Caudal pico :
-                        </strong>
-                        {` ${Math.ceil(event.peakImputFlow)} l/s`}
-                      </Typography>
-                    </Grid>
-                    <Grid item container xs={6} direction="column">
-                      <Typography color="inherit">
+                          </strong>
+                          {` ${Math.ceil(event.peakImputFlow)} l/s`}
+                        </Typography>
+                      </Grid>
+                      <Grid item container xs={6} direction="column">
+                        <Typography color="inherit">
                           Salida
-                      </Typography>
-                      <Typography color="inherit">
-                        <strong>
+                        </Typography>
+                        <Typography color="inherit">
+                          <strong>
                             Volumen :
-                        </strong>
-                        {` ${Math.ceil(event.volumeOutput)} l³`}
-                      </Typography>
-                      <Typography color="inherit">
-                        <strong>
+                          </strong>
+                          {` ${Math.ceil(event.volumeOutput)} l³`}
+                        </Typography>
+                        <Typography color="inherit">
+                          <strong>
                             Caudal pico :
-                        </strong>
-                        {` ${Math.ceil(event.peakOutputFlow)} l/s`}
-                      </Typography>
-                      <Button className={classes.left} size="small" onClick={this.csv} color="primary">
+                          </strong>
+                          {` ${Math.ceil(event.peakOutputFlow)} l/s`}
+                        </Typography>
+                        <Button className={classes.left} variant="outlined" size="small" onClick={this.csv} color="primary">
                           Descargar datos
-                      </Button>
-                    </Grid>
-                    <Grid item container xs={12} direction="column">
-                      <Typography color="inherit">
-                        <strong>
+                        </Button>
+                      </Grid>
+                      <Grid item container xs={12} direction="column">
+                        <Typography color="inherit">
+                          <strong>
                           Eficiencia :
-                        </strong>
-                        {` ${Math.ceil(event.efficiency)} %`}
-                      </Typography>
+                          </strong>
+                          {` ${Math.ceil(event.efficiency)} %`}
+                        </Typography>
 
-                      <Typography color="inherit">
-                        <strong>
+                        <Typography color="inherit">
+                          <strong>
                           Reducción del caudal pico :
-                        </strong>
-                        {` ${Math.ceil(event.reductionOfPeakFlow)} %`}
-                      </Typography>
+                          </strong>
+                          {` ${Math.ceil(event.reductionOfPeakFlow)} %`}
+                        </Typography>
 
-                      <Typography color="inherit">
-                        <strong>
+                        <Typography color="inherit">
+                          <strong>
                           Duración:
-                        </strong>
-                        {` ${Math.floor(event.duration)}:${Math.floor((event.duration - Math.floor(event.duration)) * 60)} horas`}
-                      </Typography>
+                          </strong>
+                          {` ${Math.floor(event.duration)}:${Math.floor((event.duration - Math.floor(event.duration)) * 60)} horas`}
+                        </Typography>
 
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
 
-            </CardContent>
-          </Card>
-        </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+        </div>
+
       </div>
     );
   }

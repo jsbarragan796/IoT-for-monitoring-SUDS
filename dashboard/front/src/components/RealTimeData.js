@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import HistogramGraph from './HistogramGraph';
+import logo from '../assets/logo.png';
 
 class RealTimeData extends Component {
   constructor(props) {
@@ -71,15 +78,18 @@ class RealTimeData extends Component {
     let s = '';
     let w = '';
     let e = '';
+    let dif = '';
     let final = '';
     const { data } = this.state;
     if (data && data.events.length > 0) {
       s = <HistogramGraph data={data.events[0].entrylevel} data2={data.events[0].exitlevel} />;
       const options = {
-        weekday: 'long',
         year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
       };
       w = new Date(Number(String(data.events[0].startDate).substr(0, 13))).toLocaleDateString(
         'es-US',
@@ -88,24 +98,65 @@ class RealTimeData extends Component {
       e = new Date(
         Number(String(data.events[0].lastMeasurementDate).substr(0, 13))
       ).toLocaleDateString('es-US', options);
+      dif = Number(String(data.events[0].lastMeasurementDate - data.events[0].startDate));
+      console.log(dif)
+      dif /= 1e11;
+      console.log(dif)
+      dif = `${Math.round(dif / 60)}:${Math.round(dif % 60)}`;
       final = (
         <div className="main">
-          <h2>Datos evento en curso:</h2>
-          {s}
-          <p>
-            Fecha de inicio:
-            {w}
-          </p>
-          <p>
-            Fecha último dato recibido:
-            {e}
-          </p>
+          <Card>
+            <CardHeader
+              title="Evento en curso"
+            />
+            <CardContent>
+              {s}
+              <br />
+              <Divider />
+              <br />
+              <Grid container justify="center" alignItems="center" spacing={8}>
+                <Grid item xs={4}>
+                  <Typography color="inherit" variant="h6">
+                    {`Duración  : ${dif} horas`}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography color="inherit" variant="h6">
+                    {`El evento inició : ${w}`}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography color="inherit" variant="h6">
+                    {`El último dato se recibió :${e}`}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
         </div>
       );
     } else {
       final = (
         <div className="main">
-          <h2>No se tienen eventos en curso</h2>
+          <Card>
+            <CardHeader
+              title="No hay enentos en curso"
+            />
+            <CardContent>
+              <br />
+              <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
+                <Grid item xs={6}>
+                  <img src={logo} alt="Logo" width="300px" />
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography color="inherit" variant="h6">
+                    Tan pronto  inicie un evento se mostrará la información
+                  </Typography>
+                </Grid>
+              </Grid>
+              <br />
+            </CardContent>
+          </Card>
         </div>
       );
     }
