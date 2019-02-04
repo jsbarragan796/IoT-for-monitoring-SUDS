@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -16,21 +17,11 @@ const styles = {
     marginLeft: 'auto'
   },
   card: {
-    maxWidth: 560
+    minWidth: 600
   }
 };
 
 class EventResult extends Component {
-  constructor(props) {
-    super(props);
-    this.margin = {
-      top: 20,
-      right: 30,
-      bottom: 30,
-      left: 40
-    };
-  }
-
   render() {
     const { event } = this.props;
     const { classes } = this.props;

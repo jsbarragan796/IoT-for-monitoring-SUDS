@@ -14,7 +14,8 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 150
+    width: 150,
+    height: 40
   },
   button: {
     margin: theme.spacing.unit
@@ -92,7 +93,8 @@ class Filter extends Component {
   };
 
   sendFilter = () => {
-    const { state, props } = this;
+    const { state } = this;
+    const { setFilter } = this.props;
     const filter = {
       endDate: undefined,
       beginDate: undefined,
@@ -139,18 +141,17 @@ class Filter extends Component {
       filter.endReductionOfPeakFlow = Number(state.endReductionOfPeakFlow);
     }
     if (state.beginDuration !== '') {
-      const time = String(state.beginDuration).split(':');
-      filter.beginDuration = Number(time[0]) + Number(time[1]) / 60;
+      filter.beginDuration = Number(state.beginDuration);
     }
     if (state.endDuration !== '') {
-      const time = String(state.endDuration).split(':');
-      filter.endDuration = Number(time[0]) + Number(time[1]) / 60;
+      filter.endDuration = Number(state.endDuration);
     }
-    props.setFilter(filter);
+    setFilter(filter);
   };
 
 
   reset = () => {
+    const { setFilter } = this.props;
     this.setState({
       endDate: null,
       beginDate: null,
@@ -175,6 +176,7 @@ class Filter extends Component {
       errbeginDuration: false,
       errendDuration: false
     });
+    setFilter({ pageNumber: 1 });
   }
 
 
@@ -182,18 +184,23 @@ class Filter extends Component {
     const { classes, foundEvents } = this.props;
     const { state } = this;
     return (
-      <Grid container spacing={24} direction="column" justify="center" alignItems="center">
+      <Grid container spacing={8} direction="column" justify="center" alignItems="center">
         <Grid item xs={12}>
           <Typography variant="h5" color="inherit">
             Filtros
           </Typography>
-          <Typography variant="h6" color="inherit">
+          <Typography color="inherit" component="p">
             {foundEvents}
           </Typography>
         </Grid>
         <Grid item xs={12}>
+          <Typography color="inherit">
+              Fecha
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
           <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
-            <Grid container justify="center" spacing={16}>
+            <Grid container justify="center" spacing={0}>
               <Grid item xs={6}>
                 <DatePicker
                   id="beginDate"
@@ -201,6 +208,7 @@ class Filter extends Component {
                   label="Desde"
                   emptyLabel=""
                   className={classes.textField}
+                  variant="filled"
                   format="MM/dd/yyyy"
                   mask={value => (value !== '' ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])
                 }
@@ -216,6 +224,7 @@ class Filter extends Component {
                   label="Hasta"
                   emptyLabel=""
                   className={classes.textField}
+                  variant="filled"
                   format="MM/dd/yyyy"
                   mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])
             }
@@ -241,11 +250,10 @@ class Filter extends Component {
             error={state.errbeginEfficiency}
             type="number"
             className={classes.textField}
+            variant="filled"
             InputLabelProps={{
               shrink: true
             }}
-
-
           />
 
           <TextField
@@ -256,11 +264,10 @@ class Filter extends Component {
             onChange={this.handleChange('endEfficiency')}
             type="number"
             className={classes.textField}
+            variant="filled"
             InputLabelProps={{
               shrink: true
             }}
-
-
           />
         </Grid>
         <Grid item xs={12}>
@@ -276,6 +283,7 @@ class Filter extends Component {
             onChange={this.handleChange('beginVolumeInput')}
             error={state.errbeginVolumeInput}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
@@ -290,15 +298,15 @@ class Filter extends Component {
             error={state.errendVolumeInput}
             onChange={this.handleChange('endVolumeInput')}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
             }}
-
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography color="inherit">
+          <Typography color="inherit" component="p">
               Volumen de salida l³
           </Typography>
         </Grid>
@@ -310,6 +318,7 @@ class Filter extends Component {
             onChange={this.handleChange('beginVolumeOutput')}
             error={state.errbeginVolumeOutput}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
@@ -323,6 +332,7 @@ class Filter extends Component {
             error={state.errendVolumeOutput}
             onChange={this.handleChange('endVolumeOutput')}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
@@ -342,6 +352,7 @@ class Filter extends Component {
             onChange={this.handleChange('beginReductionOfPeakFlow')}
             error={state.errbeginReductionOfPeakFlow}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
@@ -354,6 +365,7 @@ class Filter extends Component {
             error={state.errendReductionOfPeakFlow}
             onChange={this.handleChange('endReductionOfPeakFlow')}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
@@ -373,6 +385,7 @@ class Filter extends Component {
             onChange={this.handleChange('beginDuration')}
             error={state.errbeginDuration}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
@@ -385,6 +398,7 @@ class Filter extends Component {
             error={state.errendDuration}
             onChange={this.handleChange('endDuration')}
             type="number"
+            variant="filled"
             className={classes.textField}
             InputLabelProps={{
               shrink: true
@@ -392,10 +406,10 @@ class Filter extends Component {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button size="small" onClick={this.reset}>
+          <Button size="medium" variant="contained" onClick={this.reset} className={classes.button}>
             Limpiar
           </Button>
-          <Button size="small" onClick={this.sendFilter} color="primary">
+          <Button size="medium" variant="contained" onClick={this.sendFilter} color="primary" className={classes.button}>
             Aplicar
           </Button>
         </Grid>

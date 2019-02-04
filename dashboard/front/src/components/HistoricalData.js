@@ -5,6 +5,7 @@ import Pagination from 'material-ui-flat-pagination';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
 import EventResult from './EventResult';
 import Filter from './Filter';
 
@@ -108,19 +109,27 @@ class HistoricalData extends Component {
     const { currentPage, totalPages } = data;
     if (totalPages > 1) {
       return (
-        <Pagination
-          limit={1}
-          offset={currentPage - 1}
-          total={totalPages}
-          onClick={(e, offset, page) => this.changePage(page)}
-        />
+        <Grid item xs={12}>
+          <Pagination
+            limit={1}
+            offset={currentPage - 1}
+            total={totalPages}
+            onClick={(e, offset, page) => this.changePage(page)}
+          />
+        </Grid>
       );
     }
     return '';
   }
 
   render() {
-    let events = '';
+    let events = (
+      <Grid item>
+        <Typography variant="h2" color="inherit">
+           No se encontraron resultados
+        </Typography>
+      </Grid>
+    );
     let totalEventos = 'No se encontraron resultados';
     let paginador = '';
     const { data } = this.state;
@@ -139,7 +148,7 @@ class HistoricalData extends Component {
                 <Filter foundEvents={totalEventos} setFilter={filter => this.setFilter(filter)} />
               </Grid>
               <Grid item xs={8}>
-                <Grid container direction="column" justify="center" alignItems="center" spacing={40}>
+                <Grid container direction="column" justify="space-between" alignItems="center" spacing={16}>
                   {events}
                   {paginador}
                 </Grid>
