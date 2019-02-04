@@ -149,9 +149,9 @@ router.get('/get-csv', async (req, res) => {
     const date = new Date(event.startDate / 1e6).toLocaleDateString().replace(/\//g, '_')
     const fileName = `evento_${date}.csv`
     res.writeHead(200, {
+      'Access-Control-Expose-Headers': 'filename, Content-Disposition',
       'Content-Type': 'text/csv',
       'Content-Disposition': 'attachment; filename=' + fileName,
-      'X-Total-Count': 0,
       'filename': fileName
     })
     const data = [['Fecha', 'Caudal salida', 'Caudal entrada', 'Conductividad entrada', 'Conductividad salida', 'Precipitacion']]
