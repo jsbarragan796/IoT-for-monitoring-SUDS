@@ -1,14 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
+import Pagination from 'material-ui-flat-pagination';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import EventResult from './EventResult';
 import Filter from './Filter';
 
@@ -19,7 +15,6 @@ const styles = {
   filter: {
     'max-width': '25%',
     'min-width': 200
-
   },
   events: {
     'max-width': '75%',
@@ -58,7 +53,8 @@ class HistoricalData extends Component {
   }
 
   loadData(filter) {
-    axios.post('events/filtered-data', filter)
+    axios
+      .post('events/filtered-data', filter)
       .then((response) => {
         this.setState({ data: response.data, errorStatus: false });
       })
@@ -82,11 +78,10 @@ class HistoricalData extends Component {
           message={(
             <span id="message-id">
               {' '}
-          Ha ocurrido un problema, comuniquese con el administrador del sistema y
-          por favor comuníquele el siguinte mensaje :
+              Ha ocurrido un problema, comuniquese con el administrador del sistema y por favor
+              comuníquele el siguinte mensaje :
               {' '}
               {errorMessage}
-
             </span>
 )}
         />
@@ -103,57 +98,22 @@ class HistoricalData extends Component {
     this.setState({ filter });
   }
 
-
   allEvents() {
     const { data } = this.state;
-    return data.events.map(
-      event => (<EventResult key={event._id} event={event} />)
-    );
+    return data.events.map(event => <EventResult key={event._id} event={event} />);
   }
 
   paginador() {
     const { data } = this.state;
-    const { totalPages, currentPage } = data;
-
+    const { currentPage, totalPages } = data;
     if (totalPages > 1) {
-      if (currentPage === 1) {
-        return (
-          <Grid item>
-            <Card>
-              <CardContent>
-                <Button size="small" onClick={() => { this.changePage(2); }} color="primary">
-              Siguiente
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        );
-      } if (currentPage === totalPages) {
-        return (
-          <Grid item>
-            <Card>
-              <CardContent>
-                <Button size="small" onClick={() => { this.changePage(totalPages - 1); }} color="primary">
-              Atrás
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        );
-      }
       return (
-        <Grid item>
-          <Card>
-            <CardContent>
-              <Button size="small" onClick={() => { this.changePage(currentPage - 1); }} color="primary">
-              Atrás
-              </Button>
-              <Button size="small" onClick={() => { this.changePage(currentPage + 1); }} color="primary">
-              Siguiente
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
+        <Pagination
+          limit={1}
+          offset={currentPage - 1}
+          total={totalPages}
+          onClick={(e, offset, page) => this.changePage(page)}
+        />
       );
     }
     return '';
@@ -161,43 +121,35 @@ class HistoricalData extends Component {
 
   render() {
     let events = '';
-    let totalEventos = '';
+    let totalEventos = 'No se encontraron resultados';
     let paginador = '';
     const { data } = this.state;
-    const { classes } = this.props;
     if (data && data.events.length > 0) {
       events = this.allEvents();
       paginador = this.paginador();
-      totalEventos = data.numberOfEvents;
+      totalEventos = `${data.numberOfEvents} ${data.numberOfEvents === 1 ? ' resultado ' : ' resultados'}`;
     }
     return (
       <div>
         {this.showErrorMessage()}
         <div className="main">
-          <Filter setFilter={filter => this.setFilter(filter)} />
-          <br />
-          <Grid container direction="column" justify="center" alignItems="center" spacing={40}>
-            <Grid item>
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography color="inherit">
-                        Eventos encontrados:
-                    {' '}
-                    {totalEventos}
-                  </Typography>
-                </CardContent>
-              </Card>
+          <div className="historical">
+            <Grid container direction="row" justify="center" alignItems="stretch" spacing={0}>
+              <Grid item xs={4}>
+                <Filter foundEvents={totalEventos} setFilter={filter => this.setFilter(filter)} />
+              </Grid>
+              <Grid item xs={8}>
+                <Grid container direction="column" justify="center" alignItems="center" spacing={40}>
+                  {events}
+                  {paginador}
+                </Grid>
+              </Grid>
             </Grid>
-            {events}
-            {paginador}
-          </Grid>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-HistoricalData.propTypes = {
-  classes: PropTypes.instanceOf(Object).isRequired
-};
 export default withStyles(styles)(HistoricalData);

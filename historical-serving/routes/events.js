@@ -6,7 +6,7 @@ const EventLogic = require('../logic/event')
 
 const measurementLogic = require('./../logic/measurement')
 
-const EVENT_PAGINATION = 1
+const EVENT_PAGINATION = 2
 const TIME_INTERVAL_MINUTES = '1m'
 const AGGREGATION_FUNCTION = 'max'
 // const ENTRY_SENSOR_ID = '4D1089'

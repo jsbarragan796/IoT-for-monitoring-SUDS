@@ -1,23 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Divider from '@material-ui/core/Divider';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import esLocale from 'date-fns/locale/es';
 
 const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
+    width: 150
   },
   button: {
     margin: theme.spacing.unit
@@ -27,6 +24,9 @@ const styles = theme => ({
   },
   iconSmall: {
     fontSize: 20
+  },
+  grid: {
+    width: '100%'
   }
 });
 
@@ -35,8 +35,8 @@ class Filter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      endDate: '',
-      beginDate: '',
+      endDate: null,
+      beginDate: null,
       beginEfficiency: '',
       endEfficiency: '',
       beginVolumeInput: '',
@@ -66,14 +66,15 @@ class Filter extends Component {
 
 
   handleChange = name => (event) => {
-    this.validateInput(name, event.target.value);
-    if (name !== 'beginDate' && name !== 'endDate' && name !== 'beginDuration' && name !== 'endDuration') {
+    const value = event.target ? event.target.value : event;
+    this.validateInput(name, value);
+    if (name !== 'beginDate' && name !== 'endDate') {
       this.setState({
-        [name]: Number(event.target.value)
+        [name]: Number(value)
       });
     } else {
       this.setState({
-        [name]: (event.target.value)
+        [name]: (value)
       });
     }
   };
@@ -91,7 +92,7 @@ class Filter extends Component {
   };
 
   sendFilter = () => {
-    const state = this.state;
+    const { state, props } = this;
     const filter = {
       endDate: undefined,
       beginDate: undefined,
@@ -138,7 +139,6 @@ class Filter extends Component {
       filter.endReductionOfPeakFlow = Number(state.endReductionOfPeakFlow);
     }
     if (state.beginDuration !== '') {
-      console.log('asdf', state.beginDuration);
       const time = String(state.beginDuration).split(':');
       filter.beginDuration = Number(time[0]) + Number(time[1]) / 60;
     }
@@ -146,15 +146,14 @@ class Filter extends Component {
       const time = String(state.endDuration).split(':');
       filter.endDuration = Number(time[0]) + Number(time[1]) / 60;
     }
-
-    this.props.setFilter(filter);
+    props.setFilter(filter);
   };
 
 
   reset = () => {
     this.setState({
-      endDate: '',
-      beginDate: '',
+      endDate: null,
+      beginDate: null,
       beginEfficiency: '',
       endEfficiency: '',
       beginVolumeInput: '',
@@ -180,195 +179,236 @@ class Filter extends Component {
 
 
   render() {
-    const { classes } = this.props;
+    const { classes, foundEvents } = this.props;
+    const { state } = this;
     return (
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6" color="inherit">
-          Filtros
+      <Grid container spacing={24} direction="column" justify="center" alignItems="center">
+        <Grid item xs={12}>
+          <Typography variant="h5" color="inherit">
+            Filtros
           </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Grid container spacing={8}>
-            <Grid item xs={12}>
-              <Grid item container direction="column" justify="center" alignItems="center">
-                <Grid item xs={12}>
-                  <TextField
-                    id="beginDate"
-                    label="Desde "
-                    type="date"
-                    className={classes.textField}
-
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    onChange={this.handleChange('beginDate')}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                  <TextField
-                    id="endDate"
-                    label="Hasta"
-                    type="date"
-                    className={classes.textField}
-
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    onChange={this.handleChange('endDate')}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="outlined-beginEfficiency"
-                    label="Min eficiencia %"
-                    value={this.state.beginEfficiency}
-                    onChange={this.handleChange('beginEfficiency')}
-                    error={this.state.errbeginEfficiency}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    id="outlined-endEfficiency"
-                    label="Max eficiencia %"
-                    value={this.state.endEfficiency}
-                    error={this.state.errendEfficiency}
-                    onChange={this.handleChange('endEfficiency')}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="outlined-beginVolumeInput"
-                    label="Min volumen entrada l³"
-                    value={this.state.beginVolumeInput}
-                    onChange={this.handleChange('beginVolumeInput')}
-                    error={this.state.errbeginVolumeInput}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    id="outlined-endVolumeInput"
-                    label="Max volumen entrada l³"
-                    value={this.state.endVolumeInput}
-                    error={this.state.errendVolumeInput}
-                    onChange={this.handleChange('endVolumeInput')}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="outlined-beginVolumeOutput"
-                    label="Min volumen salida l³"
-                    value={this.state.beginVolumeOutput}
-                    onChange={this.handleChange('beginVolumeOutput')}
-                    error={this.state.errbeginVolumeOutput}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    id="outlined-endVolumeOutput"
-                    label="Max volumen salida l³"
-                    value={this.state.endVolumeOutput}
-                    error={this.state.errendVolumeOutput}
-                    onChange={this.handleChange('endVolumeOutput')}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="outlined-beginReductionOfPeakFlow"
-                    label="Reducción caudal pico %"
-                    value={this.state.beginReductionOfPeakFlow}
-                    onChange={this.handleChange('beginReductionOfPeakFlow')}
-                    error={this.state.errbeginReductionOfPeakFlow}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-
-                  <TextField
-                    id="outlined-endReductionOfPeakFlow"
-                    label="Reducción caudal pico %"
-                    value={this.state.endReductionOfPeakFlow}
-                    error={this.state.errendReductionOfPeakFlow}
-                    onChange={this.handleChange('endReductionOfPeakFlow')}
-                    type="number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="outlined-beginDuration"
-                    label="Min Duración (horas)"
-                    onChange={this.handleChange('beginDuration')}
-                    error={this.state.errbeginDuration}
-                    type="time"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                  />
-
-                  <TextField
-                    id="outlined-endDuration"
-                    label="Max Duración (horas)"
-                    error={this.state.errendDuration}
-                    onChange={this.handleChange('endDuration')}
-                    type="time"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                  />
-                </Grid>
+          <Typography variant="h6" color="inherit">
+            {foundEvents}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
+            <Grid container justify="center" spacing={16}>
+              <Grid item xs={6}>
+                <DatePicker
+                  id="beginDate"
+                  margin="normal"
+                  label="Desde"
+                  emptyLabel=""
+                  className={classes.textField}
+                  format="MM/dd/yyyy"
+                  mask={value => (value !== '' ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])
+                }
+                  value={state.beginDate}
+                  onChange={this.handleChange('beginDate')}
+                />
               </Grid>
+              <Grid item xs={6}>
+
+                <DatePicker
+                  id="endDate"
+                  margin="normal"
+                  label="Hasta"
+                  emptyLabel=""
+                  className={classes.textField}
+                  format="MM/dd/yyyy"
+                  mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])
+            }
+                  value={state.endDate}
+                  onChange={this.handleChange('endDate')}
+                />
+              </Grid>
+
             </Grid>
-          </Grid>
-        </ExpansionPanelDetails>
-        <Divider />
-        <ExpansionPanelActions>
+          </MuiPickersUtilsProvider>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color="inherit">
+              Eficiencia %
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="outlined-beginEfficiency"
+            label="Min %"
+            value={state.beginEfficiency}
+            onChange={this.handleChange('beginEfficiency')}
+            error={state.errbeginEfficiency}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+
+
+          />
+
+          <TextField
+            id="outlined-endEfficiency"
+            label="Max %"
+            value={state.endEfficiency}
+            error={state.errendEfficiency}
+            onChange={this.handleChange('endEfficiency')}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+
+
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color="inherit">
+              Volumen de entrada l³
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="outlined-beginVolumeInput"
+            label="Min l³"
+            value={state.beginVolumeInput}
+            onChange={this.handleChange('beginVolumeInput')}
+            error={state.errbeginVolumeInput}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+
+          />
+
+          <TextField
+            id="outlined-endVolumeInput"
+            label="Max l³"
+            value={state.endVolumeInput}
+            error={state.errendVolumeInput}
+            onChange={this.handleChange('endVolumeInput')}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color="inherit">
+              Volumen de salida l³
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="outlined-beginVolumeOutput"
+            label="Min l³"
+            value={state.beginVolumeOutput}
+            onChange={this.handleChange('beginVolumeOutput')}
+            error={state.errbeginVolumeOutput}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+
+          />
+          <TextField
+            id="outlined-endVolumeOutput"
+            label="Max l³"
+            value={state.endVolumeOutput}
+            error={state.errendVolumeOutput}
+            onChange={this.handleChange('endVolumeOutput')}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color="inherit">
+              Reducción caudal pico %
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="outlined-beginReductionOfPeakFlow"
+            label="Min %"
+            value={state.beginReductionOfPeakFlow}
+            onChange={this.handleChange('beginReductionOfPeakFlow')}
+            error={state.errbeginReductionOfPeakFlow}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          <TextField
+            id="outlined-endReductionOfPeakFlow"
+            label="Max %"
+            value={state.endReductionOfPeakFlow}
+            error={state.errendReductionOfPeakFlow}
+            onChange={this.handleChange('endReductionOfPeakFlow')}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color="inherit">
+               Duración del evento h
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="outlined-beginDuration"
+            label="Min h"
+            onChange={this.handleChange('beginDuration')}
+            error={state.errbeginDuration}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+
+          <TextField
+            id="outlined-endDuration"
+            label="Max h"
+            error={state.errendDuration}
+            onChange={this.handleChange('endDuration')}
+            type="number"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
           <Button size="small" onClick={this.reset}>
             Limpiar
           </Button>
           <Button size="small" onClick={this.sendFilter} color="primary">
             Aplicar
           </Button>
-        </ExpansionPanelActions>
-      </ExpansionPanel>
+        </Grid>
+      </Grid>
+
     );
   }
 }
 
 Filter.propTypes = {
-  classes: PropTypes.instanceOf(Object).isRequired
+  classes: PropTypes.instanceOf(Object).isRequired,
+  setFilter: PropTypes.func.isRequired,
+  foundEvents: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(Filter);

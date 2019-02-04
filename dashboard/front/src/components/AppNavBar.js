@@ -113,7 +113,9 @@ class AppNavBar extends Component {
       >
         <MenuItem component={Link} to="/">
           <IconButton color="inherit">
-            <RssFeed />
+            <Badge variant="dot" invisible={!RTEvnets} color="secondary">
+              <RssFeed />
+            </Badge>
           </IconButton>
           Tiempo Real
         </MenuItem>
@@ -139,7 +141,7 @@ class AppNavBar extends Component {
             <IconButton className={classes.menuButton} color="inherit" aria-label="Home">
               <img src={navBarLogo} width="100wv" alt="Logo" />
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            <Typography className={classes.title} color="inherit" noWrap>
               SUDS Uniandes
             </Typography>
             <div className={classes.grow} />
@@ -151,7 +153,7 @@ class AppNavBar extends Component {
               >
                 <Badge variant="dot" invisible={!RTEvnets} color="secondary">
                   <RssFeed />
-                  <Typography variant="h6" color="inherit" className={classes.grow}>
+                  <Typography color="inherit" className={classes.grow}>
                     {'Tiempo real'}
                   </Typography>
                 </Badge>
@@ -162,7 +164,7 @@ class AppNavBar extends Component {
                 to="/eventos"
               >
                 <Timeline />
-                <Typography variant="h6" color="inherit" className={classes.grow}>
+                <Typography color="inherit" className={classes.grow}>
                   {'Histórico'}
                 </Typography>
               </IconButton>
@@ -171,7 +173,7 @@ class AppNavBar extends Component {
                 color="inherit"
               >
                 <ExitToApp />
-                <Typography variant="h6" color="inherit" className={classes.grow}>
+                <Typography color="inherit" className={classes.grow}>
                   {'Cerrar Sesión'}
                 </Typography>
               </IconButton>

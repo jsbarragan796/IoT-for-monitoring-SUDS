@@ -1,37 +1,37 @@
 @font-face {
-  font-family: 'Alike';
-  src: ('/assets/fonts/Alike.ttf') format('truetype');
+  font-family: "Alike";
+  src: ("/assets/fonts/Alike.ttf") format("truetype");
 }
 
-
 .navbar-brand {
-  font-family: 'Alike', serif;
-  font-size: 130%
+  font-family: "Alike", serif;
+  font-size: 130%;
 }
 
 nav {
-  font-family: 'Alike', serif;
-  font-size: 130%
+  font-family: "Alike", serif;
+  font-size: 130%;
 }
 
 .logo {
   height: 400px;
 }
 
-
 .inicio {
   width: 100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .main {
-  margin-top: 68px;
+  margin-top: 80px;
   padding: 0 3% 0 3%;
 }
+.historical {
+  min-width: 900px;
+}
 
-.center-div
-{
+.center-div {
   margin: auto;
   padding: 10px;
 }

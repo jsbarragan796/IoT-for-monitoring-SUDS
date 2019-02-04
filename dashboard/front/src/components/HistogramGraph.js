@@ -7,8 +7,8 @@ class HistogramGraph extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 600,
-      height: 300
+      width: 0,
+      height: 0
     };
     this.margin = {
       top: 10,
@@ -21,11 +21,16 @@ class HistogramGraph extends Component {
     this.currentSize = this.currentSize.bind(this);
   }
 
-  componentDidMount() {
-    this.drawGraph();
+  componentWillMount() {
     this.currentSize();
     window.addEventListener('resize', this.currentSize);
   }
+
+
+  componentDidMount() {
+    this.drawGraph();
+  }
+
 
   componentWillUpdate() {
     this.updateGraph();
