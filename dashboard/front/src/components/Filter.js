@@ -31,7 +31,6 @@ const styles = theme => ({
   }
 });
 
-
 class Filter extends Component {
   constructor(props) {
     super(props);
@@ -65,7 +64,6 @@ class Filter extends Component {
     this.sendFilter = this.sendFilter.bind(this);
   }
 
-
   handleChange = name => (event) => {
     const value = event.target ? event.target.value : event;
     this.validateInput(name, value);
@@ -75,7 +73,7 @@ class Filter extends Component {
       });
     } else {
       this.setState({
-        [name]: (value)
+        [name]: value
       });
     }
   };
@@ -149,7 +147,6 @@ class Filter extends Component {
     setFilter(filter);
   };
 
-
   reset = () => {
     const { setFilter } = this.props;
     this.setState({
@@ -177,15 +174,14 @@ class Filter extends Component {
       errendDuration: false
     });
     setFilter({ pageNumber: 1 });
-  }
-
+  };
 
   render() {
     const { classes, foundEvents } = this.props;
     const { state } = this;
     return (
-      <Grid container spacing={8} direction="column" justify="center" alignItems="center">
-        <Grid item xs={12}>
+      <Grid container spacing={16} direction="column" justify="center" alignItems="center">
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <Typography variant="h5" color="inherit">
             Filtros
           </Typography>
@@ -193,12 +189,10 @@ class Filter extends Component {
             {foundEvents}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
-          <Typography color="inherit">
-              Fecha
-          </Typography>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Typography color="inherit">Fecha</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
             <Grid container justify="center" spacing={0}>
               <Grid item xs={6}>
@@ -211,13 +205,12 @@ class Filter extends Component {
                   variant="filled"
                   format="MM/dd/yyyy"
                   mask={value => (value !== '' ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])
-                }
+                  }
                   value={state.beginDate}
                   onChange={this.handleChange('beginDate')}
                 />
               </Grid>
               <Grid item xs={6}>
-
                 <DatePicker
                   id="endDate"
                   margin="normal"
@@ -227,21 +220,18 @@ class Filter extends Component {
                   variant="filled"
                   format="MM/dd/yyyy"
                   mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])
-            }
+                  }
                   value={state.endDate}
                   onChange={this.handleChange('endDate')}
                 />
               </Grid>
-
             </Grid>
           </MuiPickersUtilsProvider>
         </Grid>
-        <Grid item xs={12}>
-          <Typography color="inherit">
-              Eficiencia %
-          </Typography>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Typography color="inherit">Eficiencia %</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginEfficiency"
             label="Min %"
@@ -270,15 +260,13 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color="inherit">
-              Volumen de entrada l³
-          </Typography>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Typography color="inherit">Volumen de entrada l</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginVolumeInput"
-            label="Min l³"
+            label="Min l"
             value={state.beginVolumeInput}
             onChange={this.handleChange('beginVolumeInput')}
             error={state.errbeginVolumeInput}
@@ -288,12 +276,11 @@ class Filter extends Component {
             InputLabelProps={{
               shrink: true
             }}
-
           />
 
           <TextField
             id="outlined-endVolumeInput"
-            label="Max l³"
+            label="Max l"
             value={state.endVolumeInput}
             error={state.errendVolumeInput}
             onChange={this.handleChange('endVolumeInput')}
@@ -305,15 +292,15 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <Typography color="inherit" component="p">
-              Volumen de salida l³
+            Volumen de salida l
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginVolumeOutput"
-            label="Min l³"
+            label="Min l"
             value={state.beginVolumeOutput}
             onChange={this.handleChange('beginVolumeOutput')}
             error={state.errbeginVolumeOutput}
@@ -323,11 +310,10 @@ class Filter extends Component {
             InputLabelProps={{
               shrink: true
             }}
-
           />
           <TextField
             id="outlined-endVolumeOutput"
-            label="Max l³"
+            label="Max l"
             value={state.endVolumeOutput}
             error={state.errendVolumeOutput}
             onChange={this.handleChange('endVolumeOutput')}
@@ -339,12 +325,10 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color="inherit">
-              Reducción caudal pico %
-          </Typography>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Typography color="inherit">Reducción caudal pico %</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginReductionOfPeakFlow"
             label="Min %"
@@ -370,15 +354,12 @@ class Filter extends Component {
             InputLabelProps={{
               shrink: true
             }}
-
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography color="inherit">
-               Duración del evento h
-          </Typography>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Typography color="inherit">Duración del evento h</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginDuration"
             label="Min h"
@@ -405,16 +386,21 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <Button size="medium" variant="contained" onClick={this.reset} className={classes.button}>
             Limpiar
           </Button>
-          <Button size="medium" variant="contained" onClick={this.sendFilter} color="primary" className={classes.button}>
+          <Button
+            size="medium"
+            variant="contained"
+            onClick={this.sendFilter}
+            color="primary"
+            className={classes.button}
+          >
             Aplicar
           </Button>
         </Grid>
       </Grid>
-
     );
   }
 }

@@ -14,6 +14,7 @@ import Divider from '@material-ui/core/Divider';
 import AppNavBar from './AppNavBar';
 import HistogramGraph from './HistogramGraph';
 import ConductivityGraph from './ConductivityGraph';
+import Hyetograph from './Hyetograph';
 import logo from '../assets/logo.png';
 
 const styles = theme => ({
@@ -63,7 +64,6 @@ class HistoricalEvent extends Component {
     const { eventId } = match.match.params;
     axios.get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/get-csv?eventId=${eventId}`)
       .then((response) => {
-        console.log("headeras", response);
         FileDownload(response.data, response.headers.filename);
       })
       .catch((err) => {
@@ -130,7 +130,7 @@ class HistoricalEvent extends Component {
       );
     }
     if (event.entryrain && entryrain.length > 0) {
-      rainGraph = (<ConductivityGraph data={entryconductivity} data2={exitconductivity} />);
+      rainGraph = (<Hyetograph data={entryrain}  />);
     } else {
       rainGraph = (
         <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
@@ -181,7 +181,7 @@ class HistoricalEvent extends Component {
                           <strong>
                           Volumen :
                           </strong>
-                          {` ${Math.ceil(event.volumeInput)} l³`}
+                          {` ${Math.ceil(event.volumeInput)} l`}
                         </Typography>
                         <Typography color="inherit">
                           <strong>
@@ -198,7 +198,7 @@ class HistoricalEvent extends Component {
                           <strong>
                             Volumen :
                           </strong>
-                          {` ${Math.ceil(event.volumeOutput)} l³`}
+                          {` ${Math.ceil(event.volumeOutput)} l`}
                         </Typography>
                         <Typography color="inherit">
                           <strong>

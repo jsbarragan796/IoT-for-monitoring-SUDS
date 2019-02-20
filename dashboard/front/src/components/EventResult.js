@@ -47,14 +47,14 @@ class EventResult extends Component {
                     <Typography color="inherit">Entrada</Typography>
                     <Typography color="inherit">
                       <strong>Volumen :</strong>
-                      {` ${Math.ceil(event.volumeInput)} l³`}
+                      {` ${Math.ceil(event.volumeInput)} l`}
                     </Typography>
                   </Grid>
                   <Grid item container xs={6} direction="column">
                     <Typography color="inherit">Salida</Typography>
                     <Typography color="inherit">
                       <strong>Volumen :</strong>
-                      {` ${Math.ceil(event.volumeOutput)} l³`}
+                      {` ${Math.ceil(event.volumeOutput)} l`}
                     </Typography>
                   </Grid>
                   <Grid item container xs={12} direction="column">

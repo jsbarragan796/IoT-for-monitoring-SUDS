@@ -7,16 +7,15 @@ const EventLogic = require('../logic/event')
 const measurementLogic = require('./../logic/measurement')
 
 const EVENT_PAGINATION = 2
-const TIME_INTERVAL_MINUTES = '1m'
-const AGGREGATION_FUNCTION = 'max'
+
 // const ENTRY_SENSOR_ID = '4D1089'
 // const EXIT_SENSOR_ID = '4D1080'
 // const ENTRY_SENSOR_ID = '4D10B3'
 // const EXIT_SENSOR_ID = '4D10B4'
 const MEASUREMENT = [
-  { name: 'level', entry: '4D10B3', exit: '4D10B4' },
-  { name: 'rain', entry: '4D10B5' },
-  { name: 'conductivity', entry: '4D10B3', exit: '4D10B4' }
+  { name: 'level', entry: '4D10B3', exit: '4D10B4', timeIntervalMinutes: '1m', aggregationFunction: 'mean' },
+  { name: 'rain', entry: '4D10B3', timeIntervalMinutes: '60m', timeIntervalMinutesRealTime: '10m', aggregationFunction: 'sum' },
+  { name: 'conductivity', entry: '4D10B3', exit: '4D10B4', timeIntervalMinutes: '1m', aggregationFunction: 'mean' }
 ]
 
 let realtimeEventPaginator = {}
@@ -38,11 +37,14 @@ const eventSearchRange = async (pageNumber, numberOfEvents) => {
 const loadHistoricalMesuarementsEvents = async (event) => {
   for (let index = 0; index < MEASUREMENT.length; index++) {
     const measurement = MEASUREMENT[index]
-    if (measurement.entry) {
-      event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, event.finishDate, AGGREGATION_FUNCTION, TIME_INTERVAL_MINUTES)
+    if (measurement.entry && measurement.name !== 'rain') {
+      event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, event.finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
     }
     if (measurement.exit) {
-      event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, event.finishDate, AGGREGATION_FUNCTION, TIME_INTERVAL_MINUTES)
+      event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, event.finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
+    }
+    if (measurement.name === 'rain') {
+      event[`entry${measurement.name}`] = await measurementLogic.getMeasurements('level', measurement.entry, event.startDate, event.finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
     }
   }
   return event
@@ -57,11 +59,14 @@ const loadRealtimeMesuarementsEvents = async (events) => {
     }
     for (let i = 0; i < MEASUREMENT.length; i++) {
       const measurement = MEASUREMENT[i]
-      if (measurement.entry) {
-        event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, event.lastMeasurementDate, AGGREGATION_FUNCTION, TIME_INTERVAL_MINUTES)
+      if (measurement.entry && measurement.name !== 'rain') {
+        event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
       }
       if (measurement.exit) {
-        event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, event.lastMeasurementDate, AGGREGATION_FUNCTION, TIME_INTERVAL_MINUTES)
+        event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
+      }
+      if (measurement.name === 'rain') {
+        event[`entry${measurement.name}`] = await measurementLogic.getMeasurements('level', measurement.entry, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutesRealTime)
       }
     }
     eventsWithMeasurements.push(event)

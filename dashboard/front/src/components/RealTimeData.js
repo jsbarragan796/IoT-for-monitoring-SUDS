@@ -138,7 +138,7 @@ class RealTimeData extends Component {
         <div className="main">
           <Card>
             <CardHeader
-              title="No hay enentos en curso"
+              title="No hay eventos en curso"
             />
             <CardContent>
               <br />
