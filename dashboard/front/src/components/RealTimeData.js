@@ -7,8 +7,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import HistogramGraph from './HistogramGraph';
+import Switch from '@material-ui/core/Switch';
+import DinamicGraph from './DinamicGraph';
 import logo from '../assets/logo.png';
+
 
 class RealTimeData extends Component {
   constructor(props) {
@@ -16,9 +18,11 @@ class RealTimeData extends Component {
     this.state = {
       data: null,
       errorStatus: false,
-      errorMessage: ''
+      errorMessage: '',
+      showRain: false
     };
     this.loadData = this.loadData.bind(this);
+    this.handleChangeRain = this.handleChangeRain.bind(this);
   }
 
   componentDidMount() {
@@ -73,6 +77,10 @@ class RealTimeData extends Component {
       this.loadData();
     }, 2000);
   }
+  handleChangeRain() {
+    const { showRain } = this.state;
+    this.setState({ showRain: !showRain });
+  }
 
   render() {
     let s = '';
@@ -80,9 +88,13 @@ class RealTimeData extends Component {
     let e = '';
     let dif = '';
     let final = '';
-    const { data } = this.state;
+    const { data, showRain } = this.state;
     if (data && data.events && data.events.length > 0) {
-      s = <HistogramGraph data={data.events[0].entrylevel} data2={data.events[0].exitlevel} />;
+      s = <DinamicGraph level={{entry: data.events[0].entrylevel, exit: data.events[0].exitlevel}} 
+                        rain={data.events[0].entryrain}
+                        showRain = {showRain}
+                        conductivity={{entry: data.events[0].entryconductivity, exit: data.events[0].exitconductivity}} 
+                        />;
       const options = {
         year: 'numeric',
         month: 'numeric',
@@ -109,6 +121,11 @@ class RealTimeData extends Component {
             />
             <CardContent>
               {s}
+              <Switch
+                checked={showRain}
+                onChange={()=>{this.handleChangeRain()}}
+                color="primary"
+              />
               <br />
               <Divider />
               <br />

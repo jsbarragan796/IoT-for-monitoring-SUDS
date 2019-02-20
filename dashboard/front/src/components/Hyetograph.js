@@ -94,8 +94,8 @@ class Hyetograph extends Component {
       
     svg
       .append('g')
-      .attr('transform', `translate(${this.margin.left},0)`)
-      .call(d3.axisLeft(this.y))
+      .attr('transform', `translate(${this.width},0)`)
+      .call(d3.axisRight(this.y))
       .call(g => g.select('.domain').remove())
       .call(g => g
         .select('.tick:last-of-type text')
@@ -112,7 +112,7 @@ class Hyetograph extends Component {
 
     svg.append('text')
       .attr('transform',
-        `translate(${this.margin.left / 2} ,${this.height / 2})rotate(-90)`)
+        `translate(${this.width + this.margin.left } ,${this.height / 2})rotate(-90)`)
       .style('text-anchor', 'middle')
       .text('Precipitación mm/hr');
     
