@@ -13,9 +13,9 @@ const EVENT_PAGINATION = 2
 // const ENTRY_SENSOR_ID = '4D10B3'
 // const EXIT_SENSOR_ID = '4D10B4'
 const MEASUREMENT = [
-  { name: 'level', entry: '4D10B3', exit: '4D10B4', timeIntervalMinutes: '1m', aggregationFunction: 'mean' },
-  { name: 'rain', entry: '4D10B3', timeIntervalMinutes: '60m', timeIntervalMinutesRealTime: '10m', aggregationFunction: 'sum' },
-  { name: 'conductivity', entry: '4D10B3', exit: '4D10B4', timeIntervalMinutes: '1m', aggregationFunction: 'mean' }
+  { name: 'level', entry: '4D1089', exit: '4D1080', timeIntervalMinutes: '1m', aggregationFunction: 'mean' },
+  { name: 'rain', entry: '4D10B5', timeIntervalMinutes: '60m', timeIntervalMinutesRealTime: '10m', aggregationFunction: 'sum' },
+  { name: 'conductivity', entry: '4D1089', exit: '4D1080', timeIntervalMinutes: '1m', aggregationFunction: 'mean' }
 ]
 
 let realtimeEventPaginator = {}
@@ -44,7 +44,7 @@ const loadHistoricalMesuarementsEvents = async (event) => {
       event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, event.finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
     }
     if (measurement.name === 'rain') {
-      event[`entry${measurement.name}`] = await measurementLogic.getMeasurements('level', measurement.entry, event.startDate, event.finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
+      event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, event.finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
     }
   }
   return event
@@ -66,7 +66,7 @@ const loadRealtimeMesuarementsEvents = async (events) => {
         event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
       }
       if (measurement.name === 'rain') {
-        event[`entry${measurement.name}`] = await measurementLogic.getMeasurements('level', measurement.entry, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutesRealTime)
+        event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutesRealTime)
       }
     }
     eventsWithMeasurements.push(event)
