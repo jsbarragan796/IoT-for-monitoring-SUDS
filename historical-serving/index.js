@@ -7,8 +7,8 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fs = require('fs')
-
-const { PORT } = require('./config')
+const realTimeService = require('./realTimeService/realTime')
+const { PORT, SOCKET_PORT } = require('./config')
 
 const app = express()
 app.use(bodyParser.json())
@@ -28,8 +28,4 @@ routes.forEach(routeStr => {
   let route = require('./routes/' + routeName)
   app.use('/' + routeName, route)
 })
-
-// app.use(express.static(path.join(__dirname, PUBLIC_PATH)))
-// app.get('*', function (req, res) {
-//   res.sendFile('index.html', {root: path.join(__dirname, PUBLIC_PATH)})
-// })
+realTimeService.startSocket(SOCKET_PORT)

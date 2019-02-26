@@ -9,8 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Switch from '@material-ui/core/Switch';
 import DinamicGraph from './DinamicGraph';
+import connectionHandler from '../socketIo';
 import logo from '../assets/logo.png';
-
 
 class RealTimeData extends Component {
   constructor(props) {
@@ -19,7 +19,8 @@ class RealTimeData extends Component {
       data: null,
       errorStatus: false,
       errorMessage: '',
-      showRain: false
+      showRain: false,
+      socketIoData: ''
     };
     this.loadData = this.loadData.bind(this);
     this.handleChangeRain = this.handleChangeRain.bind(this);
@@ -27,10 +28,14 @@ class RealTimeData extends Component {
 
   componentDidMount() {
     this.update();
+    connectionHandler.subscribeToTimer((err, timestamp) => {
+      this.setState({ socketIoData: timestamp });
+    });
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer);
+    // clearInterval(this.timer);
+    connectionHandler.close();
   }
 
   loadData() {
@@ -73,10 +78,11 @@ class RealTimeData extends Component {
 
   update() {
     this.loadData();
-    this.timer = setInterval(() => {
-      this.loadData();
-    }, 2000);
+    // this.timer = setInterval(() => {
+    //   this.loadData();
+    // }, 2000);
   }
+
   handleChangeRain() {
     const { showRain } = this.state;
     this.setState({ showRain: !showRain });
@@ -88,13 +94,19 @@ class RealTimeData extends Component {
     let e = '';
     let dif = '';
     let final = '';
-    const { data, showRain } = this.state;
+    const { data, showRain, socketIoData } = this.state;
     if (data && data.events && data.events.length > 0) {
-      s = <DinamicGraph level={{entry: data.events[0].entrylevel, exit: data.events[0].exitlevel}} 
-                        rain={data.events[0].entryrain}
-                        showRain = {showRain}
-                        conductivity={{entry: data.events[0].entryconductivity, exit: data.events[0].exitconductivity}} 
-                        />;
+      s = (
+        <DinamicGraph
+          level={{ entry: data.events[0].entrylevel, exit: data.events[0].exitlevel }}
+          rain={data.events[0].entryrain}
+          showRain={showRain}
+          conductivity={{
+            entry: data.events[0].entryconductivity,
+            exit: data.events[0].exitconductivity
+          }}
+        />
+      );
       const options = {
         year: 'numeric',
         month: 'numeric',
@@ -116,14 +128,14 @@ class RealTimeData extends Component {
       final = (
         <div className="main">
           <Card>
-            <CardHeader
-              title="Evento en curso"
-            />
+            <CardHeader title="Evento en curso" />
             <CardContent>
               {s}
               <Switch
                 checked={showRain}
-                onChange={()=>{this.handleChangeRain()}}
+                onChange={() => {
+                  this.handleChangeRain();
+                }}
                 color="primary"
               />
               <br />
@@ -146,6 +158,10 @@ class RealTimeData extends Component {
                   </Typography>
                 </Grid>
               </Grid>
+              <Divider />
+              <Typography color="inherit" variant="h6">
+                {`El último dato se socket :${socketIoData}`}
+              </Typography>
             </CardContent>
           </Card>
         </div>
@@ -154,9 +170,7 @@ class RealTimeData extends Component {
       final = (
         <div className="main">
           <Card>
-            <CardHeader
-              title="No hay eventos en curso"
-            />
+            <CardHeader title="No hay eventos en curso" />
             <CardContent>
               <br />
               <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
@@ -165,7 +179,7 @@ class RealTimeData extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography color="inherit" variant="h6">
-                    Tan pronto  inicie un evento se mostrará la información
+                    Tan pronto inicie un evento se mostrará la información
                   </Typography>
                 </Grid>
               </Grid>

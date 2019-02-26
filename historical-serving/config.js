@@ -2,7 +2,7 @@ const isDev = !!process.env.DEV
 
 module.exports = {
   PORT: process.env.PORT,
-
+  SOCKET_PORT: process.env.SOCKET_PORT,
   INFLUX_DB_DATABASE: isDev ? process.env.INFLUX_DB_DATABASE_DEV : process.env.INFLUX_DB_DATABASE,
   INFLUX_DB_HOST: isDev ? process.env.INFLUX_DB_HOST_DEV : process.env.INFLUX_DB_HOST,
   INFLUX_DB_PORT: isDev ? process.env.INFLUX_DB_PORT_DEV : process.env.INFLUX_DB_PORT,

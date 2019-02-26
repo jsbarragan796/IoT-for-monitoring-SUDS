@@ -128,11 +128,11 @@ const postEventData = async (event) => {
   console.log('dd')
   for (let index = 0; index < allData.length; index++) {
     const row = allData[index]
-    row[4] // sensorId
+    // row[4] // sensorId
     const valueLevel = String(Math.trunc(row[3] * 100)).padStart(4, '0')
     const valueConductivity = String(Math.trunc(row[1] * 100)).padStart(4, '0')
     const codedValue = `11${valueConductivity}10${valueLevel}`
-    row[0] + 18000 // to convert to UTC (input data is in colombian time)
+    // row[0] + 18000 // to convert to UTC (input data is in colombian time)
     // const body = buildPostBody(row[4], row[3], row[0] + 18000)
     if (inicio) {
       const body = buildPostBody('4D10B5', '910910910910910', row[0] + 17000)

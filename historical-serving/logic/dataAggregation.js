@@ -1,10 +1,5 @@
-const express = require('express')
-const router = express.Router()
-const csv = require('fast-csv')
-
-const EventLogic = require('../logic/event')
-
-const measurementLogic = require('./../logic/measurement')
+const EventLogic = require('./event')
+const measurementLogic = require('./measurement')
 
 const EVENT_PAGINATION = 3
 

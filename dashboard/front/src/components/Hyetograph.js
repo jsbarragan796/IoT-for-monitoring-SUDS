@@ -58,9 +58,7 @@ class Hyetograph extends Component {
   drawGraph() {
     const { data } = this.props;
 
-    const getFullTime = (date) => {
-      return new Date(date).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-    }
+    const getFullTime = date => new Date(date).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 
     const dates1 = data.map(d => new Date(d.time));
     const allDates = dates1.sort((a, b) => d3.ascending(a, b));
@@ -69,18 +67,18 @@ class Hyetograph extends Component {
     const svg = d3.select(this.svg);
     this.height = svg.attr('height') - this.margin.top - this.margin.bottom;
     this.width = svg.attr('width') - this.margin.left - this.margin.right;
-    
+
     this.x = d3
       .scaleBand()
       .domain(data.map(d => getFullTime(d.time)))
       .range([this.margin.left, this.width - this.margin.right])
       .padding(0.1);
-    
+
     this.y = d3
       .scaleLinear()
-      .domain([Math.max(d3.max(data, d => d.value))*1.5,0])
+      .domain([0, Math.max(d3.max(data, d => d.value)) * 1.5])
       .nice()
-      .range([ (this.height) - this.margin.bottom, this.margin.top])
+      .range([(this.height) - this.margin.bottom, this.margin.top]);
 
     svg
       .append('g')
@@ -91,11 +89,11 @@ class Hyetograph extends Component {
           .ticks(this.width / 80)
           .tickSizeOuter(0),
       );
-      
+
     svg
       .append('g')
-      .attr('transform', `translate(${this.width},0)`)
-      .call(d3.axisRight(this.y))
+      .attr('transform', `translate(${this.margin.left},0)`)
+      .call(d3.axisLeft(this.y))
       .call(g => g.select('.domain').remove())
       .call(g => g
         .select('.tick:last-of-type text')
@@ -112,11 +110,10 @@ class Hyetograph extends Component {
 
     svg.append('text')
       .attr('transform',
-        `translate(${this.width + this.margin.left } ,${this.height / 2})rotate(-90)`)
+        `translate(${this.margin.left / 2} ,${this.height / 2})rotate(-90)`)
       .style('text-anchor', 'middle')
       .text('Precipitación mm/hr');
-    
-    
+
 
     svg.append('text')
       .attr('transform', `translate(${this.width / 2} ,${this.margin.top + 10})`)
@@ -124,18 +121,18 @@ class Hyetograph extends Component {
       .style('font-size', '24px')
       .text('Precipitación ');
 
-    svg.append("g")
-      .attr("fill", "steelblue")
-      .selectAll("rect")
-      .data(data).enter().append("rect")
-      .attr("x", d => this.x(getFullTime(d.time)))
-      .attr("y",  this.margin.top)
-      .attr("height", d => this.y(d.value)-this.margin.top)
-      .attr("width", this.x.bandwidth());
+    svg.append('g')
+      .attr('fill', 'steelblue')
+      .selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('x', d => this.x(getFullTime(d.time)))
+      .attr('y', d => this.y(d.value))
+      .attr('height', d => this.y(0) - this.y(d.value))
+      .attr('width', this.x.bandwidth());
   }
 
-
-  
   render() {
     const { height, width } = this.state;
     const widthSvg = width < 400 ? width * 0.9 : width * 0.7;
