@@ -67,7 +67,7 @@ module.exports = {
     ${groupClause || ''}
     ORDER BY time asc
     `
-    console.log(query)
+    // console.log(query)
     return influx.query(query)
   },
 
