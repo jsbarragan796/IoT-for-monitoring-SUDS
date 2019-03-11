@@ -50,7 +50,6 @@ module.exports = {
           }
         })
         MEASUREMENT.push(tempMeasurement)
-        console.log('tempMeasurement added ', tempMeasurement)
       }
     }
   },
@@ -77,6 +76,24 @@ module.exports = {
       }
       if (measurement.name === 'rain') {
         event[`entry${measurement.name}`] = await measurementLogic.getMeasurements('level', measurement.entry, event.startDate, event.finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
+      }
+    }
+    return event
+  },
+  newMeasurementsEvents: async (event, currentEvent) => {
+    for (let index = 0; index < MEASUREMENT.length; index++) {
+      const measurement = MEASUREMENT[index]
+      if (measurement.entry && measurement.name !== 'rain') {
+        const sentIndex = event[`entry${measurement.name}`].length
+        event[`entry${measurement.name}`] = currentEvent[`entry${measurement.name}`].slice(sentIndex)
+      }
+      if (measurement.exit) {
+        const sentIndex = event[`exit${measurement.name}`].length
+        event[`exit${measurement.name}`] = currentEvent[`exit${measurement.name}`].slice(sentIndex)
+      }
+      if (measurement.name === 'rain') {
+        const sentIndex = event[`entry${measurement.name}`].length
+        event[`entry${measurement.name}`] = currentEvent[`entry${measurement.name}`].slice(sentIndex)
       }
     }
     return event
