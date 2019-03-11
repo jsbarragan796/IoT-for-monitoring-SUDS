@@ -15,6 +15,7 @@ import ExitToApp from '@material-ui/icons/ExitToApp';
 import Badge from '@material-ui/core/Badge';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import navBarLogo from '../assets/navbar2.png';
+import connectionHandler from '../socketIo';
 
 const styles = theme => ({
   root: {
@@ -59,7 +60,7 @@ class AppNavBar extends Component {
   componentDidMount() {
     const { optionActive } = this.props;
     if (optionActive !== 'realtime') {
-      this.update();
+      this.checkRealTimeEvent();
     }
   }
 
@@ -80,22 +81,23 @@ class AppNavBar extends Component {
   };
 
   checkRealTimeEvent() {
-    axios
-      .get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/are-current-events`)
-      .then((response) => {
-        const { RTEvnets } = this.state;
-        if (RTEvnets !== response.data.RTEvnets) {
-          this.setState({ RTEvnets: !RTEvnets });
-        }
-      })
-      .catch();
-  }
+    connectionHandler.subCurrentEvent((bool) => {
+      const { RTEvnets } = this.state;
+      console.log("itresopse")
+      if (RTEvnets !== bool) {
+        this.setState({ RTEvnets: !RTEvnets });
+      }
+    });
 
-  update() {
-    this.checkRealTimeEvent();
-    this.timer = setInterval(() => {
-      this.checkRealTimeEvent();
-    }, 1500);
+    // axios
+    //   .get(`${process.env.REACT_APP_HISTORICAL_SERVING_SOCKET}/events/are-current-events`)
+    //   .then((response) => {
+    //     const { RTEvnets } = this.state;
+    //     if (RTEvnets !== response.data.RTEvnets) {
+    //       this.setState({ RTEvnets: !RTEvnets });
+    //     }
+    //   })
+    //   .catch();
   }
 
   render() {
