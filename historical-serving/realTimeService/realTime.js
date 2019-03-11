@@ -13,37 +13,43 @@ let interval = undefined
 const setEventChecker = () => {
   if ( numberOfClients && !interval) {
     interval = setInterval(async () => {
-      if(numberOfClients > 0 )
-      numberOfEvents = await EventLogic.numberOfNotEndedEvents()
-      if (numberOfEvents > 0) {
-        io.sockets.to('subsCurrentEvent').emit('are-current-events', true)
-        const notEndedEvents = await EventLogic.findNotFinishedEvents(0, numberOfEvents)
-        const lastEventsWithMeasurements = eventsWithMeasurements
-        eventsWithMeasurements = await convertor.loadRealtimeMesuarementsEvents(notEndedEvents)
-        if (lastEventsWithMeasurements.lenght > 0) {
-          for (let index = 0; index < lastEventsWithMeasurements.length; index++) {     
-            const event = lastEventsWithMeasurements[index];
-            const eventId = event._id    
-            console.log('actualizando 223123', eventId)
-            const eventFound = eventsWithMeasurements.find( event => event._id = eventId)
-            if (eventFound.length > 0) {
-              if ( eventFound.lastMeasurementDate !== event.lastMeasurementDate) {
-                const dataEventToUpdate = await convertor.newMeasurementsEvents(event, eventFound)
-                io.sockets.in(eventId).emit({ data: dataEventToUpdate})
+      if(numberOfClients > 0 ){
+        const currentNumberOfEvents = await EventLogic.numberOfNotEndedEvents()
+        
+        if (Boolean(numberOfEvents) !== Boolean(currentNumberOfEvents)) { 
+          io.sockets.in('subsCurrentEvent').emit('are-current-events', Boolean(currentNumberOfEvents))
+        }
+
+        numberOfEvents = currentNumberOfEvents
+
+        if (currentNumberOfEvents > 0) {
+          const notEndedEvents = await EventLogic.findNotFinishedEvents(0, currentNumberOfEvents)
+          const lastEventsWithMeasurements = eventsWithMeasurements
+          eventsWithMeasurements = await convertor.loadRealtimeMesuarementsEvents(notEndedEvents)
+          if (lastEventsWithMeasurements.lenght > 0) {
+            for (let index = 0; index < lastEventsWithMeasurements.length; index++) {     
+              const event = lastEventsWithMeasurements[index];
+              const eventId = event._id    
+              console.log('actualizando 223123', eventId)
+              const eventFound = eventsWithMeasurements.find( event => event._id = eventId)
+              if (eventFound.length > 0) {
+                if ( eventFound.lastMeasurementDate !== event.lastMeasurementDate) {
+                  const dataEventToUpdate = await convertor.newMeasurementsEvents(event, eventFound)
+                  io.sockets.in(eventId).emit('current-events', { data: dataEventToUpdate})
+                }
+              }
+              else {
+                io.sockets.in(eventId).emit({ data: false})
               }
             }
-            else {
-              io.sockets.in(eventId).emit({ data: false})
-            }
           }
-          io.sockets.in('subsCurrentEvent').emit('are-current-events', true)
+        } else {
+          eventsWithMeasurements = []
+          io.sockets.in('subsCurrentEvent').emit('are-current-events', false)
         }
-      } else {
-        eventsWithMeasurements = []
-        io.sockets.in('subsCurrentEvent').emit('are-current-events', false)
       }
-      }, 1000)
-
+    }, 1000)
+    
   }
   else {
     if (!numberOfClients && interval ) {
@@ -72,9 +78,9 @@ module.exports = {
     console.log('inicio el socket',PORT_SOCKET)
     io.on('connection', (client) => {
       numberOfClients++
-      client.join('subsCurrentEvent');
-      console.log("subcreov")
       setEventChecker()
+      client.join('subsCurrentEvent');
+      client.emit('are-current-events', Boolean(numberOfEvents))
       client.on('current-events', (pageNumberParameter) => {
         currentsEvents(pageNumberParameter, client)
       })
