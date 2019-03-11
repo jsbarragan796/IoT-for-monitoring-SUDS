@@ -15,14 +15,17 @@ const setEventChecker = () => {
     interval = setInterval(async () => {
       if(numberOfClients > 0 ){
         const currentNumberOfEvents = await EventLogic.numberOfNotEndedEvents()
-        
+
         if (Boolean(numberOfEvents) !== Boolean(currentNumberOfEvents)) { 
           io.sockets.in('subsCurrentEvent').emit('are-current-events', Boolean(currentNumberOfEvents))
+          if ( !currentNumberOfEvents ) {
+            eventsWithMeasurements = []
+          }
         }
 
         numberOfEvents = currentNumberOfEvents
 
-        if (currentNumberOfEvents > 0) {
+        if (currentNumberOfEvents) {
           const notEndedEvents = await EventLogic.findNotFinishedEvents(0, currentNumberOfEvents)
           const lastEventsWithMeasurements = eventsWithMeasurements
           eventsWithMeasurements = await convertor.loadRealtimeMesuarementsEvents(notEndedEvents)
@@ -43,9 +46,6 @@ const setEventChecker = () => {
               }
             }
           }
-        } else {
-          eventsWithMeasurements = []
-          io.sockets.in('subsCurrentEvent').emit('are-current-events', false)
         }
       }
     }, 1000)
