@@ -25,34 +25,35 @@ const mongoConnect = () => {
     })
   })
 }
+const setupSensors = async () => {
+  if (MEASUREMENT.length === 0) {
+    const mongo = await mongoConnect()
+    const Sensor = mongo.db().collection('Sensor')
+    const sensors = await Sensor.find({}).toArray()
+    const MeasurementType = mongo.db().collection('MeasurementType')
+    const measurementTypes = await MeasurementType.find({}).toArray()
+    mongo.close()
+    for (let measurement of measurementTypes) {
+      const locationSensors = sensors.filter(({ type }) => {
+        return measurement._id.toString() === type.toString()
+      })
+      const tempMeasurement = measurement
+      locationSensors.forEach(sensor => {
+        if (sensor.isEntrance) {
+          tempMeasurement.entry = sensor.id.split('-')[0]
+        }
+        if (!sensor.isEntrance) {
+          tempMeasurement.exit = sensor.id.split('-')[0]
+        }
+      })
+      MEASUREMENT.push(tempMeasurement)
+    }
+  }
+}
+
+setupSensors()
 
 module.exports = {
-  setupSensors: async () => {
-    if (MEASUREMENT.length === 0) {
-      const mongo = await mongoConnect()
-      const Sensor = mongo.db().collection('Sensor')
-      const sensors = await Sensor.find({}).toArray()
-      const MeasurementType = mongo.db().collection('MeasurementType')
-      const measurementTypes = await MeasurementType.find({}).toArray()
-      mongo.close()
-
-      for (let measurement of measurementTypes) {
-        const locationSensors = sensors.filter(({ type }) => {
-          return measurement._id.toString() === type.toString()
-        })
-        const tempMeasurement = measurement
-        locationSensors.forEach(sensor => {
-          if (sensor.isEntrance) {
-            tempMeasurement.entry = sensor.id.split('-')[0]
-          }
-          if (!sensor.isEntrance) {
-            tempMeasurement.entry = sensor.id.split('-')[0]
-          }
-        })
-        MEASUREMENT.push(tempMeasurement)
-      }
-    }
-  },
   eventSearchRange: async (pageNumber, numberOfEvents) => {
     const numberOfPages = Math.ceil(numberOfEvents / EVENT_PAGINATION)
     if (!pageNumber) {

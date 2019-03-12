@@ -6,8 +6,6 @@ const EventLogic = require('../logic/event')
 
 const convertor = require('./../logic/convertor')
 
-convertor.setupSensors()
-
 router.post('/filtered-data', async (req, res) => {
   try {
     const { pageNumber } = req.body

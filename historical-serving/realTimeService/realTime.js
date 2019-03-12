@@ -5,8 +5,6 @@ const convertor = require('./../logic/convertor')
 
 let eventsWithMeasurements = []
 let numberOfEvents = 0
-convertor.setupSensors()
-
 let numberOfClients = 0 
 let interval = undefined
 
@@ -15,16 +13,14 @@ const setEventChecker = () => {
     interval = setInterval(async () => {
       if(numberOfClients > 0 ){
         const currentNumberOfEvents = await EventLogic.numberOfNotEndedEvents()
-
         if (Boolean(numberOfEvents) !== Boolean(currentNumberOfEvents)) { 
           io.sockets.in('subsCurrentEvent').emit('are-current-events', Boolean(currentNumberOfEvents))
+          io.sockets.in('wait-for-current-events').emit('refresh-current-events', true)
           if ( !currentNumberOfEvents ) {
             eventsWithMeasurements = []
           }
         }
-
         numberOfEvents = currentNumberOfEvents
-
         if (currentNumberOfEvents) {
           const notEndedEvents = await EventLogic.findNotFinishedEvents(0, currentNumberOfEvents)
           const lastEventsWithMeasurements = eventsWithMeasurements
@@ -36,13 +32,13 @@ const setEventChecker = () => {
               console.log('actualizando 223123', eventId)
               const eventFound = eventsWithMeasurements.find( event => event._id = eventId)
               if (eventFound.length > 0) {
-                if ( eventFound.lastMeasurementDate !== event.lastMeasurementDate) {
+                if ( eventFound[0].lastMeasurementDate !== event.lastMeasurementDate) {
                   const dataEventToUpdate = await convertor.newMeasurementsEvents(event, eventFound)
-                  io.sockets.in(eventId).emit('current-events', { data: dataEventToUpdate})
+                  io.sockets.in(eventId).emit('update-current-events', { data: dataEventToUpdate})
                 }
               }
               else {
-                io.sockets.in(eventId).emit({ data: false})
+                io.sockets.in(eventId).emit('refresh-current-events', true)
               }
             }
           }
@@ -69,7 +65,7 @@ const currentsEvents = async (pageNumberParameter, client) => {
     client.emit('current-events', paginator)
     socket.join(eventsWithMeasurementsToSend._id);
   } else {
-    io.sockets.in('subsCurrentEvent').emit('are-current-events', false)
+    client.emit('current-events', { currentPage: 0, totalPages: 0, events: []})
   }
 }
 
@@ -79,10 +75,13 @@ module.exports = {
     io.on('connection', (client) => {
       numberOfClients++
       setEventChecker()
-      client.join('subsCurrentEvent');
-      client.emit('are-current-events', Boolean(numberOfEvents))
-      client.on('current-events', (pageNumberParameter) => {
+      client.on('sub-are-current-events', (join) => {
+        if (join) client.join('subsCurrentEvent');
+        client.emit('are-current-events', Boolean(numberOfEvents))
+      }) 
+      client.on('get-current-events', (pageNumberParameter) => {
         currentsEvents(pageNumberParameter, client)
+        socket.join('wait-for-current-events');
       })
       client.on('disconnect', (client) => {
         console.log('user disconnected',client);

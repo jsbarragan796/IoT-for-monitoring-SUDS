@@ -34,19 +34,19 @@ class RealTimeData extends Component {
   }
 
   componentWillUnmount() {
-    // clearInterval(this.timer);
     connectionHandler.close();
   }
 
   loadData() {
-    axios
-      .get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/current-events?pageNumber=1`)
-      .then((response) => {
-        this.setState({ data: response.data, errorStatus: false });
-      })
-      .catch((err) => {
-        this.setState({ errorStatus: true, errorMessage: err.message });
-      });
+    connectionHandler.subRealTimeEvents(1, enter, update, exit )
+    // axios
+    //   .get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/current-events?pageNumber=1`)
+    //   .then((response) => {
+    //     this.setState({ data: response.data, errorStatus: false });
+    //   })
+    //   .catch((err) => {
+    //     this.setState({ errorStatus: true, errorMessage: err.message });
+    //   });
   }
 
   showErrorMessage() {

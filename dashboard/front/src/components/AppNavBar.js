@@ -67,11 +67,10 @@ class AppNavBar extends Component {
   componentWillUnmount() {
     const { optionActive } = this.props;
     if (optionActive !== 'realtime') {
-      clearInterval(this.timer);
+      connectionHandler.close();
     }
   }
-
-
+  
   handleMobileMenuOpen = (event) => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
   };
@@ -83,21 +82,10 @@ class AppNavBar extends Component {
   checkRealTimeEvent() {
     connectionHandler.subCurrentEvent((bool) => {
       const { RTEvnets } = this.state;
-      console.log("itresopse")
       if (RTEvnets !== bool) {
         this.setState({ RTEvnets: !RTEvnets });
       }
     });
-
-    // axios
-    //   .get(`${process.env.REACT_APP_HISTORICAL_SERVING_SOCKET}/events/are-current-events`)
-    //   .then((response) => {
-    //     const { RTEvnets } = this.state;
-    //     if (RTEvnets !== response.data.RTEvnets) {
-    //       this.setState({ RTEvnets: !RTEvnets });
-    //     }
-    //   })
-    //   .catch();
   }
 
   render() {
