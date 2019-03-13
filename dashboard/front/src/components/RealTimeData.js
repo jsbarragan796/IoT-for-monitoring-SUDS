@@ -22,31 +22,33 @@ class RealTimeData extends Component {
       showRain: false,
       socketIoData: ''
     };
-    this.loadData = this.loadData.bind(this);
+    this.getRealTimeEvents = this.getRealTimeEvents.bind(this);
+    this.subRealTimeEvents = this.subRealTimeEvents.bind(this);
     this.handleChangeRain = this.handleChangeRain.bind(this);
   }
 
   componentDidMount() {
-    this.update();
-    connectionHandler.subscribeToTimer((err, timestamp) => {
-      this.setState({ socketIoData: timestamp });
-    });
+    this.subRealTimeEvents();
+    this.getRealTimeEvents();
   }
 
   componentWillUnmount() {
     connectionHandler.close();
   }
 
-  loadData() {
-    connectionHandler.subRealTimeEvents(1, enter, update, exit )
-    // axios
-    //   .get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/current-events?pageNumber=1`)
-    //   .then((response) => {
-    //     this.setState({ data: response.data, errorStatus: false });
-    //   })
-    //   .catch((err) => {
-    //     this.setState({ errorStatus: true, errorMessage: err.message });
-    //   });
+  subRealTimeEvents() {
+    connectionHandler.subRealTimeEvents((response) => {
+      console.log("update", response)
+    }, (response) => {
+      console.log("exit", response)
+       if (response) this.getRealTimeEvents();
+    })
+  }
+  getRealTimeEvents() {
+    console.log("getRealTimeEvents")
+    connectionHandler.getRealTimeEvents(1, (response) => {
+      this.setState({ data: response, errorStatus: false });
+    })
   }
 
   showErrorMessage() {

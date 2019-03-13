@@ -12,12 +12,15 @@ const connectionHandler = {
     socket.emit('sub-are-current-events', true)
     socket.on('are-current-events', bool => cb(bool));
   },
-  subRealTimeEvents: (pageNumber, enter, update, exit ) => {
+  subRealTimeEvents: (update, exit ) => {
+    if (!socket) socket = io(`${process.env.REACT_APP_HISTORICAL_SERVING_SOCKET}`);
+    socket.on('update-current-events', event => update(event));
+    socket.on('refresh-current-events', bool => exit(bool));
+  },
+  getRealTimeEvents: (pageNumber, enter ) => {
     if (!socket) socket = io(`${process.env.REACT_APP_HISTORICAL_SERVING_SOCKET}`);
     socket.emit('get-current-events', pageNumber)
     socket.on('current-events', event => enter(event));
-    socket.on('update-current-events', event => update(event));
-    socket.on('refresh-current-events', bool => exit(bool));
   },
   close: () => {
     if (socket) {
