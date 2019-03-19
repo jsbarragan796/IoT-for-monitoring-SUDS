@@ -87,13 +87,6 @@ class RealTimeData extends Component {
     return '';
   }
 
-  update() {
-    this.loadData();
-    // this.timer = setInterval(() => {
-    //   this.loadData();
-    // }, 2000);
-  }
-
   handleChangeRain() {
     const { showRain } = this.state;
     this.setState({ showRain: !showRain });

@@ -25,18 +25,14 @@ const validatorFunction = async () =>{
       const notEndedEvents = await EventLogic.findNotFinishedEvents(0, currentNumberOfEvents)
       const lastEventsWithMeasurements = eventsWithMeasurements
       eventsWithMeasurements = await convertor.loadRealtimeMesuarementsEvents(notEndedEvents)
-      console.log("inico ", lastEventsWithMeasurements.length)
       if (lastEventsWithMeasurements.length > 0) {
-        console.log("engtro ")
         for (let index = 0; index < lastEventsWithMeasurements.length; index++) {     
           const event = lastEventsWithMeasurements[index];
-          const eventId = event._id
-          console.log("buscando ", eventId)    
+          const eventId = event._id  
           const eventFound = eventsWithMeasurements.find( event => event._id = eventId)  
           if (eventFound) {
             if ( eventFound.lastMeasurementDate !== event.lastMeasurementDate) {
               const dataEventToUpdate = await convertor.newMeasurementsEvents(event, eventFound)
-              console.log("UPDATE!!")
               io.sockets.in(eventId).emit('update-current-events', { data: dataEventToUpdate})
             }
           }
@@ -73,15 +69,15 @@ const currentsEvents = async (pageNumberParameter, client) => {
     const paginator = { currentPage: pageNumber, totalPages: numberOfEvents, events: [eventsWithMeasurementsToSend] }
     client.emit('current-events', paginator)
     client.join(eventsWithMeasurementsToSend._id);
-    client.join('wait-for-current-events');
   } else {
+    client.join('wait-for-current-events');
     client.emit('current-events', { currentPage: 0, totalPages: 0, events: []})
   }
 }
 
 module.exports = {
   startSocket: (PORT_SOCKET) => {
-    console.log('inicio el socket',PORT_SOCKET)
+    console.log('socket start on port ',PORT_SOCKET)
     io.on('connection', (client) => {
       numberOfClients++
       setEventChecker()

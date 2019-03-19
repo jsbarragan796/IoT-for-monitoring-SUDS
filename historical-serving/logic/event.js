@@ -228,10 +228,17 @@ module.exports = {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
         if (err) reject(err)
         else {
+          const { orderBy }  = filter
+          let sort = {_id: 1}
+          try {
+            sort = JSON.parse(orderBy)
+          } catch (error) {
+            console.log("invalid sort parameter at filter")
+          }
           let Events = client.db().collection('Event')
           Events.find(
             getFilterData(filter),
-            { sort: { _id: 1 },
+            { sort: sort,
               skip: firstEventPage,
               limit: eventsInPage }).toArray((err, points) => {
             client.close()
