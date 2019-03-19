@@ -37,15 +37,24 @@ class RealTimeData extends Component {
   }
 
   subRealTimeEvents() {
-    connectionHandler.subRealTimeEvents((response) => {
-      console.log("update", response)
+    connectionHandler.subRealTimeEvents(async (response) => {
+      const { data } = this.state
+      Object.keys(response.data).forEach( (key) => {
+        if (data.events[0][key] && typeof data.events[0][key] === "object") {
+          response.data[key].map((n)=>{
+            data.events[0][key].push(n)
+          })
+        }
+        if (data.events[0][key] && typeof data.events[0][key] !== "object") {
+          data.events[0][key] = response.data[key]
+        }       
+      });
+      this.setState({ data: data });
     }, (response) => {
-      console.log("exit", response)
        if (response) this.getRealTimeEvents();
     })
   }
   getRealTimeEvents() {
-    console.log("getRealTimeEvents")
     connectionHandler.getRealTimeEvents(1, (response) => {
       this.setState({ data: response, errorStatus: false });
     })
