@@ -30,18 +30,16 @@ class DinamicGraph extends Component {
     window.addEventListener('resize', this.currentSize);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.currentSize);
+  }
 
   componentDidMount() {
     this.drawGraph();
   }
 
-
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.updateGraph();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.currentSize);
   }
 
   currentSize() {
@@ -55,8 +53,7 @@ class DinamicGraph extends Component {
   }
 
   drawGraph() {
-    const { rain, conductivity, level, showRain} = this.props;
-
+    const { rain, conductivity, level, showRain } = this.props;
     const getFullTime = (date) => {
       return new Date(date).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
     }
@@ -203,7 +200,7 @@ class DinamicGraph extends Component {
       }
     };
 
-    const path = svg
+    svg
       .append('g')
       .selectAll('path')
       .data(series)
@@ -219,6 +216,7 @@ class DinamicGraph extends Component {
   }
 
   render() {
+   
     const { height, width } = this.state;
     const widthSvg = width < 400 ? width * 0.9 : width * 0.7;
     const heightSvg = height < 690 ? height * 0.7 : height * 0.6;
@@ -227,8 +225,6 @@ class DinamicGraph extends Component {
         <Grid item xs={10}>
           <svg
             id="level"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
             className="graph-svg-component"
             width={widthSvg}
             height={heightSvg}
@@ -259,6 +255,6 @@ export default DinamicGraph;
 DinamicGraph.propTypes = {
   rain: PropTypes.instanceOf(Object).isRequired,
   conductivity: PropTypes.instanceOf(Object).isRequired,
-  level: PropTypes.instanceOf(Array).isRequired,
+  level: PropTypes.instanceOf(Object).isRequired,
   showRain:PropTypes.bool.isRequired
 };

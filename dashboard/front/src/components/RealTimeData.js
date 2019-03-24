@@ -55,7 +55,7 @@ class RealTimeData extends Component {
       const { data } = this.state
       Object.keys(response.data).forEach( (key) => {
         if (data.events[0][key] && typeof data.events[0][key] === "object") {
-          response.data[key].map((n)=>{
+          response.data[key].forEach((n)=>{
             data.events[0][key].push(n)
           })
         }

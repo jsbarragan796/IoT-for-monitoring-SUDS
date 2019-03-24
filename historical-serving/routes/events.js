@@ -30,7 +30,7 @@ router.get('/data', async (req, res) => {
   try {
     const eventId = req.query.eventId
     const event = await EventLogic.findEvent(eventId)
-    const eventsWithMeasurements = await convertor.loadHistoricalMesuarementsEvents(event)
+    const eventsWithMeasurements = await convertor.loadMesuarementsEvents(event)
     res.send(eventsWithMeasurements)
   } catch (e) {
     res.status(200).send({
