@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import FileDownload from 'js-file-download';
+import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -20,11 +22,13 @@ class RealTimeData extends Component {
       errorStatus: false,
       errorMessage: '',
       showRain: false,
-      socketIoData: ''
+      socketIoData: '',
+      eventId:undefined
     };
     this.getRealTimeEvents = this.getRealTimeEvents.bind(this);
     this.subRealTimeEvents = this.subRealTimeEvents.bind(this);
     this.handleChangeRain = this.handleChangeRain.bind(this);
+    this.getCsv = this.getCsv.bind(this);
   }
 
   componentDidMount() {
@@ -36,6 +40,16 @@ class RealTimeData extends Component {
     connectionHandler.close();
   }
 
+  getCsv() {
+    const { eventId } = this.state
+    axios.get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/get-csv?eventId=${eventId}`)
+      .then((response) => {
+        FileDownload(response.data, response.headers.filename);
+      })
+      .catch((err) => {
+        this.setState({ errorStatus: true, errorMessage: err.message });
+      });
+  }
   subRealTimeEvents() {
     connectionHandler.subRealTimeEvents(async (response) => {
       const { data } = this.state
@@ -56,7 +70,8 @@ class RealTimeData extends Component {
   }
   getRealTimeEvents() {
     connectionHandler.getRealTimeEvents(1, (response) => {
-      this.setState({ data: response, errorStatus: false });
+      console.log(response.events[0])
+      this.setState({ data: response, errorStatus: false, eventId: response.events[0]._id});
     })
   }
 
@@ -167,6 +182,9 @@ class RealTimeData extends Component {
                 {`El último dato se socket :${socketIoData}`}
               </Typography>
             </CardContent>
+            <Button variant="outlined" size="small" onClick={this.getCsv} color="primary">
+            Descargar datos
+          </Button>
           </Card>
         </div>
       );

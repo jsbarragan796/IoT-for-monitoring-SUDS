@@ -42,7 +42,7 @@ router.get('/get-csv', async (req, res) => {
   try {
     const eventId = req.query.eventId
     const event = await EventLogic.findEvent(eventId)
-    const eventsWithMeasurements = await convertor.loadHistoricalMesuarementsEvents(event)
+    const eventsWithMeasurements = await convertor.loadMesuarementsEvents(event)
     const date = new Date(event.startDate / 1e6).toLocaleDateString().replace(/\//g, '_')
     const fileName = `evento_${date}.csv`
     res.writeHead(200, {
@@ -67,7 +67,7 @@ router.get('/get-csv', async (req, res) => {
       if (eventsWithMeasurements.entryrain.length > index) {
         rain = eventsWithMeasurements.entryrain[index]
       }
-      data.push([entry.time, entry.value, out.value, entryC.value, entryE.value, rain.value])
+      data.push([entry.time._nanoISO, entry.value, out.value, entryC.value, entryE.value, rain.value])
     }
 
     csv.write(data, {
