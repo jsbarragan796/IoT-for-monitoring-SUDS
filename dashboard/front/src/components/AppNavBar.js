@@ -91,6 +91,7 @@ class AppNavBar extends Component {
     const { mobileMoreAnchorEl, RTEvnets } = this.state;
     const { classes, auth } = this.props;
     const userdata = auth.getProfile();
+    console.log('userdata',userdata)
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const renderMobileMenu = (
       <Menu
@@ -102,7 +103,7 @@ class AppNavBar extends Component {
       >
         <MenuItem component={Link} to="/">
           <IconButton color="inherit">
-            <Badge variant="dot" invisible={!RTEvnets} color="secondary">
+            <Badge invisible={!RTEvnets} color="secondary"  badgeContent={' '}>
               <RssFeed />
             </Badge>
           </IconButton>
@@ -140,12 +141,12 @@ class AppNavBar extends Component {
                 component={Link}
                 to="/"
               >
-                <Badge variant="dot" invisible={!RTEvnets} color="secondary">
+                <Badge invisible={!RTEvnets} color="secondary" badgeContent={'1'}>
                   <RssFeed />
-                  <Typography color="inherit" className={classes.grow}>
-                    {'Tiempo real'}
-                  </Typography>
                 </Badge>
+                <Typography color="inherit" className={classes.grow}>
+                    {'Tiempo real'}
+                </Typography>
               </IconButton>
               <IconButton
                 color="inherit"

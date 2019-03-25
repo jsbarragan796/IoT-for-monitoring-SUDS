@@ -157,7 +157,7 @@ module.exports = {
           client.close()
           resolve()
         }
-      })
+      }) 
     })
   },
   findFinishedEvents: (firstEventPage, eventsInPage) => {
@@ -229,9 +229,9 @@ module.exports = {
         if (err) reject(err)
         else {
           const { orderBy }  = filter
-          let sort = {_id: 1}
+          let sort
           try {
-            sort = JSON.parse(orderBy)
+            sort = orderBy ? JSON.parse(orderBy) : {_id: 1}
           } catch (error) {
             console.log("invalid sort parameter at filter")
           }

@@ -3,6 +3,9 @@
   src: ("/assets/fonts/Alike.ttf") format("truetype");
 }
 
+body{
+  background-color:#56b6ab14 ;
+} 
 .navbar-brand {
   font-family: "Alike", serif;
   font-size: 130%;

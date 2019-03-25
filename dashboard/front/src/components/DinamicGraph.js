@@ -106,8 +106,11 @@ class DinamicGraph extends Component {
 
     const gw = svg.selectAll('g')
       .data(this.color.domain())
-      .enter().append('g')
-      .attr('transform', (d, i) => `translate(${this.width - this.margin.left * 2},${this.height * 0.1 + i * 26})`);
+      .enter()
+      .append('g')
+      .attr('transform', (d, i) => `translate(${this.width - this.margin.left * 2.55},${this.height * 0.13 + i * 26})`)
+
+      
 
     gw.append('rect')
       .attr('width', 18)
@@ -142,9 +145,35 @@ class DinamicGraph extends Component {
         .attr('x', 3)
         .attr('text-anchor', 'start')
         .attr('font-weight', 'bold'));
-
-
     
+
+      const make_x_gridlines = () => {
+        return d3.axisBottom(this.x)
+          .ticks(8)
+      }
+      const make_y_gridlines = () =>  {
+        return d3.axisLeft(this.y)
+          .ticks(8)
+      }
+      svg.append("g")
+  		.attr("class","grid")
+  		.attr("transform",`translate(0,${this.height - this.margin.bottom})`)
+  		.style("stroke-dasharray",("0.2,1"))
+  		.call(make_x_gridlines()
+            .tickSize(-(this.height-this.margin.bottom))
+            .tickFormat("")
+         )
+
+      svg.append("g")
+          .attr("class","grid")
+          .attr('transform', `translate(${this.margin.left},0)`)
+          .style("stroke-dasharray",("0.2,1"))
+          .call(make_y_gridlines()
+                .tickSize(-(this.width-this.margin.left))
+                .tickFormat("")
+            )
+
+
     if(showRain){
         svg
         .append('g')
@@ -222,9 +251,9 @@ class DinamicGraph extends Component {
     const heightSvg = height < 690 ? height * 0.7 : height * 0.6;
     return (
       <Grid container direction="column" alignItems="center" spacing={0}>
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <svg
-            id="level"
+            id="realTimeGraph"
             className="graph-svg-component"
             width={widthSvg}
             height={heightSvg}
@@ -235,15 +264,6 @@ class DinamicGraph extends Component {
           >
           vizualización
           </svg>
-          <Tooltip title="Descargar gráfica" placement="bottom">
-            <IconButton
-              onClick={() => { saveSvgAsPng(document.querySelector('#level'), 'caudal', { scale: 3 }); }}
-              className="marginRight: 'auto'"
-              aria-label="descargar"
-            >
-              <SaveAlt />
-            </IconButton>
-          </Tooltip>
         </Grid>
       </Grid>
     );
