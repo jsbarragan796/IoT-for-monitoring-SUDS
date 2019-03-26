@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -17,7 +18,7 @@ const styles = {
     marginLeft: 'auto'
   },
   card: {
-    minWidth: 600
+    display: 'flex'
   }
 };
 
@@ -56,6 +57,9 @@ class EventResult extends Component {
                       <strong>Volumen :</strong>
                       {` ${Math.ceil(event.volumeOutput)} l`}
                     </Typography>
+                  </Grid>
+                  <Grid item container xs={12} direction="column">
+                   <Divider/>
                   </Grid>
                   <Grid item container xs={12} direction="column">
                     <Typography color="inherit">

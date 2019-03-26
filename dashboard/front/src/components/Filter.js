@@ -75,17 +75,18 @@ class Filter extends Component {
     this.sendFilter = this.sendFilter.bind(this);
   }
 
-  handleChange = name => (event) => {
+  handleChange = name =>  (event) => {
     const value = event.target ? event.target.value : event;
     this.validateInput(name, value);
     if (name !== 'beginDate' && name !== 'endDate' && name !== 'orderBy') {
       this.setState({
         [name]: Number(value)
-      });
+      },() => {this.sendFilter()});
     } else {
       this.setState({
         [name]: value
-      });
+      },() => {this.sendFilter()});
+      
     }
   };
 
@@ -99,6 +100,7 @@ class Filter extends Component {
         [`err${name}`]: false
       });
     }
+    
   };
 
 
@@ -262,7 +264,6 @@ class Filter extends Component {
               shrink: true
             }}
           />
-
           <TextField
             id="outlined-endEfficiency"
             label="Max %"
@@ -433,17 +434,8 @@ class Filter extends Component {
         </TextField>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Button size="medium" variant="contained" onClick={this.reset} className={classes.button}>
+          <Button  color="primary" size="medium" variant="contained" onClick={this.reset} className={classes.button}>
             Limpiar
-          </Button>
-          <Button
-            size="medium"
-            variant="contained"
-            onClick={this.sendFilter}
-            color="primary"
-            className={classes.button}
-          >
-            Aplicar
           </Button>
         </Grid>
       </Grid>

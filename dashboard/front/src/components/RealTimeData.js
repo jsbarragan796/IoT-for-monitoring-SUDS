@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import FileDownload from 'js-file-download';
 import { saveSvgAsPng } from 'save-svg-as-png';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Card from '@material-ui/core/Card';
@@ -13,9 +10,14 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Switch from '@material-ui/core/Switch';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import Checkbox from '@material-ui/core/Checkbox';
 import DinamicGraph from './DinamicGraph';
 import connectionHandler from '../socketIo';
+import Radio from '@material-ui/core/Radio';
 import logo from '../assets/logo.png';
 
 class RealTimeData extends Component {
@@ -27,12 +29,22 @@ class RealTimeData extends Component {
       errorMessage: '',
       showRain: false,
       eventId:undefined,
-      graphTitle: 'Caudal vs tiempo'
+      graphTitle: 'Caudal vs tiempo',
+      extraRain:false,
+      extraConductivity:false,
+      width: 0
     };
     this.getRealTimeEvents = this.getRealTimeEvents.bind(this);
     this.subRealTimeEvents = this.subRealTimeEvents.bind(this);
     this.handleChangeRain = this.handleChangeRain.bind(this);
+    this.currentWidth = this.currentWidth.bind(this);
     this.getCsv = this.getCsv.bind(this);
+    this.handleAddGraph = this.handleAddGraph.bind(this)
+  }
+
+  componentWillMount() {
+    this.currentWidth();
+    window.addEventListener('resize', this.currentWidth);
   }
 
   componentDidMount() {
@@ -42,8 +54,15 @@ class RealTimeData extends Component {
 
   componentWillUnmount() {
     connectionHandler.close();
+    window.removeEventListener('resize', this.currentWidth);
   }
 
+  handleAddGraph = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
+  currentWidth() {
+    this.setState({ width: window.innerWidth });
+  }
   getCsv() {
     const { eventId } = this.state
     axios.get(`${process.env.REACT_APP_HISTORICAL_SERVING}/events/get-csv?eventId=${eventId}`)
@@ -74,7 +93,6 @@ class RealTimeData extends Component {
   }
   getRealTimeEvents() {
     connectionHandler.getRealTimeEvents(1, (response) => {
-      console.log(response.events[0])
       this.setState({ data: response, errorStatus: false, eventId: response.events[0]._id});
     })
   }
@@ -107,18 +125,21 @@ class RealTimeData extends Component {
 
   handleChangeRain() {
     const { showRain } = this.state;
-    this.setState({ showRain: !showRain });
+    this.setState({ showRain: !showRain, graphTitle: !showRain ? 'Caudal y recipitación vs tiempo' : 'Caudal vs tiempo' });
+
   }
 
   render() {
     let s = '';
+    let fechaInicio = '';
     let w = '';
     let e = '';
     let dif = '';
     let final = '';
     let maxInflow = null;
     let maxOutflow = null;
-    const { data, showRain, graphTitle } = this.state;
+    const { data, showRain, graphTitle, width, extraConductivity, extraRain } = this.state;
+
     if (data && data.events && data.events.length > 0) {
 
       s = (
@@ -140,13 +161,18 @@ class RealTimeData extends Component {
         minute: 'numeric',
         hour12: true
       };
+      const options2 = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+      };
       w = new Date(Number(String(data.events[0].startDate).substr(0, 13))).toLocaleDateString(
-        'es-US',
-        options
-      );
+        'es-US', options ).split('/').join('-');
+      fechaInicio = new Date(Number(String(data.events[0].startDate).substr(0, 13))).toLocaleDateString(
+        'es-US',options2).split('/').join('-');
       e = new Date(
         Number(String(data.events[0].lastMeasurementDate).substr(0, 13))
-      ).toLocaleDateString('es-US', options);
+      ).toLocaleDateString('es-US', options).split('/').join('-');
       dif = Number(String(data.events[0].lastMeasurementDate - data.events[0].startDate));
       dif /= 1e11;
       dif = `${Math.round(dif / 60)}:${Math.round(dif % 60)}`;
@@ -169,12 +195,12 @@ class RealTimeData extends Component {
       final = (
         <div className="main">
         <Grid direction="column" container justify="center" spacing={8} >
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid item xs={12} sm={12} md={12} lg={12} >
             <Typography color="inherit" variant="h3" align="left" style={{ paddingTop: 10, paddingBottom: 15}}>
               {`Evento en curso`}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid item xs={12} sm={12} md={12} lg={12} style={{maxHeight: width > 960 ? width < 1400 ? 158 : 108 : 1000 }}>
               <Grid direction="row" container justify="center" spacing={8} >
                 <Grid item xs={12}  sm={12} md={3} lg={3}>
                   <Grid container direction="row" justify="center" >
@@ -236,31 +262,85 @@ class RealTimeData extends Component {
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
               <Card>
-              <CardHeader title={`${graphTitle}`} />
+              <CardHeader title={`${graphTitle}`}  style={{textAlign:'center'}}/>
               <CardContent>
                 {s}
-                <Switch
-                  checked={showRain}
-                  onChange={() => {
-                    this.handleChangeRain();
-                  }}
-                  color="primary"
-                />
               </CardContent>
-              <Button variant="outlined" size="small" onClick={this.getCsv} color="primary">
-                Descargar datos
-              </Button>
-              <Tooltip title="Descargar gráfica" placement="bottom">
-              <IconButton
-                onClick={() => { saveSvgAsPng(document.querySelector('#realTimeGraph'), 'caudal', { scale: 3 }); }}
-                className="marginRight: 'auto'"
-                aria-label="descargar"
-              >
-                <SaveAlt />
-              </IconButton>
-            </Tooltip>
+              
             </Card>
 
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} style={{marginBottom:25}}>
+            <Paper elevation={3} style={{padding:5}}>
+            <Grid container  direction="row" justify="center" >
+              <Grid item xs={12} sm={12} md={8} lg={8} >
+                <Typography color="inherit" variant="h6" align="center">
+                  {`Opciones de gráfica`}
+                </Typography>
+                <Grid container  direction="row" justify="center" alignItems="center">
+                  <Grid item xs={12} sm={12} md={4} lg={4} >
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        onChange={this.handleChange}
+                        value={String(showRain)}    
+                        name="graph-selector"
+                        onChange={() => {
+                          this.handleChangeRain();
+                          }}
+                        row
+                        > 
+                        <FormControlLabel value='false' control={<Radio color="primary"/>} label="Caudal vs tiempo" />
+                        <FormControlLabel value='true' control={<Radio color="primary"/>} label="Caudal precipitación vs tiempo" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={4} lg={4} >
+                      <FormGroup row>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={extraRain}
+                            onChange={this.handleAddGraph('extraRain')}
+                            value="checkedB"
+                            color="primary"
+                          />
+                        }
+                        label="Ver precipitación"
+                      />  
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={extraConductivity}
+                            onChange={this.handleAddGraph('extraConductivity')}
+                            value="checkedB"
+                            color="primary"
+                          />
+                        }
+                        label="Ver conductividad"
+                      />
+                    </FormGroup>
+                  </Grid>
+                </Grid>
+              </Grid> 
+              <Grid item xs={12} sm={12} md={4} lg={4} > 
+                <Typography color="inherit" variant="h6" align="center">
+                   Descargas 
+                </Typography>
+                <Grid container  direction="row" justify="center" alignItems="center" spacing={8}>
+                  <Grid item xs={12} sm={12} md={3} lg={3} style={{width:120}}>
+                    <Button variant="outlined" fullWidth size="medium" onClick={this.getCsv} color="primary">
+                      CSV datos
+                    </Button>     
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={3} lg={3} style={{width:120}}>
+                    <Button variant="outlined" fullWidth  size="medium" onClick={() => { saveSvgAsPng(document.querySelector('#realTimeGraph'), `${graphTitle} ${fechaInicio}`, { scale: 3 }); }} color="primary">
+                       Gráfica
+                    </Button>     
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>       
+            </Paper>          
           </Grid>
         </Grid>      
         </div>
@@ -278,7 +358,7 @@ class RealTimeData extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography color="inherit" variant="h6">
-                    Tan pronto inicie un evento se mostrará
+                    Espetando que inicie un evento
                   </Typography>
                 </Grid>
               </Grid>

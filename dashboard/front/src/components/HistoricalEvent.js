@@ -11,6 +11,9 @@ import Button from '@material-ui/core/Button';
 import FileDownload from 'js-file-download';
 import Snackbar from '@material-ui/core/Snackbar';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Paper from '@material-ui/core/Paper';
 import AppNavBar from './AppNavBar';
 import HistogramGraph from './HistogramGraph';
 import ConductivityGraph from './ConductivityGraph';
@@ -41,7 +44,7 @@ class HistoricalEvent extends Component {
     this.csv = this.csv.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.loadData();
   }
 
@@ -100,6 +103,8 @@ class HistoricalEvent extends Component {
 
   render() {
     const { event } = this.state;
+    console.log(event)
+
     const {
       entrylevel, exitlevel, entryconductivity, exitconductivity, entryrain
     } = event;
@@ -113,140 +118,231 @@ class HistoricalEvent extends Component {
       histogramGraph = (<h1>Cargando</h1>);
     }
     if (entryconductivity && entryconductivity.length > 0) {
-      conductivityGraph = (<ConductivityGraph data={entryconductivity} data2={exitconductivity} />);
+      conductivityGraph = (
+        <Card>
+        <CardHeader
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+        />
+        <CardContent>
+          <ConductivityGraph data={entryconductivity} data2={exitconductivity} />
+        </CardContent>
+      </Card>
+        
+        );
     } else {
       conductivityGraph = (
-        <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
-          <Grid item xs={4}>
-            <img src={logo} alt="Logo" width="200" />
+        <Card>
+        <CardContent>
+          <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
+            <Grid    xs={4}>
+              <img src={logo} alt="Logo" width="150" />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography color="inherit" variant="h5">
+                    Lo sentimos, este evento no cuenta con datos de conductividad
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Typography color="inherit" variant="h5">
-                  Lo sentimos, este evento no cuenta con datos de conductividad
-            </Typography>
-          </Grid>
-          
-        </Grid>
+        </CardContent>
+      </Card>
       );
     }
     if (event.entryrain && entryrain.length > 0) {
-      rainGraph = (<Hyetograph data={entryrain}  />);
+      rainGraph = (
+        <Card>
+        <CardHeader
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+        />
+        <CardContent>
+          <Hyetograph data={entryrain}  />
+        </CardContent>
+      </Card>
+        );
     } else {
       rainGraph = (
-        <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
-          <Grid item xs={4}>
-            <img src={logo} alt="Logo" width="200" />
-          </Grid>
-          <Grid item xs={8}>
-            <Typography color="inherit" variant="h5">
-                  Lo sentimos, este evento no cuenta con datos de precipitación
-            </Typography>
-          </Grid>
-        </Grid>
+        <Card>
+          <CardContent>
+            <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
+              <Grid item xs={4}>
+                <img src={logo} alt="Logo" width="200" />
+              </Grid>
+              <Grid item xs={8}>
+                <Typography color="inherit" variant="h5">
+                      Lo sentimos, este evento no cuenta con datos de precipitación
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       );
     }
     const { classes, auth } = this.props;
     const options = {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     };
+    const options2 = {
+      year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    };
     const date = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options);
+    const date2 = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options2).split('/').join('-');
     return (
       <div>
         <AppNavBar auth={auth} optionActive="eventDetail" />
         {this.showErrorMessage()}
         <div className="main">
-          <Grid item sx={6}>
+        <Grid direction="column" container justify="center" spacing={8} >
+          <Grid item xs={12} sm={12} md={12} lg={12} >
+            <Typography color="inherit" variant="h4" align="left" style={{ paddingTop: 10, paddingBottom: 15}}>
+              {`Evento registrado el ${date}`}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} >
+              <Grid direction="row" container justify="center" spacing={8} >
+                <Grid item xs={12}  sm={12} md={3} lg={3}>
+                  <Grid container direction="row" justify="center" >
+                      <Grid item xs={12}>
+                      <Paper elevation={3} style={{padding:10}}>
+                        <Typography color="inherit" variant="h5" align="center">
+                          {`${Math.ceil(event.volumeInput) / 1000}`}
+                        </Typography>
+                        <Typography color="inherit" variant="h6" align="center">
+                          {`Volumen entrada m³`}
+                        </Typography>  
+                      </Paper> 
+                      </Grid>
+                  </Grid>  
+                </Grid>
+                <Grid item xs={12}  sm={12} md={3} lg={3}>
+                  <Grid container direction="row" justify="center" >
+                      <Grid item xs={12} >
+                      <Paper elevation={3} style={{padding:10}}>
+                        <Typography color="inherit" variant="h5" align="center">
+                        {`${ (event.volumeOutput / 1000).toFixed(2) }`}
+                        </Typography>
+                        <Typography color="inherit" variant="h6" align="center">
+                        {`Volumen salida m³`}
+                        </Typography> 
+                        </Paper>       
+                      </Grid>
+                  </Grid> 
+                </Grid>
+                <Grid item xs={12}  sm={12} md={3} lg={3}>
+                  <Grid container direction="row" justify="center" >
+                      <Grid item xs={12} >
+                      <Paper elevation={3} style={{padding:10}}>
+                        <Typography color="inherit" variant="h5" align="center">
+                        {`${ (100 - (event.volumeInput / event.volumeOutput)*100 ).toFixed(2) }`}
+                        </Typography>
+                        <Typography color="inherit" variant="h6" align="center">
+                        {`% reducción volumen`}
+                        </Typography> 
+                        </Paper>       
+                      </Grid>
+                  </Grid> 
+                </Grid>
+                <Grid item xs={12}  sm={12} md={3} lg={3}>
+                <Grid container direction="row" justify="center" >
+                    <Grid item xs={12} >
+                      <Paper elevation={3} style={{padding:10}}>
+                        <Typography color="inherit" variant="h5" align="center">
+                          {` ${Math.floor(event.duration)}:${Math.floor((event.duration - Math.floor(event.duration)) * 60)}`}
+                        </Typography>
+                        <Typography color="inherit" variant="h6" align="center">
+                          Duración horas
+                        </Typography> 
+                        </Paper>       
+                      </Grid>
+                  </Grid> 
+                </Grid>
+                <Grid item xs={12} sm={12} md={3} lg={3}>
+                    <Grid container  direction="row" justify="center" >
+                        <Grid item xs={12}>
+                        <Paper elevation={3} style={{padding:10}}>
+                          <Typography color="inherit" variant="h5" align="center">
+                           {`${event.peakImputFlow ? event.peakImputFlow.max.toFixed(2): 0}`}
+                          </Typography>    
+                          <Typography color="inherit" variant="h6" align="center">
+                            {`Caudal pico entrada l/s`}
+                          </Typography> 
+                          </Paper>          
+                        </Grid>
+                    </Grid>  
+                </Grid> 
+                <Grid item xs={12} sm={12} md={3} lg={3}>
+                    <Grid container  direction="row" justify="center" >
+                        <Grid item xs={12}>
+                        <Paper elevation={3} style={{padding:10}}>
+                          <Typography color="inherit" variant="h6" align="center">
+                          {`${event.peakOutputFlow ? event.peakOutputFlow.max.toFixed(2): 0}`}
+                          </Typography>     
+                          <Typography color="inherit" variant="h6" align="center">
+                          {`Caudal pico salida l/s`}
+                          </Typography> 
+                          </Paper>          
+                        </Grid>
+                    </Grid>  
+                </Grid>
+                <Grid item xs={12} sm={12} md={3} lg={3}>
+                    <Grid container  direction="row" justify="center" >
+                        <Grid item xs={12}>
+                        <Paper elevation={3} style={{padding:10}}>
+                          <Typography color="inherit" variant="h6" align="center">
+                            {`${event.efficiency}`}
+                          </Typography>     
+                          <Typography color="inherit" variant="h6" align="center">
+                            Reducción del caudal pico
+                          </Typography> 
+                          </Paper>          
+                        </Grid>
+                    </Grid>  
+                </Grid>
+                <Grid item xs={12} sm={12} md={3} lg={3}>
+                    <Grid container  direction="row" justify="center" >
+                        <Grid item xs={12}>
+                        <Paper elevation={3} style={{padding:10}}>
+                          <Typography color="inherit" variant="h6" align="center">
+                            {`${date2}`}
+                          </Typography>     
+                          <Typography color="inherit" variant="h6" align="center">
+                            {`Inicio`}
+                          </Typography> 
+                          </Paper>          
+                        </Grid>
+                    </Grid>  
+                </Grid>                           
+              </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <Card>
               <CardHeader
-                title={`Evento registrado el ${date}`}
+                action={
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                }
               />
               <CardContent>
                 {histogramGraph}
-                <br />
-                <Divider />
-                <br />
-                <Grid container justify="center" alignItems="center" spacing={8}>
-                  <Grid item xs={8}>
-                    <Typography color="inherit" variant="h5">
-                        Resumen
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Grid item container direction="row">
-                      <Grid item container xs={6} direction="column">
-                        <Typography color="inherit">
-                        Entrada
-                        </Typography>
-                        <Typography color="inherit">
-                          <strong>
-                          Volumen :
-                          </strong>
-                          {` ${Math.ceil(event.volumeInput)} l`}
-                        </Typography>
-                        <Typography color="inherit">
-                          <strong>
-                          Caudal pico :
-                          </strong>
-                          {` ${Math.ceil(event.peakImputFlow)} l/s`}
-                        </Typography>
-                      </Grid>
-                      <Grid item container xs={6} direction="column">
-                        <Typography color="inherit">
-                          Salida
-                        </Typography>
-                        <Typography color="inherit">
-                          <strong>
-                            Volumen :
-                          </strong>
-                          {` ${Math.ceil(event.volumeOutput)} l`}
-                        </Typography>
-                        <Typography color="inherit">
-                          <strong>
-                            Caudal pico :
-                          </strong>
-                          {` ${Math.ceil(event.peakOutputFlow)} l/s`}
-                        </Typography>
-                        <Button className={classes.left} variant="outlined" size="small" onClick={this.csv} color="primary">
-                          Descargar datos
-                        </Button>
-                      </Grid>
-                      <Grid item container xs={12} direction="column">
-                        <Typography color="inherit">
-                          <strong>
-                          Eficiencia :
-                          </strong>
-                          {` ${Math.ceil(event.efficiency)} %`}
-                        </Typography>
-
-                        <Typography color="inherit">
-                          <strong>
-                          Reducción del caudal pico :
-                          </strong>
-                          {` ${Math.ceil(event.reductionOfPeakFlow)} %`}
-                        </Typography>
-
-                        <Typography color="inherit">
-                          <strong>
-                          Duración:
-                          </strong>
-                          {` ${Math.floor(event.duration)}:${Math.floor((event.duration - Math.floor(event.duration)) * 60)} horas`}
-                        </Typography>
-
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <br />
-                <Divider />
-                <br />
-                {conductivityGraph}
-                <br />
-                <Divider />
-                <br />
-                {rainGraph}
               </CardContent>
             </Card>
           </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            {conductivityGraph}
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+              {rainGraph}
+          </Grid>
+        </Grid>
         </div>
 
       </div>

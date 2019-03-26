@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-import { saveSvgAsPng } from 'save-svg-as-png';
 import Grid from '@material-ui/core/Grid';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 
 class DinamicGraph extends Component {
   constructor(props) {
@@ -276,5 +272,5 @@ DinamicGraph.propTypes = {
   rain: PropTypes.instanceOf(Object).isRequired,
   conductivity: PropTypes.instanceOf(Object).isRequired,
   level: PropTypes.instanceOf(Object).isRequired,
-  showRain:PropTypes.bool.isRequired
+  showRain: PropTypes.bool.isRequired
 };

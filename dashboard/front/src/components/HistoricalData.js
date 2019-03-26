@@ -142,12 +142,12 @@ class HistoricalData extends Component {
       <div>
         {this.showErrorMessage()}
         <div className="main">
-          <div className="historical">
-            <Grid container direction="row" justify="center" alignItems="stretch" spacing={0}>
-              <Grid item xs={4} sm={4} md={5} lg={5}>
+          <div >
+            <Grid container direction="row" justify="center" alignItems="center" spacing={0}>
+              <Grid item xs={12} sm={12} md={5} lg={5}>
                 <Filter foundEvents={totalEventos} setFilter={filter => this.setFilter(filter)} />
               </Grid>
-              <Grid item xs={8} sm={8} md={7} lg={7}>
+              <Grid item xs={12} sm={12} md={7} lg={7}>
                 <Grid container direction="column" justify="space-between" alignItems="center" spacing={16}>
                   {events}
                   {paginador}
