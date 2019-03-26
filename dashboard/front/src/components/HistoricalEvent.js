@@ -7,13 +7,13 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
 import FileDownload from 'js-file-download';
 import Snackbar from '@material-ui/core/Snackbar';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Paper from '@material-ui/core/Paper';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import AppNavBar from './AppNavBar';
 import HistogramGraph from './HistogramGraph';
 import ConductivityGraph from './ConductivityGraph';
@@ -32,7 +32,8 @@ class HistoricalEvent extends Component {
     this.state = {
       event: {},
       errorStatus: false,
-      errorMessage: ''
+      errorMessage: '',
+      anchorEl: null,
     };
     this.margin = {
       top: 20,
@@ -42,11 +43,21 @@ class HistoricalEvent extends Component {
     };
     this.loadData = this.loadData.bind(this);
     this.csv = this.csv.bind(this);
+    this.handleClick = this.handleClick.bind(this)
+    this.handleClose = this.handleClose.bind(this)
   }
 
   componentWillMount() {
     this.loadData();
   }
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };s
 
   loadData() {
     const { match } = this.props;
@@ -93,8 +104,7 @@ class HistoricalEvent extends Component {
               comuníquele el siguinte mensaje :
               {' '}
               {errorMessage}
-            </span>
-)}
+            </span>)}
         />
       );
     }
@@ -102,8 +112,8 @@ class HistoricalEvent extends Component {
   }
 
   render() {
-    const { event } = this.state;
-    console.log(event)
+    const { event, anchorEl } = this.state;
+    console.log( anchorEl)
 
     const {
       entrylevel, exitlevel, entryconductivity, exitconductivity, entryrain
@@ -138,7 +148,7 @@ class HistoricalEvent extends Component {
         <Card>
         <CardContent>
           <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
-            <Grid    xs={4}>
+            <Grid  xs={4}>
               <img src={logo} alt="Logo" width="150" />
             </Grid>
             <Grid item xs={12}>
@@ -326,9 +336,28 @@ class HistoricalEvent extends Component {
             <Card>
               <CardHeader
                 action={
-                  <IconButton>
+                  <div>
+                  <IconButton
+                  aria-label="More"
+                  aria-owns={Boolean(anchorEl) ? 'menu-1' : undefined}
+                  aria-haspopup="true"
+                  onClick={this.handleClick}
+                  >
                     <MoreVertIcon />
                   </IconButton>
+                  <Menu
+                      id="menu-1"
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={this.handleClose}
+  
+                    >
+                    <MenuItem key={"optionOne"} selected={false} onClick={this.handleClose}>
+                      {"Descargar datos "}
+                    </MenuItem>
+                    
+                  </Menu>
+                  </div>
                 }
               />
               <CardContent>

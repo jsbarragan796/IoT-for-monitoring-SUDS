@@ -278,7 +278,7 @@ class RealTimeData extends Component {
                   {`Opciones de gráfica`}
                 </Typography>
                 <Grid container  direction="row" justify="center" alignItems="center">
-                  <Grid item xs={12} sm={12} md={4} lg={4} >
+                  <Grid item xs={12} sm={12} md={6} lg={6} >
                     <FormControl component="fieldset">
                       <RadioGroup
                         onChange={this.handleChange}
