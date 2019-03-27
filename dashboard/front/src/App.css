@@ -30,6 +30,14 @@ nav {
   margin-top: 100px;
   padding: 0 3% 0 3%;
 }
+.intro {
+  margin-top: 50px;
+  padding: 0 10% 0 10%;
+}
+.responsive {
+  max-width: 50%;
+  height: auto;
+}
 .historical {
   min-width: 1000px;
 }
