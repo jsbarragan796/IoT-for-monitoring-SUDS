@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-import { saveSvgAsPng } from 'save-svg-as-png';
 import Grid from '@material-ui/core/Grid';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+
 
 class HistogramGraph extends Component {
   constructor(props) {
@@ -260,7 +257,7 @@ class HistogramGraph extends Component {
       <Grid container direction="column" alignItems="center" spacing={0}>
         <Grid item xs={10}>
           <svg
-            id="level"
+            id="histogramGraph"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
             className="graph-svg-component"
@@ -273,15 +270,6 @@ class HistogramGraph extends Component {
           >
           vizualización
           </svg>
-          <Tooltip title="Descargar gráfica" placement="bottom">
-            <IconButton
-              onClick={() => { saveSvgAsPng(document.querySelector('#level'), 'caudal', { scale: 3 }); }}
-              className="marginRight: 'auto'"
-              aria-label="descargar"
-            >
-              <SaveAlt />
-            </IconButton>
-          </Tooltip>
         </Grid>
       </Grid>
     );

@@ -8,7 +8,7 @@ import Home from './components/Home';
 import Events from './components/Events';
 import ErrorPage from './components/ErrorPage';
 import Auth from './auth/Auth0';
-import HistoricalEvent from './components/HistoricalEvent';
+import HistoricalEventWrapper from './components/HistoricalEventWrapper';
 import Welcome from './components/Welcome';
 import Callback from './auth/Callback';
 
@@ -36,7 +36,7 @@ class App extends Component {
           <Route exact path="/eventos" component={() => <Events auth={auth} />} />
           <Route
             path="/eventos/:eventId"
-            component={match => <HistoricalEvent match={match} auth={auth} />}
+            component={match => <HistoricalEventWrapper match={match} auth={auth} />}
           />
           <Route render={ErrorPage} />
         </Switch>

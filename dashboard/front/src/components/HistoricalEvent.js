@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,23 +7,17 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import FileDownload from 'js-file-download';
+import { saveSvgAsPng } from 'save-svg-as-png';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Paper from '@material-ui/core/Paper';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import AppNavBar from './AppNavBar';
 import HistogramGraph from './HistogramGraph';
 import ConductivityGraph from './ConductivityGraph';
 import Hyetograph from './Hyetograph';
 import logo from '../assets/logo.png';
-
-const styles = theme => ({
-  left: {
-    margin: theme.spacing.unit
-  }
-});
 
 class HistoricalEvent extends Component {
   constructor(props) {
@@ -33,7 +26,9 @@ class HistoricalEvent extends Component {
       event: {},
       errorStatus: false,
       errorMessage: '',
-      anchorEl: null,
+      menuFlow: null,
+      menuRain: null,
+      menuConductivity: null
     };
     this.margin = {
       top: 20,
@@ -43,21 +38,37 @@ class HistoricalEvent extends Component {
     };
     this.loadData = this.loadData.bind(this);
     this.csv = this.csv.bind(this);
-    this.handleClick = this.handleClick.bind(this)
-    this.handleClose = this.handleClose.bind(this)
   }
 
   componentWillMount() {
     this.loadData();
   }
 
-  handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  handleClick = name => (event) => {
+    this.setState({ [name]: event.currentTarget });
   };
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };s
+  handleClose = (name) => {
+    this.setState({ [name]: null });
+  };
+
+  handleOption= (name,option, date2) => {
+    this.handleClose(name)
+    const date = date2.split(' ')[0]
+    if (option === 'flowImagen') {
+      saveSvgAsPng(document.querySelector('#histogramGraph'), `Caudal vs tiempo ${date}`, { scale: 3 });
+    }
+    if (option === 'csv') {
+      this.csv()
+    }
+    if (option === 'rainImagen') {
+      saveSvgAsPng(document.querySelector('#histogramGraph'), `Precipitación vs tiempo ${date}`, { scale: 3 });
+    }
+    if (option === 'conductivityImagen') {
+      saveSvgAsPng(document.querySelector('#conductivity'), `Conductividad ${date}`, { scale: 3 });
+    }
+    
+  };
 
   loadData() {
     const { match } = this.props;
@@ -112,8 +123,7 @@ class HistoricalEvent extends Component {
   }
 
   render() {
-    const { event, anchorEl } = this.state;
-    console.log( anchorEl)
+    const { event, menuFlow, menuRain, menuConductivity  } = this.state;
 
     const {
       entrylevel, exitlevel, entryconductivity, exitconductivity, entryrain
@@ -121,7 +131,7 @@ class HistoricalEvent extends Component {
     let histogramGraph = '';
     let conductivityGraph = '';
     let rainGraph = '';
-
+    const date2 = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options2).split('/').join('-');
     if (entrylevel) {
       histogramGraph = (<HistogramGraph data={entrylevel} data2={exitlevel} />);
     } else {
@@ -132,9 +142,30 @@ class HistoricalEvent extends Component {
         <Card>
         <CardHeader
           action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
+            <div>
+              <IconButton
+                aria-label="Más conductividad"
+                aria-owns={Boolean(menuConductivity) ? 'menu-1' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleClick("menuConductivity")}
+              >
+                <MoreVertIcon />
+              </IconButton>
+                <Menu
+                  id="menu-1"
+                  anchorEl={menuConductivity}
+                  open={Boolean(menuConductivity)}
+                  onClose={()=> {this.handleClose("menuConductivity")}}
+                >
+                <MenuItem key={"option1"} selected={false} onClick={() => {this.handleOption('menuConductivity','csv', date2)}}>
+                  Descargar datos
+                </MenuItem>
+                <MenuItem key={"option2"} selected={false} onClick={() => {this.handleOption('menuConductivity','conductivityImagen', date2)}}>
+                  Descargar Imagen 
+                </MenuItem>              
+              </Menu>
+            </div>
+            
           }
         />
         <CardContent>
@@ -148,7 +179,7 @@ class HistoricalEvent extends Component {
         <Card>
         <CardContent>
           <Grid container direction="column" justify="center" alignItems="center" spacing={8}>
-            <Grid  xs={4}>
+            <Grid  item xs={4}>
               <img src={logo} alt="Logo" width="150" />
             </Grid>
             <Grid item xs={12}>
@@ -166,9 +197,29 @@ class HistoricalEvent extends Component {
         <Card>
         <CardHeader
           action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
+            <div>
+              <IconButton
+                aria-label="Más precipitación"
+                aria-owns={Boolean(menuRain) ? 'menu-1' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleClick("menuRain")}
+              >
+                <MoreVertIcon />
+              </IconButton>
+                <Menu
+                  id="menu-1"
+                  anchorEl={menuRain}
+                  open={Boolean(menuRain)}
+                  onClose={()=> {this.handleClose("menuRain")}}
+                >
+                <MenuItem key={"option1"} selected={false} onClick={() => {this.handleOption('menuRain','csv', date2)}}>
+                  Descargar datos
+                </MenuItem>
+                <MenuItem key={"option2"} selected={false} onClick={() => {this.handleOption('menuRain','rainImagen', date2)}}>
+                  Descargar Imagen 
+                </MenuItem>              
+              </Menu>
+          </div>
           }
         />
         <CardContent>
@@ -194,7 +245,6 @@ class HistoricalEvent extends Component {
         </Card>
       );
     }
-    const { classes, auth } = this.props;
     const options = {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     };
@@ -204,10 +254,8 @@ class HistoricalEvent extends Component {
       hour12: true
     };
     const date = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options);
-    const date2 = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options2).split('/').join('-');
     return (
       <div>
-        <AppNavBar auth={auth} optionActive="eventDetail" />
         {this.showErrorMessage()}
         <div className="main">
         <Grid direction="column" container justify="center" spacing={8} >
@@ -338,24 +386,25 @@ class HistoricalEvent extends Component {
                 action={
                   <div>
                   <IconButton
-                  aria-label="More"
-                  aria-owns={Boolean(anchorEl) ? 'menu-1' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleClick}
+                    aria-label="Más"
+                    aria-owns={Boolean(menuFlow) ? 'menu-1' : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleClick("menuFlow")}
                   >
                     <MoreVertIcon />
                   </IconButton>
-                  <Menu
+                    <Menu
                       id="menu-1"
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}
-                      onClose={this.handleClose}
-  
+                      anchorEl={menuFlow}
+                      open={Boolean(menuFlow)}
+                      onClose={()=> {this.handleClose("menuFlow")}}
                     >
-                    <MenuItem key={"optionOne"} selected={false} onClick={this.handleClose}>
-                      {"Descargar datos "}
+                    <MenuItem key={"option1"} selected={false} onClick={() => {this.handleOption('menuFlow','csv', date2)}}>
+                      Descargar datos
                     </MenuItem>
-                    
+                    <MenuItem key={"option2"} selected={false} onClick={() => {this.handleOption('menuFlow','flowImagen', date2)}}>
+                      Descargar Imagen 
+                    </MenuItem>              
                   </Menu>
                   </div>
                 }
@@ -380,9 +429,7 @@ class HistoricalEvent extends Component {
 }
 
 HistoricalEvent.propTypes = {
-  classes: PropTypes.instanceOf(Object).isRequired,
   match: PropTypes.instanceOf(Object).isRequired,
-  auth: PropTypes.instanceOf(Object).isRequired
 };
 
-export default withStyles(styles)(HistoricalEvent);
+export default HistoricalEvent ;

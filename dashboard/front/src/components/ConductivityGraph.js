@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-import { saveSvgAsPng } from 'save-svg-as-png';
 import Grid from '@material-ui/core/Grid';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 
 class ConductivityGraph extends Component {
   constructor(props) {
@@ -273,15 +269,6 @@ class ConductivityGraph extends Component {
           >
           vizualización
           </svg>
-          <Tooltip title="Descargar gráfica" placement="bottom">
-            <IconButton
-              onClick={() => { saveSvgAsPng(document.querySelector('#conductivity'), 'conductividad', { scale: 3 }); }}
-              className="marginRight: 'auto'"
-              aria-label="descargar"
-            >
-              <SaveAlt />
-            </IconButton>
-          </Tooltip>
         </Grid>
       </Grid>
     );

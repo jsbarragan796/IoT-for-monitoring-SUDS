@@ -273,7 +273,7 @@ class RealTimeData extends Component {
           <Grid item xs={12} sm={12} md={12} lg={12} style={{marginBottom:25}}>
             <Paper elevation={3} style={{padding:5}}>
             <Grid container  direction="row" justify="center" >
-              <Grid item xs={12} sm={12} md={8} lg={8} >
+              <Grid item xs={12} sm={12} md={6} lg={7} >
                 <Typography color="inherit" variant="h6" align="center">
                   {`Opciones de gráfica`}
                 </Typography>
@@ -322,7 +322,7 @@ class RealTimeData extends Component {
                   </Grid>
                 </Grid>
               </Grid> 
-              <Grid item xs={12} sm={12} md={4} lg={4} > 
+              <Grid item xs={12} sm={12} md={6} lg={5} > 
                 <Typography color="inherit" variant="h6" align="center">
                    Descargas 
                 </Typography>
