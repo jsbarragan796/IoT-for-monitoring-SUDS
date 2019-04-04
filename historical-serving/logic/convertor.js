@@ -75,16 +75,34 @@ module.exports = {
     for (let index = 0; index < MEASUREMENT.length; index++) {
       const measurement = MEASUREMENT[index]
       if (measurement.entry && measurement.name !== 'rain') {
-        const sentIndex = event[`entry${measurement.name}`].length
-        event[`entry${measurement.name}`] = currentEvent[`entry${measurement.name}`].slice(sentIndex)
+        const toSendIndex = event[`entry${measurement.name}`].length
+        const sentIndex = currentEvent[`entry${measurement.name}`].length
+        if (sentIndex === toSendIndex){
+          const toSend = currentEvent[`entry${measurement.name}`].pop()
+          event[`entry${measurement.name}`] = toSend ? [toSend]: []
+        } else {
+          event[`entry${measurement.name}`] = currentEvent[`entry${measurement.name}`].slice(toSendIndex)
+        }     
       }
       if (measurement.exit) {
-        const sentIndex = event[`exit${measurement.name}`].length
-        event[`exit${measurement.name}`] = currentEvent[`exit${measurement.name}`].slice(sentIndex)
+        const toSendIndex = event[`exit${measurement.name}`].length
+        const sentIndex = currentEvent[`exit${measurement.name}`].length
+        if (sentIndex === toSendIndex){
+          const toSend = currentEvent[`exit${measurement.name}`].pop()
+          event[`exit${measurement.name}`] = toSend ? [toSend]: []
+        } else {
+          event[`exit${measurement.name}`] = currentEvent[`exit${measurement.name}`].slice(toSendIndex)
+        }   
       }
       if (measurement.name === 'rain') {
-        const sentIndex = event[`entry${measurement.name}`].length
-        event[`entry${measurement.name}`] = currentEvent[`entry${measurement.name}`].slice(sentIndex)
+        const toSendIndex = event[`entry${measurement.name}`].length
+        const sentIndex = currentEvent[`entry${measurement.name}`].length
+        if (sentIndex === toSendIndex){
+          const toSend = currentEvent[`entry${measurement.name}`].pop()
+          event[`entry${measurement.name}`] = toSend ? [toSend]: []
+        } else {
+          event[`entry${measurement.name}`] = currentEvent[`entry${measurement.name}`].slice(toSendIndex)
+        }
       }
     }
     return event

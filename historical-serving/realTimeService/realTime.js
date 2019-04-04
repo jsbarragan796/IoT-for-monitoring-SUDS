@@ -26,10 +26,10 @@ const validatorFunction = async () =>{
       const lastEventsWithMeasurements = eventsWithMeasurements
       eventsWithMeasurements = await convertor.loadRealtimeMesuarementsEvents(notEndedEvents)
       if (lastEventsWithMeasurements.length > 0) {
-        for (let index = 0; index < lastEventsWithMeasurements.length; index++) {     
+        for (let index = 0; index < lastEventsWithMeasurements.length ; index++) {  
           const event = lastEventsWithMeasurements[index];
           const eventId = event._id  
-          const eventFound = eventsWithMeasurements.find( event => event._id = eventId)  
+          const eventFound = eventsWithMeasurements.find( event => event._id = eventId) 
           if (eventFound) {
             if ( eventFound.lastMeasurementDate !== event.lastMeasurementDate) {
               const dataEventToUpdate = await convertor.newMeasurementsEvents(event, eventFound)
@@ -64,14 +64,15 @@ const setEventChecker = async () => {
 const currentsEvents = async (pageNumberParameter, client) => {
   const pageNumber = Number(pageNumberParameter)
   if (numberOfClients === 1 ) await validatorFunction()
-  if (numberOfEvents && pageNumber <= numberOfEvents && eventsWithMeasurements.length) {
-    const eventsWithMeasurementsToSend = eventsWithMeasurements[pageNumberParameter-1]
+  const eventsWithMeasurements2 = eventsWithMeasurements
+  if (numberOfEvents && pageNumber <= numberOfEvents && eventsWithMeasurements2.length > 0) {
+    const eventsWithMeasurementsToSend = eventsWithMeasurements2[pageNumberParameter-1]
     const paginator = { currentPage: pageNumber, totalPages: numberOfEvents, events: [eventsWithMeasurementsToSend] }
     client.emit('current-events', paginator)
     client.join(eventsWithMeasurementsToSend._id);
   } else {
-    client.join('wait-for-current-events');
     client.emit('current-events', { currentPage: 0, totalPages: 0, events: []})
+    client.join('wait-for-current-events');   
   }
 }
 

@@ -19,7 +19,7 @@
       console.log(`Notification got message ${message} from topic ${topic}`)
 
       if (topic === KAFKA_TOPIC_EVENT_STARTED) {
-        // await sendEventStartAlarm()
+        await sendEventStartAlarm()
       }
     })
 })()
