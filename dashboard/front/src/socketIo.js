@@ -22,6 +22,10 @@ const connectionHandler = {
     socket.emit('get-current-events', pageNumber)
     socket.on('current-events', event => enter(event));
   },
+  reloadRealTimeEvents: (pageNumber) => {
+    if (!socket) socket = io(`${process.env.REACT_APP_HISTORICAL_SERVING_SOCKET}`);
+    socket.emit('get-current-events', pageNumber)
+  },
   close: () => {
     if (socket) {
       socket.close();

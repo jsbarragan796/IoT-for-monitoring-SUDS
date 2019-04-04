@@ -28,7 +28,7 @@ class RealTimeData extends Component {
       errorStatus: false,
       errorMessage: '',
       showRain: false,
-      eventId:undefined,
+      eventId:null,
       graphTitle: 'Caudal vs tiempo',
       extraRain:false,
       extraConductivity:false,
@@ -78,9 +78,21 @@ class RealTimeData extends Component {
       const { data } = this.state
       Object.keys(response.data).forEach( (key) => {
         if (data.events[0][key] && typeof data.events[0][key] === "object") {
+          const lastElemtent = data.events[0][key].pop()
+          if (lastElemtent){
+            const firstElementGotten = response.data[key].shift()
+            if (firstElementGotten){
+              if (lastElemtent.time === firstElementGotten.time) {
+                data.events[0][key].push(firstElementGotten)
+              } else {
+                data.events[0][key].push(lastElemtent) 
+                data.events[0][key].push(firstElementGotten) 
+              }
+            }
+          } 
           response.data[key].forEach((n)=>{
             data.events[0][key].push(n)
-          })
+          }) 
         }
         if (data.events[0][key] && typeof data.events[0][key] !== "object") {
           data.events[0][key] = response.data[key]
@@ -88,12 +100,12 @@ class RealTimeData extends Component {
       });
       this.setState({ data: data });
     }, (response) => {
-       if (response) this.getRealTimeEvents();
+       if (response) connectionHandler.reloadRealTimeEvents(1)
     })
   }
   getRealTimeEvents() {
     connectionHandler.getRealTimeEvents(1, (response) => {
-      this.setState({ data: response, errorStatus: false, eventId: response.events[0]._id});
+      this.setState({ data: response, errorStatus: false, eventId: response.events.length ? response.events[0]._id: null });
     })
   }
 
@@ -130,29 +142,56 @@ class RealTimeData extends Component {
   }
 
   render() {
-    let s = '';
+    let s = (<Grid container direction="column" justify="center" alignItems="center" spacing={8}>
+    <Grid item xs={6}>
+      <img src={logo} alt="Logo" width="200px" />
+    </Grid>
+    <Grid item xs={6}>
+      <Typography color="inherit" variant="h6">
+        Inició un evento, esperando datos..
+      </Typography>
+    </Grid>
+  </Grid>);
     let fechaInicio = '';
     let w = '';
     let e = '';
     let dif = '';
     let final = '';
-    let maxInflow = null;
-    let maxOutflow = null;
-    const { data, showRain, graphTitle, width, extraConductivity, extraRain } = this.state;
+    let maxInflow = 'Esperando datos';
+    let maxOutflow = 'Esperando datos';
+    const { data, showRain, graphTitle, width, extraConductivity, extraRain, eventId } = this.state;
 
     if (data && data.events && data.events.length > 0) {
-
-      s = (
-        <DinamicGraph
-          level={{ entry: data.events[0].entrylevel, exit: data.events[0].exitlevel }}
-          rain={data.events[0].entryrain}
-          showRain={showRain}
-          conductivity={{
-            entry: data.events[0].entryconductivity,
-            exit: data.events[0].exitconductivity
-          }}
-        />
-      );
+      if (data.events[0].entrylevel.length){
+        data.events[0].entrylevel.forEach((element) => {
+          if (maxInflow === 'Esperando datos' ){
+            maxInflow = element
+          } else {
+            maxInflow =  maxInflow.value > element.value ? maxInflow : element
+          }
+        });
+      }  
+      if (data.events[0].exitlevel.length)
+      data.events[0].exitlevel.forEach((element) => {
+        if (maxOutflow === 'Esperando datos' ){
+          maxOutflow = element
+        } else {
+          maxOutflow =  maxOutflow.value > element.value ? maxOutflow : element
+        }
+      });
+      if(data.events[0].entrylevel.length && data.events[0].exitlevel.length){
+        s = (
+          <DinamicGraph
+            level={{ entry: data.events[0].entrylevel, exit: data.events[0].exitlevel }}
+            rain={data.events[0].entryrain}
+            showRain={showRain}
+            conductivity={{
+              entry: data.events[0].entryconductivity,
+              exit: data.events[0].exitconductivity
+            }}
+          />
+        );
+      }
       const options = {
         year: 'numeric',
         month: 'numeric',
@@ -177,20 +216,7 @@ class RealTimeData extends Component {
       dif /= 1e11;
       dif = `${Math.round(dif / 60)}:${Math.round(dif % 60)}`;
        
-      data.events[0].entrylevel.forEach((element) => {
-        if (maxInflow === null ){
-          maxInflow = element
-        } else {
-          maxInflow =  maxInflow.value > element.value ? maxInflow : element
-        }
-      });
-      data.events[0].exitlevel.forEach((element) => {
-        if (maxOutflow === null ){
-          maxOutflow = element
-        } else {
-          maxOutflow =  maxOutflow.value > element.value ? maxOutflow : element
-        }
-      });
+      
       
       final = (
         <div className="main">
@@ -249,7 +275,7 @@ class RealTimeData extends Component {
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
                           <Typography color="inherit" variant="h6" align="center">
-                            {`Entrada:${maxInflow.value.toFixed(2)} l/s - Salida:${maxOutflow.value.toFixed(2)} l/s`}
+                            {`Entrada:${maxInflow.value? maxInflow.value.toFixed(2): maxInflow } l/s - Salida:${maxOutflow.value? maxOutflow.value.toFixed(2): maxOutflow } l/s`}
                           </Typography>     
                           <Typography color="inherit" variant="h6" align="center">
                             {`Caudales pico registrados`}
@@ -328,12 +354,12 @@ class RealTimeData extends Component {
                 </Typography>
                 <Grid container  direction="row" justify="center" alignItems="center" spacing={8}>
                   <Grid item xs={12} sm={12} md={3} lg={3} style={{width:120}}>
-                    <Button variant="outlined" fullWidth size="medium" onClick={this.getCsv} color="primary">
+                    <Button disabled={!Boolean(eventId)} variant="outlined" fullWidth size="medium" onClick={this.getCsv} color="primary">
                       CSV datos
                     </Button>     
                   </Grid>
                   <Grid item xs={12} sm={12} md={3} lg={3} style={{width:120}}>
-                    <Button variant="outlined" fullWidth  size="medium" onClick={() => { saveSvgAsPng(document.querySelector('#realTimeGraph'), `${graphTitle} ${fechaInicio}`, { scale: 3 }); }} color="primary">
+                    <Button disabled={!Boolean(eventId)} variant="outlined" fullWidth  size="medium" onClick={() => { saveSvgAsPng(document.querySelector('#realTimeGraph'), `${graphTitle} ${fechaInicio}`, { scale: 3 }); }} color="primary">
                        Gráfica
                     </Button>     
                   </Grid>
@@ -358,7 +384,7 @@ class RealTimeData extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography color="inherit" variant="h6">
-                    Espetando que inicie un evento
+                    Esperando que inicie un evento
                   </Typography>
                 </Grid>
               </Grid>
