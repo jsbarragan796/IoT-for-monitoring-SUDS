@@ -17,7 +17,7 @@ const getDataFromFile = (fileName) => {
         data[1] = Number(data[1])
         data[2] = Number(data[2])
         data[3] = Number(data[3])
-        data[4] = fileName === '4D10B3' ? '4D1089' : '4D1080'
+        data[4] = fileName === '4D10B3' ? '4D10B3' : '4D10B4'
         allData.push(data)
       })
       .on('end', function () {
@@ -37,8 +37,7 @@ const getDataFromFile = (fileName) => {
 // ]
 // [inicio, fin, ajuste Entrada, ajuste salida  ]
 const events = [
-  [1495012500, 1495029000, 1, 1.35],
-  [ 1496922300, 1496965500, 0.32, 1.33 ]
+  [ 1494578400, 1494605700, 0.95, 0.4 ]
 ]
 
 // const future = 31536000 157.253.238.216
@@ -47,7 +46,7 @@ const events = [
 let future = 0
 
 const postOptions = {
-  hostname: '157.253.238.216',
+  hostname: 'localhost',
   port: 8081,
   path: '/measurement',
   method: 'POST',
@@ -135,12 +134,12 @@ const postEventData = async (event) => {
     // row[0] + 18000 // to convert to UTC (input data is in colombian time)
     // const body = buildPostBody(row[4], row[3], row[0] + 18000)
     if (inicio) {
-      const body = buildPostBody('4D10B5', '910910910910910', row[0] + 17000)
+      const body = buildPostBody('4D10B5', '910910910910910', Math.round(new Date().getTime()/1000))
       await hola3(body)
       inicio = false
     }
     // await postData(body)
-    const body = buildPostBody(row[4], codedValue, row[0] + 18000)
+    const body = buildPostBody(row[4], codedValue, Math.round(new Date().getTime()/1000))
     await hola2(body)
   }
 }
@@ -149,14 +148,14 @@ const hola2 = (body) => {
     setTimeout(async () => {
       await postData(body)
       resolve()
-    }, 400)
+    }, 3000)
   })
 }
 const hola3 = (body) => {
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
       await postData(body)
-      resolve()
+      resolve(console.log("envio inicio"))
     }, 2000)
   })
 }
