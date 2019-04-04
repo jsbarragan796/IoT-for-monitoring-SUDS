@@ -27,7 +27,6 @@
 
   const consumer = await getConsumer()
   const producer = await getProducer()
-
   const mongoConnect = () => {
     return new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, { useNewUrlParser: true }, async (err, client) => {
@@ -67,13 +66,15 @@
   })
 
   cron.schedule(CRON_SCHEDULE, async () => {
-    console.log('Cron started')
+    console.log('Cron started', CRON_SCHEDULE)
     const event = await findMostRecentOpenEvent()
     if (event) {
       const { _id, lastMeasurementDate } = event
       const now = new Date().getTime() * 1000000
-
-      if (lastMeasurementDate < now + 1000000000 * 60 * 60 * 6) await endEvent(_id, lastMeasurementDate)
+      console.log('now', now)
+      console.log('now', lastMeasurementDate)
+      // if (lastMeasurementDate < now + 1000000000 * 60 * 60 * 6) await endEvent(_id, lastMeasurementDate)
+      if (now - lastMeasurementDate > 6e10) await endEvent(_id, lastMeasurementDate)
     }
   })
 })()
