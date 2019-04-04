@@ -30,7 +30,7 @@ module.exports = (producer, redis) => {
           await eventBegun(sensorId, ts)
         } else {
           const messagePart1 = String(value).substr(0, 6)
-          const messagePart2 = String(value).substr(6, 11)
+          const messagePart2 = String(value).substr(7, 12)
 
           const valM1 = getMessageValue(messagePart1)
           const channelM1 = getchannel(messagePart1)
