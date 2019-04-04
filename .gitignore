@@ -15,11 +15,4 @@ dashboard/front/yarn\.lock
 
 dashboard/.vscode/settings.json
 
-aggregate-data/package-lock.json
-aggregate-data/package.json
-aggregate-data/package.json
-aggregate-data/package.json
-crude-data/package-lock.json
-event-manager/package-lock.json
-notification/package-lock.json
-reception/package-lock.json
+
