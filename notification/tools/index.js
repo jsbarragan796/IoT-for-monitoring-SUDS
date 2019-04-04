@@ -8,7 +8,7 @@ const MongoCLient = require('mongodb').MongoClient
 module.exports = {
   sendEventStartAlarm: async () => {
     return new Promise(async (resolve, reject) => {
-      MongoCLient.connect(MONGODB_URI, (err, client) => {
+      MongoCLient.connect(MONGODB_URI, { useNewUrlParser: true }, (err, client) => {
         if (err) reject(err)
         else {
           const Users = client.db().collection('User')
@@ -19,7 +19,7 @@ module.exports = {
                 const { phone } = user
                 const params = {
                   Message: 'SUDS-SC -> Ha empezado a llover',
-                  PhoneNumber: phone
+                  PhoneNumber: String(phone)
                 }
                 var publishTextPromise = new AWS.SNS({ apiVersion: '2010-03-31' }).publish(params).promise()
                 await publishTextPromise
