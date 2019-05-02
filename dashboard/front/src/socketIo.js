@@ -24,6 +24,7 @@ const connectionHandler = {
   },
   reloadRealTimeEvents: (pageNumber) => {
     if (!socket) socket = io(`${process.env.REACT_APP_HISTORICAL_SERVING_SOCKET}`);
+    console.log("pediña recarga")
     socket.emit('get-current-events', pageNumber)
   },
   close: () => {

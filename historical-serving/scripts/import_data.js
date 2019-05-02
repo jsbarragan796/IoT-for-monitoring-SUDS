@@ -134,12 +134,12 @@ const postEventData = async (event) => {
     // row[0] + 18000 // to convert to UTC (input data is in colombian time)
     // const body = buildPostBody(row[4], row[3], row[0] + 18000)
     if (inicio) {
-      const body = buildPostBody('4D10B5', '910910910910910', Math.round(new Date().getTime()/1000))
+      const body = buildPostBody('4D10B5', '910910910910910',row[0] + 18000 )
       await hola3(body)
       inicio = false
     }
     // await postData(body)
-    const body = buildPostBody(row[4], codedValue, Math.round(new Date().getTime()/1000))
+    const body = buildPostBody(row[4], codedValue, row[0] + 18000)
     await hola2(body)
   }
 }

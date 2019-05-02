@@ -82,6 +82,18 @@ class DinamicGraph extends Component {
       .domain([Math.max(d3.max(rain, d => d.value))*3,0])
       .nice()
       .range([ (this.height) - this.margin.bottom, this.margin.top])
+
+    this.xConductivity = d3
+      .scaleBand()
+      .domain(d3.extent(dates, d => d))
+      .range([this.margin.left, this.width - this.margin.right])
+      .padding(0.1);
+    
+    this.yConductivity = d3
+      .scaleLinear()
+      .domain([scale*Math.max(d3.max(conductivity.entry, d => d.value), d3.max(conductivity.exit, d => d.value))*3,0])
+      .nice()
+      .range([ (this.height) - this.margin.bottom, this.margin.top])
     
     const scale = showRain ? 1.5 : 1;
     this.y = d3
@@ -105,8 +117,6 @@ class DinamicGraph extends Component {
       .enter()
       .append('g')
       .attr('transform', (d, i) => `translate(${this.width - this.margin.left * 2.55},${this.height * 0.13 + i * 26})`)
-
-      
 
     gw.append('rect')
       .attr('width', 18)

@@ -15,6 +15,7 @@ const validatorFunction = async () =>{
     if (Boolean(numberOfEvents) !== Boolean(currentNumberOfEvents)) { 
       io.sockets.in('subsCurrentEvent').emit('are-current-events', Boolean(currentNumberOfEvents))
       io.sockets.in('wait-for-current-events').emit('refresh-current-events', true)
+      console.log("termino evenrto")
       if ( !currentNumberOfEvents ) {
         eventsWithMeasurements = []
         numberOfEvents = 0 

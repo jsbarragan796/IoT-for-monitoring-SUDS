@@ -1,7 +1,7 @@
 const { MONGODB_URI } = require('../config')
 const MongoClient = require('mongodb').MongoClient
 const measurementLogic = require('./measurement')
-const EVENT_PAGINATION = 1
+const EVENT_PAGINATION = 5
 const MEASUREMENT = []
 
 const mongoConnect = () => {

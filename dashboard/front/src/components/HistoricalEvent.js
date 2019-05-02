@@ -161,7 +161,7 @@ class HistoricalEvent extends Component {
                   Descargar datos
                 </MenuItem>
                 <MenuItem key={"option2"} selected={false} onClick={() => {this.handleOption('menuConductivity','conductivityImagen', date2)}}>
-                  Descargar Imagen 
+                  Descargar imagen 
                 </MenuItem>              
               </Menu>
             </div>
