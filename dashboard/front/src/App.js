@@ -15,14 +15,15 @@ import Callback from './auth/Callback';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#4db6ac'
+      main: '#3aa9d4'
     },
     secondary: {
-      main: '#1e88e5'
+      main: '#08465f'
     }
   },
   typography: {
-    useNextVariants: true
+    useNextVariants: true,
+    fontFamily: 'Segoe UI',
   }
 });
 const auth = new Auth();

@@ -132,7 +132,7 @@ class AppNavBar extends Component {
               <img src={navBarLogo} width="100wv" alt="Logo" />
             </IconButton>
             <Typography className={classes.title} color="inherit" noWrap>
-              SUDS Uniandes
+              MISUDS
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>

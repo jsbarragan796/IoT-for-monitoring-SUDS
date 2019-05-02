@@ -4,7 +4,7 @@
 }
 
 body{
-  background-color:#56b6ab14 ;
+  background-color:white ;
 } 
 .navbar-brand {
   font-family: "Alike", serif;
@@ -27,7 +27,7 @@ nav {
   justify-content: center;
 }
 .main {
-  margin-top: 100px;
+  margin-top: 80px;
   padding: 0 3% 0 3%;
 }
 .intro {
@@ -35,7 +35,11 @@ nav {
   padding: 0 10% 0 10%;
 }
 .responsive {
-  max-width: 50%;
+  max-width: 40%;
+  height: auto;
+}
+.responsive-banner {
+  max-width: 60%;
   height: auto;
 }
 .historical {

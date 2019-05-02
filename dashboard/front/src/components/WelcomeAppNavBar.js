@@ -32,7 +32,7 @@ function WelcomeAppBar(props) {
       <AppBar position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-            SUDS Uniandes
+            MISUDS
           </Typography>
           <div className={classes.grow} />
           <Button

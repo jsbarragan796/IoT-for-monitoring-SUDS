@@ -222,7 +222,7 @@ class RealTimeData extends Component {
         <div className="main">
         <Grid direction="column" container justify="center" spacing={8} >
           <Grid item xs={12} sm={12} md={12} lg={12} >
-            <Typography color="inherit" variant="h3" align="left" style={{ paddingTop: 10, paddingBottom: 15}}>
+            <Typography color="primary" variant="h3" align="left" style={{ paddingTop: 10, paddingBottom: 15}}>
               {`Evento en curso`}
             </Typography>
           </Grid>

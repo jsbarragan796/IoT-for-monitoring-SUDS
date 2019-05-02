@@ -13,8 +13,10 @@ import esLocale from 'date-fns/locale/es';
 
 const styles = theme => ({
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing.unit/2,
+    marginRight: theme.spacing.unit/2,
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit/2,
     width: 150,
     height: 40
   },
@@ -248,12 +250,9 @@ class Filter extends Component {
           </MuiPickersUtilsProvider>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography color="inherit">Eficiencia %</Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginEfficiency"
-            label="Min %"
+            label="Eficiencia Min %"
             value={state.beginEfficiency}
             onChange={this.handleChange('beginEfficiency')}
             error={state.errbeginEfficiency}
@@ -266,7 +265,7 @@ class Filter extends Component {
           />
           <TextField
             id="outlined-endEfficiency"
-            label="Max %"
+            label="Eficiencia Max %"
             value={state.endEfficiency}
             error={state.errendEfficiency}
             onChange={this.handleChange('endEfficiency')}
@@ -279,12 +278,9 @@ class Filter extends Component {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography color="inherit">Volumen de entrada l</Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginVolumeInput"
-            label="Min l"
+            label="Volumen de entrada Min L"
             value={state.beginVolumeInput}
             onChange={this.handleChange('beginVolumeInput')}
             error={state.errbeginVolumeInput}
@@ -298,7 +294,7 @@ class Filter extends Component {
 
           <TextField
             id="outlined-endVolumeInput"
-            label="Max l"
+            label="Volumen de entrada Max L"
             value={state.endVolumeInput}
             error={state.errendVolumeInput}
             onChange={this.handleChange('endVolumeInput')}
@@ -311,14 +307,9 @@ class Filter extends Component {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography color="inherit" component="p">
-            Volumen de salida l
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginVolumeOutput"
-            label="Min l"
+            label="Volumen de salida Min L"
             value={state.beginVolumeOutput}
             onChange={this.handleChange('beginVolumeOutput')}
             error={state.errbeginVolumeOutput}
@@ -331,7 +322,7 @@ class Filter extends Component {
           />
           <TextField
             id="outlined-endVolumeOutput"
-            label="Max l"
+            label="Volumen de salida Max L"
             value={state.endVolumeOutput}
             error={state.errendVolumeOutput}
             onChange={this.handleChange('endVolumeOutput')}
@@ -344,12 +335,9 @@ class Filter extends Component {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography color="inherit">Reducción caudal pico %</Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginReductionOfPeakFlow"
-            label="Min %"
+            label="Min Reducción caudal pico %"
             value={state.beginReductionOfPeakFlow}
             onChange={this.handleChange('beginReductionOfPeakFlow')}
             error={state.errbeginReductionOfPeakFlow}
@@ -362,7 +350,7 @@ class Filter extends Component {
           />
           <TextField
             id="outlined-endReductionOfPeakFlow"
-            label="Max %"
+            label="Max Reducción caudal pico %"
             value={state.endReductionOfPeakFlow}
             error={state.errendReductionOfPeakFlow}
             onChange={this.handleChange('endReductionOfPeakFlow')}
@@ -375,12 +363,9 @@ class Filter extends Component {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography color="inherit">Duración del evento h</Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
           <TextField
             id="outlined-beginDuration"
-            label="Min h"
+            label="Min Duración del evento h"
             onChange={this.handleChange('beginDuration')}
             error={state.errbeginDuration}
             type="number"
@@ -393,7 +378,7 @@ class Filter extends Component {
 
           <TextField
             id="outlined-endDuration"
-            label="Max h"
+            label="Max Duración del evento h"
             error={state.errendDuration}
             onChange={this.handleChange('endDuration')}
             type="number"
