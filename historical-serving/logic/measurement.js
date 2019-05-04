@@ -4,8 +4,6 @@ const Influx = require('influx')
 const { INFLUX_DB_DATABASE, INFLUX_DB_HOST, INFLUX_DB_PORT,
   INFLUX_DB_USERNAME, INFLUX_DB_PASSWORD, INFLUX_DB_PROTOCOL } = require('../config')
 
-const eventLogic = require('./event')
-
 const influx = new Influx.InfluxDB({
   database: INFLUX_DB_DATABASE,
   host: INFLUX_DB_HOST,
@@ -57,7 +55,7 @@ module.exports = {
     }
 
     if (timeRange) {
-      groupClause = `GROUP BY time(${timeRange})`
+      groupClause = `GROUP BY time(${timeRange}) fill(none)`
     }
 
     const query = `
@@ -67,78 +65,6 @@ module.exports = {
     ${groupClause || ''}
     ORDER BY time asc
     `
-    // console.log(query)
     return influx.query(query)
-  },
-
-  /**
-  * Saves a measurement
-  * @param sensorId id of the sensor
-  * @param measurementType type of measure
-  * @param value value of the measure
-  * @param timestamp time of the measure
-  * @returns {Promise <Object, Error>} A promise that resolves with the client or rejects an error
-  */
-  saveMeasurement: async (sensorType, sensorId, measurementType, value, timestamp) => {
-    const { _id, lastMeasurementDate: mostRecentEventFinishDate, startDate: mostRecentEventStartDate } = await eventLogic.findMostRecentEvent()
-
-    if (mostRecentEventFinishDate + 1000000000 * 60 * 30 < timestamp) {
-      const inputQuery = `
-        SELECT MEAN(value)
-        FROM level
-        WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId = '4D10B3'
-        GROUP BY time(1m)
-      `
-      const lastEventInputMeasurements = await influx.query(inputQuery)
-
-      const outputQuery = `
-        SELECT MEAN(value)
-        FROM level
-        WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId= '4D10B4'
-        GROUP BY time(1m)
-      `
-      const lastEventOutputMeasurements = await influx.query(outputQuery)
-
-      const peakImputFlowQuery = `
-        SELECT max(value)
-        FROM level
-        WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-          AND sensorId= '4D10B3'
-      `
-      const peakImputFlow = await influx.query(peakImputFlowQuery)
-
-      const peakOutputFlowQuery = `
-      SELECT max(value)
-      FROM level
-      WHERE time >= ${mostRecentEventStartDate} AND time <= ${mostRecentEventFinishDate}
-        AND sensorId= '4D10B4'
-      `
-      const peakOutputFlow = await influx.query(peakOutputFlowQuery)
-
-      const duration = ((mostRecentEventFinishDate - mostRecentEventStartDate) / 1e9) / (60 * 60)
-
-      const lastEventData = { _id,
-        finishDate: mostRecentEventFinishDate,
-        startDate: mostRecentEventStartDate,
-        inputMeasurements: lastEventInputMeasurements,
-        outputMeasurements: lastEventOutputMeasurements,
-        peakImputFlow: peakImputFlow[0],
-        peakOutputFlow: peakOutputFlow[0],
-        duration: duration }
-
-      const newEventData = { startDate: timestamp }
-      await eventLogic.endEventAndCreateOne(lastEventData, newEventData)
-    } else {
-      const eventToUpdate = { _id, lastMeasurementDate: timestamp }
-      await eventLogic.updateLastMeasurementDate(eventToUpdate)
-    }
-    await influx.writePoints([{
-      measurement: measurementType,
-      tags: { sensorId },
-      fields: { value },
-      timestamp
-    }]).catch((e) => console.log(e))
   }
 }

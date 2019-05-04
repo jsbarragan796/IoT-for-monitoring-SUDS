@@ -37,7 +37,7 @@ const getDataFromFile = (fileName) => {
 // ]
 // [inicio, fin, ajuste Entrada, ajuste salida  ]
 const events = [
-  [ 1494578400, 1494605700, 0.95, 0.4 ]
+  [ 1496922300, 1496965500, 0.32, 1.33 ]
 ]
 
 // const future = 31536000 157.253.238.216
@@ -148,7 +148,7 @@ const hola2 = (body) => {
     setTimeout(async () => {
       await postData(body)
       resolve()
-    }, 3000)
+    }, 1000)
   })
 }
 const hola3 = (body) => {

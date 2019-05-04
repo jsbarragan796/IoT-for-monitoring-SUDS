@@ -1,7 +1,7 @@
 const { MONGODB_URI } = require('../config')
 const MongoClient = require('mongodb').MongoClient
 const measurementLogic = require('./measurement')
-const EVENT_PAGINATION = 5
+const EVENT_PAGINATION = 4
 const MEASUREMENT = []
 
 const mongoConnect = () => {
@@ -66,12 +66,13 @@ module.exports = {
         event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
       }
       if (measurement.name === 'rain') {
-        event[`entry${measurement.name}`] = await measurementLogic.getMeasurements('level', measurement.entry, event.startDate, finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
+        event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, finishDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
       }
     }
     return event
   },
-  newMeasurementsEvents: async (event, currentEvent) => {
+  newMeasurementsEvents: async (eventParameter, currentEvent) => {
+    const event = {...eventParameter}
     for (let index = 0; index < MEASUREMENT.length; index++) {
       const measurement = MEASUREMENT[index]
       if (measurement.entry && measurement.name !== 'rain') {
@@ -79,9 +80,10 @@ module.exports = {
         const sentIndex = currentEvent[`entry${measurement.name}`].length
         if (sentIndex === toSendIndex){
           const toSend = currentEvent[`entry${measurement.name}`].pop()
-          event[`entry${measurement.name}`] = toSend ? [toSend]: []
+          event[`entry${measurement.name}`] = toSend? [toSend]: []
         } else {
-          event[`entry${measurement.name}`] = currentEvent[`entry${measurement.name}`].slice(toSendIndex)
+         const tepm = currentEvent[`entry${measurement.name}`].slice(toSendIndex)
+         event[`entry${measurement.name}`] = tepm
         }     
       }
       if (measurement.exit) {
@@ -123,7 +125,7 @@ module.exports = {
           event[`exit${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.exit, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutes)
         }
         if (measurement.name === 'rain') {
-          event[`entry${measurement.name}`] = await measurementLogic.getMeasurements('level', measurement.entry, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutesRealTime)
+          event[`entry${measurement.name}`] = await measurementLogic.getMeasurements(measurement.name, measurement.entry, event.startDate, event.lastMeasurementDate, measurement.aggregationFunction, measurement.timeIntervalMinutesRealTime)
         }
       }
       eventsWithMeasurements.push(event)
