@@ -144,9 +144,7 @@
         volumeOutput += flow * 60
       })
 
-      const didNotGoOut = volumeInput - volumeOutput
-
-      const efficiency = volumeInput !== 0 ? parseInt(100 * didNotGoOut / volumeInput) : 0
+      const volumeEfficiency = volumeInput ? (1 - (volumeOutput / volumeInput)) * 100 : 0
 
       const peakImputFlowQuery = `
             SELECT max(value)
@@ -164,14 +162,11 @@
           `
       const peakOutputFlow = await influx.query(peakOutputFlowQuery)
 
-      const duration = ((startDate - lastMeasurementDate) / 1e9) / (60 * 60)
+      const duration = ((lastMeasurementDate - startDate) / 1e9) / (60 * 60)
+      let peakFlowEfficiency = peakImputFlow[0].max !== 0 ? 1 - (peakOutputFlow[0].max / peakImputFlow[0].max) : 0
 
-      let reductionOfPeakFlow = 0
-      if (peakOutputFlow && peakOutputFlow.max) {
-        reductionOfPeakFlow = peakOutputFlow.max / peakImputFlow.max
-      }
       await Events.updateOne({ _id: ObjectID(_id) }, {
-        $set: { volumeInput, volumeOutput, efficiency, peakImputFlow: peakImputFlow[0], peakOutputFlow: peakOutputFlow[0], duration, reductionOfPeakFlow }
+        $set: { volumeInput, volumeOutput, volumeEfficiency, peakImputFlow: peakImputFlow[0], peakOutputFlow: peakOutputFlow[0], duration, peakFlowEfficiency }
       })
     } catch (e) {
       log.error(e.message)
