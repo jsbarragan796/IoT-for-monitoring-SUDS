@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import FileDownload from 'js-file-download';
 import { saveSvgAsPng } from 'save-svg-as-png';
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -33,7 +32,6 @@ class RealTimeData extends Component {
       width: 0,
       menuOptions: null
     };
-    this.getRealTimeEvents = this.getRealTimeEvents.bind(this);
     this.subRealTimeEvents = this.subRealTimeEvents.bind(this);
     this.handleChangeRain = this.handleChangeRain.bind(this);
     this.currentWidth = this.currentWidth.bind(this);
@@ -41,18 +39,13 @@ class RealTimeData extends Component {
     this.handleAddGraph = this.handleAddGraph.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.currentWidth();
+    this.subRealTimeEvents();
     window.addEventListener('resize', this.currentWidth);
   }
 
-  componentDidMount() {
-    this.subRealTimeEvents();
-    this.getRealTimeEvents();
-  }
-
   componentWillUnmount() {
-    connectionHandler.close();
     window.removeEventListener('resize', this.currentWidth);
   }
 
@@ -60,6 +53,7 @@ class RealTimeData extends Component {
     this.setState({ [name]: event.target.checked });
   };
   currentWidth() {
+    console.log("asdf")
     this.setState({ width: window.innerWidth });
   }
   getCsv() {
@@ -95,6 +89,7 @@ class RealTimeData extends Component {
   subRealTimeEvents() {
     connectionHandler.subRealTimeEvents(async (response) => {
       const { data } = this.state
+      if (data.events[0].startDate) {
       Object.keys(response.data).forEach( (key) => {
         if (data.events[0][key] && typeof data.events[0][key] === "object") {
           const lastElemtent = data.events[0][key].pop()
@@ -118,13 +113,8 @@ class RealTimeData extends Component {
         }       
       });
       this.setState({ data: data });
+    }
     }, (response) => {
-       console.log("a recargfar ", response)
-       if (response) connectionHandler.reloadRealTimeEvents(1)
-    })
-  }
-  getRealTimeEvents() {
-    connectionHandler.getRealTimeEvents(1, (response) => {
       this.setState({ data: response, errorStatus: false, eventId: response.events.length ? response.events[0]._id: null });
     })
   }

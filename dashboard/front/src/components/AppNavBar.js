@@ -63,13 +63,6 @@ class AppNavBar extends Component {
     }
   }
 
-  componentWillUnmount() {
-    const { optionActive } = this.props;
-    if (optionActive !== 'realtime') {
-      connectionHandler.close();
-    }
-  }
-  
   handleMobileMenuOpen = (event) => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
   };

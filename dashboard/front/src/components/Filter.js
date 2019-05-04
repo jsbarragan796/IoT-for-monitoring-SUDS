@@ -123,7 +123,7 @@ class Filter extends Component {
       beginDuration: undefined,
       endDuration: undefined,
       pageNumber: 1,
-      orderBy: '_id:1'
+      orderBy: '{"_id":1}'
     };
     if (state.beginEfficiency !== '') {
       filter.beginEfficiency = Number(state.beginEfficiency);

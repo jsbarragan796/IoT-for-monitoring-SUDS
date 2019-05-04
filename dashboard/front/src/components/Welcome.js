@@ -82,11 +82,11 @@ class Welcome extends Component {
                 <img src={suds} alt="Logo" className="responsive" style={{marginRight:5, marginLeft:5 }}/>
                 </div> 
                   <Typography color="secondary" align ="justify" variant="h5">
-                  El Centro de Investigaciones en Ingeniería Ambiental, CIIA realizó una 
+                  El Centro de Investigaciones en Ingeniería Ambiental, CIIA desarrolló una 
                   investigación en la que realizó la construcción y el monitoreo de un 
-                  piloto de SUDS en el Parque Metropolitano San Cristóbal Sur. 
+                  piloto de SUDS en el Parque Metropolitano San Cristóbal Sur de Bogotá. 
                   El objetivo del monitoreo era determinar el desempeño de las estructuras que lo componen,
-                  evaluando la eficiencia de reducción de contaminantes y la disminución de 
+                  evaluando la eficiencia de reducción de contaminantes, la disminución de 
                   volúmenes y caudales pico de escorrentía. Dicho monitoreo requería que los investigadores tuvieran que
                   desplazarse hasta el lugar para colectar la información manualmente. Con MISUDS se busca que el investigador
                   tenga acceso a la información remotamente y en tiempo real.   
@@ -105,11 +105,11 @@ class Welcome extends Component {
                  <Typography color="secondary" align ="justify" variant="h5">
                    Cuando se está presentando un evento de precipitación MISUDS
                    muestra en tiempo real una gráfica con la los datos de caudal, 
-                   conductividad y precipitación. Cuando el evento termina se procesan los datos y el evento puede 
+                   conductividad y precipitación. Cuando el evento termina MISUDS procesa los datos y el evento puede 
                    ser consultado en los eventos históricos, los cuales pueden ser fácilmente filtrados. Todos 
                    los datos pueden ser exportados  
                    en formato CSV y las gráficas 
-                   pueden guardarse en formato PNG ideal para informes. 
+                   pueden guardarse en formato PNG, ideal para informes. 
                  </Typography>
                  </Paper>
                 </Grid>

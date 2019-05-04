@@ -285,7 +285,7 @@ class HistoricalEvent extends Component {
                       <Grid item xs={12} >
                       <Paper elevation={3} style={{padding:10}}>
                         <Typography color="inherit" variant="h5" align="center">
-                        {`${ (event.volumeOutput / 1000).toFixed(2) }`}
+                        {`${ Number(event.volumeOutput / 1000).toFixed(2) }`}
                         </Typography>
                         <Typography color="inherit" variant="h6" align="center">
                         {`Volumen salida m³`}
@@ -299,7 +299,7 @@ class HistoricalEvent extends Component {
                       <Grid item xs={12} >
                       <Paper elevation={3} style={{padding:10}}>
                         <Typography color="inherit" variant="h5" align="center">
-                        {`${ (100 - (event.volumeInput / event.volumeOutput)*100 ).toFixed(2) }`}
+                        {`${ Number(event.volumeEfficiency).toFixed(2) }`}
                         </Typography>
                         <Typography color="inherit" variant="h6" align="center">
                         {`% reducción volumen`}
@@ -313,7 +313,7 @@ class HistoricalEvent extends Component {
                     <Grid item xs={12} >
                       <Paper elevation={3} style={{padding:10}}>
                         <Typography color="inherit" variant="h5" align="center">
-                          {` ${Math.floor(event.duration)}:${Math.floor((event.duration - Math.floor(event.duration)) * 60)}`}
+                          {` ${Math.floor(event.duration / 60)}:${Math.floor((event.duration - Math.floor(event.duration / 60)) * 60)}`}
                         </Typography>
                         <Typography color="inherit" variant="h6" align="center">
                           Duración horas
@@ -355,7 +355,7 @@ class HistoricalEvent extends Component {
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
                           <Typography color="inherit" variant="h6" align="center">
-                            {`${event.efficiency}`}
+                            {`${event.peakFlowEfficiency}`}
                           </Typography>     
                           <Typography color="inherit" variant="h6" align="center">
                             Reducción del caudal pico
