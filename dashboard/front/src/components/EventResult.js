@@ -48,14 +48,14 @@ class EventResult extends Component {
                     <Typography color="inherit">Entrada</Typography>
                     <Typography color="inherit">
                       <strong>Volumen :</strong>
-                      {` ${Math.ceil(event.volumeInput)} l`}
+                      {` ${Math.ceil(event.volumeInput)} litros`}
                     </Typography>
                   </Grid>
                   <Grid item container xs={6} direction="column">
                     <Typography color="inherit">Salida</Typography>
                     <Typography color="inherit">
                       <strong>Volumen :</strong>
-                      {` ${Math.ceil(event.volumeOutput)} l`}
+                      {` ${Math.ceil(event.volumeOutput)} litros`}
                     </Typography>
                   </Grid>
                   <Grid item container xs={12} direction="column">
@@ -63,13 +63,13 @@ class EventResult extends Component {
                   </Grid>
                   <Grid item container xs={12} direction="column">
                     <Typography color="inherit">
-                      <strong>Eficiencia :</strong>
-                      {` ${Math.ceil(event.efficiency)} %`}
+                      <strong>Reducción Volumen:</strong>
+                      {` ${Math.ceil(event.volumeEfficiency)} %`}
                     </Typography>
 
                     <Typography color="inherit">
                       <strong>Reducción del caudal pico :</strong>
-                      {` ${Math.ceil(event.reductionOfPeakFlow)} %`}
+                      {` ${Math.ceil(event.peakFlowEfficiency)} %`}
                     </Typography>
 
                     <Typography color="inherit">

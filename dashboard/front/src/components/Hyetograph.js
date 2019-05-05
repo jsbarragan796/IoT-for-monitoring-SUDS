@@ -52,13 +52,7 @@ class Hyetograph extends Component {
 
   drawGraph() {
     const { data } = this.props;
-
     const getFullTime = date => new Date(date).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-
-    const dates1 = data.map(d => new Date(d.time));
-    const allDates = dates1.sort((a, b) => d3.ascending(a, b));
-    const dates = allDates.filter((elem, index, self) => index === self.indexOf(elem));
-    const series = [{ name: 'entrada', values: data }];
     const svg = d3.select(this.svg);
     this.height = svg.attr('height') - this.margin.top - this.margin.bottom;
     this.width = svg.attr('width') - this.margin.left - this.margin.right;

@@ -131,6 +131,11 @@ class HistoricalEvent extends Component {
     let histogramGraph = '';
     let conductivityGraph = '';
     let rainGraph = '';
+    const options2 = {
+      year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    };
     const date2 = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options2).split('/').join('-');
     if (entrylevel) {
       histogramGraph = (<HistogramGraph data={entrylevel} data2={exitlevel} />);
@@ -183,7 +188,7 @@ class HistoricalEvent extends Component {
               <img src={logo} alt="Logo" width="150" />
             </Grid>
             <Grid item xs={12}>
-              <Typography color="inherit" variant="h5">
+              <Typography color="primary" variant="h5">
                     Lo sentimos, este evento no cuenta con datos de conductividad
               </Typography>
             </Grid>
@@ -236,7 +241,7 @@ class HistoricalEvent extends Component {
                 <img src={logo} alt="Logo" width="200" />
               </Grid>
               <Grid item xs={8}>
-                <Typography color="inherit" variant="h5">
+                <Typography color="primary" variant="h5">
                       Lo sentimos, este evento no cuenta con datos de precipitación
                 </Typography>
               </Grid>
@@ -248,11 +253,7 @@ class HistoricalEvent extends Component {
     const options = {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     };
-    const options2 = {
-      year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    };
+
     const date = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString('es-US', options);
     return (
       <div>
@@ -260,7 +261,7 @@ class HistoricalEvent extends Component {
         <div className="main">
         <Grid direction="column" container justify="center" spacing={8} >
           <Grid item xs={12} sm={12} md={12} lg={12} >
-            <Typography color="inherit" variant="h4" align="left" style={{ paddingTop: 10, paddingBottom: 15}}>
+            <Typography color="primary" variant="h4" align="left" style={{ paddingTop: 10, paddingBottom: 15}}>
               {`Evento registrado el ${date}`}
             </Typography>
           </Grid>
@@ -270,10 +271,10 @@ class HistoricalEvent extends Component {
                   <Grid container direction="row" justify="center" >
                       <Grid item xs={12}>
                       <Paper elevation={3} style={{padding:10}}>
-                        <Typography color="inherit" variant="h5" align="center">
+                        <Typography color="secondary" variant="h5" align="center">
                           {`${Math.ceil(event.volumeInput) / 1000}`}
                         </Typography>
-                        <Typography color="inherit" variant="h6" align="center">
+                        <Typography color="secondary" variant="h6" align="center">
                           {`Volumen entrada m³`}
                         </Typography>  
                       </Paper> 
@@ -284,10 +285,10 @@ class HistoricalEvent extends Component {
                   <Grid container direction="row" justify="center" >
                       <Grid item xs={12} >
                       <Paper elevation={3} style={{padding:10}}>
-                        <Typography color="inherit" variant="h5" align="center">
+                        <Typography color="secondary" variant="h5" align="center">
                         {`${ Number(event.volumeOutput / 1000).toFixed(2) }`}
                         </Typography>
-                        <Typography color="inherit" variant="h6" align="center">
+                        <Typography color="secondary" variant="h6" align="center">
                         {`Volumen salida m³`}
                         </Typography> 
                         </Paper>       
@@ -298,10 +299,10 @@ class HistoricalEvent extends Component {
                   <Grid container direction="row" justify="center" >
                       <Grid item xs={12} >
                       <Paper elevation={3} style={{padding:10}}>
-                        <Typography color="inherit" variant="h5" align="center">
+                        <Typography color="secondary" variant="h5" align="center">
                         {`${ Number(event.volumeEfficiency).toFixed(2) }`}
                         </Typography>
-                        <Typography color="inherit" variant="h6" align="center">
+                        <Typography color="secondary" variant="h6" align="center">
                         {`% reducción volumen`}
                         </Typography> 
                         </Paper>       
@@ -312,10 +313,10 @@ class HistoricalEvent extends Component {
                 <Grid container direction="row" justify="center" >
                     <Grid item xs={12} >
                       <Paper elevation={3} style={{padding:10}}>
-                        <Typography color="inherit" variant="h5" align="center">
+                        <Typography color="secondary" variant="h5" align="center">
                           {` ${Math.floor(event.duration / 60)}:${Math.floor((event.duration - Math.floor(event.duration / 60)) * 60)}`}
                         </Typography>
-                        <Typography color="inherit" variant="h6" align="center">
+                        <Typography color="secondary" variant="h6" align="center">
                           Duración horas
                         </Typography> 
                         </Paper>       
@@ -326,10 +327,10 @@ class HistoricalEvent extends Component {
                     <Grid container  direction="row" justify="center" >
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
-                          <Typography color="inherit" variant="h5" align="center">
+                          <Typography color="secondary" variant="h5" align="center">
                            {`${event.peakImputFlow ? event.peakImputFlow.max.toFixed(2): 0}`}
                           </Typography>    
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                             {`Caudal pico entrada l/s`}
                           </Typography> 
                           </Paper>          
@@ -340,10 +341,10 @@ class HistoricalEvent extends Component {
                     <Grid container  direction="row" justify="center" >
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                           {`${event.peakOutputFlow ? event.peakOutputFlow.max.toFixed(2): 0}`}
                           </Typography>     
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                           {`Caudal pico salida l/s`}
                           </Typography> 
                           </Paper>          
@@ -354,10 +355,10 @@ class HistoricalEvent extends Component {
                     <Grid container  direction="row" justify="center" >
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
-                          <Typography color="inherit" variant="h6" align="center">
-                            {`${event.peakFlowEfficiency}`}
+                          <Typography color="secondary" variant="h6" align="center">
+                            {`${event.peakFlowEfficiency? event.peakFlowEfficiency.toFixed(4)*100:0}`}
                           </Typography>     
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                             Reducción del caudal pico
                           </Typography> 
                           </Paper>          
@@ -368,10 +369,10 @@ class HistoricalEvent extends Component {
                     <Grid container  direction="row" justify="center" >
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                             {`${date2}`}
                           </Typography>     
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                             {`Inicio`}
                           </Typography> 
                           </Paper>          

@@ -215,8 +215,6 @@ class ConductivityGraph extends Component {
             ? { serie: a, value: closestA }
             : { serie: b, value: closestB };
         });
-        // path.attr('stroke', d => (d === s.serie ? null : '#ddd'))
-        // .filter(d => d === s.serie).raise();
         dot.attr(
           'transform',
           `translate(${this.x(new Date(s.value.time))},${this.y(s.value.value)})`,
@@ -224,12 +222,10 @@ class ConductivityGraph extends Component {
         dot.select('text').text(Number(s.value.value).toFixed(3));
       };
       const entered = () => {
-        // path.style('mix-blend-mode', null).attr('stroke', '#ddd');
         dot.attr('display', null);
       };
 
       const left = () => {
-        // path.style('mix-blend-mode', 'multiply').attr('stroke', null);
         dot.attr('display', 'none');
       };
 

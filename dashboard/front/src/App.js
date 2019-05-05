@@ -10,6 +10,7 @@ import ErrorPage from './components/ErrorPage';
 import Auth from './auth/Auth0';
 import HistoricalEventWrapper from './components/HistoricalEventWrapper';
 import Welcome from './components/Welcome';
+import Help from './components/Help';
 import Callback from './auth/Callback';
 
 const theme = createMuiTheme({
@@ -35,6 +36,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={() => <Home auth={auth} />} />
           <Route exact path="/eventos" component={() => <Events auth={auth} />} />
+          <Route exact path="/ayuda" component={() => <Help auth={auth} />} />
           <Route
             path="/eventos/:eventId"
             component={match => <HistoricalEventWrapper match={match} auth={auth} />}

@@ -16,14 +16,14 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit/2,
     marginRight: theme.spacing.unit/2,
     marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit/2,
-    width: 150,
+    marginBottom: theme.spacing.unit*2,
+    width: 210,
     height: 40
   },
   orderField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 300,
+    width: 420,
     height: 50
   },
   button: {
@@ -202,21 +202,18 @@ class Filter extends Component {
     const { state } = this;
     return (
       <Grid container spacing={16} direction="column" justify="center" alignItems="center">
-        <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography variant="h5" color="inherit">
+        <Grid item xs={6} sm={6} md={12} lg={12}>
+          <Typography variant="h5" color="primary">
             Filtros
           </Typography>
-          <Typography color="inherit" component="p">
+          <Typography color="secondary" component="p">
             {foundEvents}
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography color="inherit">Fecha</Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={6} sm={6} md={12} lg={12}>
           <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
-            <Grid container justify="center" spacing={0}>
-              <Grid item xs={6}>
+            <Grid container direction="row"  justify="center" spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
                 <DatePicker
                   id="beginDate"
                   margin="normal"
@@ -231,7 +228,7 @@ class Filter extends Component {
                   onChange={this.handleChange('beginDate')}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
                 <DatePicker
                   id="endDate"
                   margin="normal"
@@ -249,10 +246,10 @@ class Filter extends Component {
             </Grid>
           </MuiPickersUtilsProvider>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={6} sm={6} md={12} lg={12}>
           <TextField
             id="outlined-beginEfficiency"
-            label="Eficiencia Min %"
+            label="Reducción Volumen Min %"
             value={state.beginEfficiency}
             onChange={this.handleChange('beginEfficiency')}
             error={state.errbeginEfficiency}
@@ -265,7 +262,7 @@ class Filter extends Component {
           />
           <TextField
             id="outlined-endEfficiency"
-            label="Eficiencia Max %"
+            label="Reducción Volumen Max %"
             value={state.endEfficiency}
             error={state.errendEfficiency}
             onChange={this.handleChange('endEfficiency')}
@@ -277,10 +274,10 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={6} sm={6} md={12} lg={12}>
           <TextField
             id="outlined-beginVolumeInput"
-            label="Volumen de entrada Min L"
+            label="Volumen de entrada Min litros"
             value={state.beginVolumeInput}
             onChange={this.handleChange('beginVolumeInput')}
             error={state.errbeginVolumeInput}
@@ -294,7 +291,7 @@ class Filter extends Component {
 
           <TextField
             id="outlined-endVolumeInput"
-            label="Volumen de entrada Max L"
+            label="Volumen de entrada Max litros"
             value={state.endVolumeInput}
             error={state.errendVolumeInput}
             onChange={this.handleChange('endVolumeInput')}
@@ -306,10 +303,10 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={6} sm={6} md={12} lg={12}>
           <TextField
             id="outlined-beginVolumeOutput"
-            label="Volumen de salida Min L"
+            label="Volumen de salida  Min litros"
             value={state.beginVolumeOutput}
             onChange={this.handleChange('beginVolumeOutput')}
             error={state.errbeginVolumeOutput}
@@ -322,7 +319,7 @@ class Filter extends Component {
           />
           <TextField
             id="outlined-endVolumeOutput"
-            label="Volumen de salida Max L"
+            label="Volumen de salida Max litros"
             value={state.endVolumeOutput}
             error={state.errendVolumeOutput}
             onChange={this.handleChange('endVolumeOutput')}
@@ -334,10 +331,10 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={6} sm={6} md={12} lg={12}>
           <TextField
             id="outlined-beginReductionOfPeakFlow"
-            label="Min Reducción caudal pico %"
+            label="Reducción caudal pico Min %"
             value={state.beginReductionOfPeakFlow}
             onChange={this.handleChange('beginReductionOfPeakFlow')}
             error={state.errbeginReductionOfPeakFlow}
@@ -350,7 +347,7 @@ class Filter extends Component {
           />
           <TextField
             id="outlined-endReductionOfPeakFlow"
-            label="Max Reducción caudal pico %"
+            label="Reducción caudal pico Max %"
             value={state.endReductionOfPeakFlow}
             error={state.errendReductionOfPeakFlow}
             onChange={this.handleChange('endReductionOfPeakFlow')}
@@ -362,10 +359,10 @@ class Filter extends Component {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={6} sm={6} md={12} lg={12}>
           <TextField
             id="outlined-beginDuration"
-            label="Min Duración del evento h"
+            label="Min Duración del evento horas"
             onChange={this.handleChange('beginDuration')}
             error={state.errbeginDuration}
             type="number"
@@ -378,7 +375,7 @@ class Filter extends Component {
 
           <TextField
             id="outlined-endDuration"
-            label="Max Duración del evento h"
+            label="Max Duración del evento horas"
             error={state.errendDuration}
             onChange={this.handleChange('endDuration')}
             type="number"
@@ -418,7 +415,7 @@ class Filter extends Component {
 
         </TextField>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid item xs={2} sm={6} md={12} lg={12}>
           <Button  color="primary" size="medium" variant="contained" onClick={this.reset} className={classes.button}>
             Limpiar
           </Button>
