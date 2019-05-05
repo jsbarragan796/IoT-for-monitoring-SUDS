@@ -11,7 +11,7 @@ class HistoricalEventWrapper extends Component {
     return (
       <div className="main">
         <AppNavBar auth={auth} optionActive="eventDetail" />
-        <HistoricalEvent  match={match} />
+        <HistoricalEvent match={match} />
       </div>
     );
   }

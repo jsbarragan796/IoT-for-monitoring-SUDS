@@ -13,30 +13,30 @@ import esLocale from 'date-fns/locale/es';
 
 const styles = theme => ({
   textField: {
-    marginLeft: theme.spacing.unit/2,
-    marginRight: theme.spacing.unit/2,
+    marginLeft: theme.spacing.unit / 2,
+    marginRight: theme.spacing.unit / 2,
     marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit*2,
+    marginBottom: theme.spacing.unit * 2,
     width: 210,
-    height: 40
+    height: 40,
   },
   orderField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 420,
-    height: 50
+    height: 50,
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing.unit,
   },
   iconSmall: {
-    fontSize: 20
+    fontSize: 20,
   },
   grid: {
-    width: '100%'
+    width: '100%',
   },
   menu: {
     width: 200,
@@ -77,32 +77,30 @@ class Filter extends Component {
     this.sendFilter = this.sendFilter.bind(this);
   }
 
-  handleChange = name =>  (event) => {
+  handleChange = name => (event) => {
     const value = event.target ? event.target.value : event;
     this.validateInput(name, value);
     if (name !== 'beginDate' && name !== 'endDate' && name !== 'orderBy') {
       this.setState({
-        [name]: Number(value)
-      },() => {this.sendFilter()});
+        [name]: Number(value),
+      }, () => { this.sendFilter(); });
     } else {
       this.setState({
-        [name]: value
-      },() => {this.sendFilter()});
-      
+        [name]: value,
+      }, () => { this.sendFilter(); });
     }
   };
 
   validateInput = (name, value) => {
     if (name !== 'beginDate' && name !== 'endDate' && Number(value) < 0) {
       this.setState({
-        [`err${name}`]: true
+        [`err${name}`]: true,
       });
     } else {
       this.setState({
-        [`err${name}`]: false
+        [`err${name}`]: false,
       });
     }
-    
   };
 
 
@@ -123,7 +121,7 @@ class Filter extends Component {
       beginDuration: undefined,
       endDuration: undefined,
       pageNumber: 1,
-      orderBy: '{"_id":1}'
+      orderBy: '{"_id":1}',
     };
     if (state.beginEfficiency !== '') {
       filter.beginEfficiency = Number(state.beginEfficiency);
@@ -192,7 +190,7 @@ class Filter extends Component {
       errendReductionOfPeakFlow: false,
       errbeginDuration: false,
       errendDuration: false,
-      orderBy: ''
+      orderBy: '',
     });
     setFilter({ pageNumber: 1 });
   };
@@ -212,7 +210,7 @@ class Filter extends Component {
         </Grid>
         <Grid item xs={6} sm={6} md={12} lg={12}>
           <MuiPickersUtilsProvider utils={DateFnsUtils} locale={esLocale}>
-            <Grid container direction="row"  justify="center" spacing={0}>
+            <Grid container direction="row" justify="center" spacing={0}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <DatePicker
                   id="beginDate"
@@ -257,7 +255,7 @@ class Filter extends Component {
             className={classes.textField}
             variant="filled"
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
           <TextField
@@ -270,7 +268,7 @@ class Filter extends Component {
             className={classes.textField}
             variant="filled"
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
         </Grid>
@@ -285,7 +283,7 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
 
@@ -299,7 +297,7 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
         </Grid>
@@ -314,7 +312,7 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
           <TextField
@@ -327,7 +325,7 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
         </Grid>
@@ -342,7 +340,7 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
           <TextField
@@ -355,7 +353,7 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
         </Grid>
@@ -369,7 +367,7 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
 
@@ -382,41 +380,41 @@ class Filter extends Component {
             variant="filled"
             className={classes.textField}
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-        <TextField
-        id="filled-select-currency"
-        select
-        label="Ordenar"
-        className={classes.orderField}
-        value={state.orderBy}
-        onChange={this.handleChange('orderBy')}
-        SelectProps={{
-          MenuProps: {
-            className: classes.menu,
-          },
-        }}
-        margin="normal"
-        variant="filled"
-        >
-          <MenuItem value={'{"startDate":-1}'}>Más recientes</MenuItem>
-          <MenuItem value={'{"startDate":1}'}>Menos recientes</MenuItem>
-          <MenuItem value={'{"volumeInput":-1}'}>Mayor volumen de entrada</MenuItem>
-          <MenuItem value={'{"volumeInput":1}'}>Menor volumen de entrada</MenuItem>
-          <MenuItem value={'{"volumeOutput":-1}'}>Mayor volumen de salida</MenuItem>
-          <MenuItem value={'{"volumeOutput":1}'}>Menor volumen de salida</MenuItem>
-          <MenuItem value={'{"reductionOfPeakFlow":-1}'}>Mayor reducción caudal pico</MenuItem>
-          <MenuItem value={'{"reductionOfPeakFlow":1}'}>Menor reducción caudal pico</MenuItem>
-          <MenuItem value={'{"duration":-1}'}>Mayor duración</MenuItem>
-          <MenuItem value={'{"duration":1}'}>Menor duración</MenuItem>
+          <TextField
+            id="filled-select-currency"
+            select
+            label="Ordenar"
+            className={classes.orderField}
+            value={state.orderBy}
+            onChange={this.handleChange('orderBy')}
+            SelectProps={{
+              MenuProps: {
+                className: classes.menu,
+              },
+            }}
+            margin="normal"
+            variant="filled"
+          >
+            <MenuItem value={'{"startDate":-1}'}>Más recientes</MenuItem>
+            <MenuItem value={'{"startDate":1}'}>Menos recientes</MenuItem>
+            <MenuItem value={'{"volumeInput":-1}'}>Mayor volumen de entrada</MenuItem>
+            <MenuItem value={'{"volumeInput":1}'}>Menor volumen de entrada</MenuItem>
+            <MenuItem value={'{"volumeOutput":-1}'}>Mayor volumen de salida</MenuItem>
+            <MenuItem value={'{"volumeOutput":1}'}>Menor volumen de salida</MenuItem>
+            <MenuItem value={'{"reductionOfPeakFlow":-1}'}>Mayor reducción caudal pico</MenuItem>
+            <MenuItem value={'{"reductionOfPeakFlow":1}'}>Menor reducción caudal pico</MenuItem>
+            <MenuItem value={'{"duration":-1}'}>Mayor duración</MenuItem>
+            <MenuItem value={'{"duration":1}'}>Menor duración</MenuItem>
 
-        </TextField>
+          </TextField>
         </Grid>
         <Grid item xs={2} sm={6} md={12} lg={12}>
-          <Button  color="primary" size="medium" variant="contained" onClick={this.reset} className={classes.button}>
+          <Button color="primary" size="medium" variant="contained" onClick={this.reset} className={classes.button}>
             Limpiar
           </Button>
         </Grid>
@@ -428,7 +426,7 @@ class Filter extends Component {
 Filter.propTypes = {
   classes: PropTypes.instanceOf(Object).isRequired,
   setFilter: PropTypes.func.isRequired,
-  foundEvents: PropTypes.string.isRequired
+  foundEvents: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(Filter);

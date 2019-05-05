@@ -16,16 +16,16 @@ import Callback from './auth/Callback';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#3aa9d4'
+      main: '#3aa9d4',
     },
     secondary: {
-      main: '#08465f'
-    }
+      main: '#08465f',
+    },
   },
   typography: {
     useNextVariants: true,
     fontFamily: 'Segoe UI',
-  }
+  },
 });
 const auth = new Auth();
 class App extends Component {

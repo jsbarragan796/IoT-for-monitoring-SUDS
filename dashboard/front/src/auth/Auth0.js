@@ -9,7 +9,7 @@ export default class Auth0 {
     clientID: process.env.REACT_APP_CLIENT_ID,
     redirectUri: process.env.REACT_APP_CALLBACK_URL,
     responseType: 'token id_token',
-    scope: 'openid profile'
+    scope: 'openid profile',
   });
 
   constructor() {
@@ -20,7 +20,7 @@ export default class Auth0 {
     this.getProfile = this.getProfile.bind(this);
   }
 
-  getProfile () {
+  getProfile() {
     return JSON.parse(localStorage.getItem('userProfile'));
   }
 
@@ -61,7 +61,7 @@ export default class Auth0 {
     localStorage.clear();
     // navigate to the home route
     location.pathname = '/inicio';
-    this.auth0.logout({"returnTo": process.env.REACT_APP_LOGOUT_URL});
+    this.auth0.logout({ returnTo: process.env.REACT_APP_LOGOUT_URL });
   }
 
   isAuthenticated() {

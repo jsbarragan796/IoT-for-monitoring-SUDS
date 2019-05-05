@@ -1,3 +1,5 @@
+/* global window */
+/* global document */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
@@ -9,13 +11,13 @@ class HistogramGraph extends Component {
     super(props);
     this.state = {
       width: 0,
-      height: 0
+      height: 0,
     };
     this.margin = {
       top: 10,
       right: 8,
       bottom: 20,
-      left: 80
+      left: 80,
     };
     this.drawGraph = this.drawGraph.bind(this);
     this.updateGraph = this.updateGraph.bind(this);
@@ -280,5 +282,5 @@ export default HistogramGraph;
 
 HistogramGraph.propTypes = {
   data: PropTypes.instanceOf(Array).isRequired,
-  data2: PropTypes.instanceOf(Array).isRequired
+  data2: PropTypes.instanceOf(Array).isRequired,
 };

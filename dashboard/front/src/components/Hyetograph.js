@@ -1,19 +1,21 @@
+/* global window */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import Grid from '@material-ui/core/Grid';
+
 class Hyetograph extends Component {
   constructor(props) {
     super(props);
     this.state = {
       width: 0,
-      height: 0
+      height: 0,
     };
     this.margin = {
       top: 10,
       right: 8,
       bottom: 20,
-      left: 80
+      left: 80,
     };
     this.drawGraph = this.drawGraph.bind(this);
     this.updateGraph = this.updateGraph.bind(this);
@@ -152,5 +154,5 @@ class Hyetograph extends Component {
 export default Hyetograph;
 
 Hyetograph.propTypes = {
-  data: PropTypes.instanceOf(Array).isRequired
+  data: PropTypes.instanceOf(Array).isRequired,
 };

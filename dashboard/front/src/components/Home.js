@@ -16,6 +16,6 @@ class Home extends Component {
   }
 }
 Home.propTypes = {
-  auth: PropTypes.instanceOf(Object).isRequired
+  auth: PropTypes.instanceOf(Object).isRequired,
 };
 export default Home;

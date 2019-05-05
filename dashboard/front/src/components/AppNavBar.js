@@ -19,33 +19,33 @@ import connectionHandler from '../socketIo';
 
 const styles = theme => ({
   root: {
-    width: '100%'
+    width: '100%',
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20
+    marginRight: 20,
   },
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
-      display: 'block'
-    }
+      display: 'block',
+    },
   },
   sectionDesktop: {
     display: 'none',
     [theme.breakpoints.up('md')]: {
-      display: 'flex'
-    }
+      display: 'flex',
+    },
   },
   sectionMobile: {
     display: 'flex',
     [theme.breakpoints.up('md')]: {
-      display: 'none'
-    }
-  }
+      display: 'none',
+    },
+  },
 });
 
 class AppNavBar extends Component {
@@ -53,7 +53,7 @@ class AppNavBar extends Component {
     super(props);
     this.state = {
       mobileMoreAnchorEl: null,
-      RTEvnets: false
+      RTEvnets: false,
     };
   }
 
@@ -96,7 +96,7 @@ class AppNavBar extends Component {
       >
         <MenuItem component={Link} to="/">
           <IconButton color="inherit">
-            <Badge invisible={!RTEvnets} color="secondary"  badgeContent={' '}>
+            <Badge invisible={!RTEvnets} color="secondary" badgeContent=" ">
               <RssFeed />
             </Badge>
           </IconButton>
@@ -109,7 +109,7 @@ class AppNavBar extends Component {
             Histórico
         </MenuItem>
         <MenuItem component={Link} to="/ayuda">
-        <IconButton color="inherit">
+          <IconButton color="inherit">
             <Help />
           </IconButton>
             Ayuda
@@ -131,7 +131,9 @@ class AppNavBar extends Component {
               <img src={navBarLogo} width="100wv" alt="Logo" />
             </IconButton>
             <Typography className={classes.title} color="inherit" noWrap>
-              Hola, {userData? userData.nickname: " " }
+              Hola,
+              {' '}
+              {userData ? userData.nickname : ' ' }
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
@@ -140,11 +142,11 @@ class AppNavBar extends Component {
                 component={Link}
                 to="/"
               >
-                <Badge invisible={!RTEvnets} color="secondary" badgeContent={'1'}>
+                <Badge invisible={!RTEvnets} color="secondary" badgeContent="1">
                   <RssFeed />
                 </Badge>
                 <Typography color="inherit" className={classes.grow}>
-                    {'Tiempo real'}
+                  {'Tiempo real'}
                 </Typography>
               </IconButton>
               <IconButton
@@ -159,16 +161,16 @@ class AppNavBar extends Component {
               </IconButton>
 
               <IconButton
-              color="inherit"
-              component={Link}
-              to="/ayuda"
-            >
-              <Help />
-              <Typography color="inherit" className={classes.grow}>
-                {'Ayuda'}
-              </Typography>
-            </IconButton>
-              
+                color="inherit"
+                component={Link}
+                to="/ayuda"
+              >
+                <Help />
+                <Typography color="inherit" className={classes.grow}>
+                  {'Ayuda'}
+                </Typography>
+              </IconButton>
+
               <IconButton
                 onClick={auth.logout}
                 color="inherit"
@@ -195,7 +197,7 @@ class AppNavBar extends Component {
 AppNavBar.propTypes = {
   classes: PropTypes.instanceOf(Object).isRequired,
   auth: PropTypes.instanceOf(Object).isRequired,
-  optionActive: PropTypes.string.isRequired
+  optionActive: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(AppNavBar);

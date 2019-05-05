@@ -15,11 +15,11 @@ import { Link } from 'react-router-dom';
 
 const styles = {
   left: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
   },
   card: {
-    display: 'flex'
-  }
+    display: 'flex',
+  },
 };
 
 class EventResult extends Component {
@@ -30,11 +30,11 @@ class EventResult extends Component {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     };
     const date = new Date(Number(String(event.startDate).substr(0, 13))).toLocaleDateString(
       'es-US',
-      options
+      options,
     );
     return (
       <Grid item>
@@ -59,7 +59,7 @@ class EventResult extends Component {
                     </Typography>
                   </Grid>
                   <Grid item container xs={12} direction="column">
-                   <Divider/>
+                    <Divider />
                   </Grid>
                   <Grid item container xs={12} direction="column">
                     <Typography color="inherit">
@@ -75,7 +75,7 @@ class EventResult extends Component {
                     <Typography color="inherit">
                       <strong>Duración:</strong>
                       {` ${Math.floor(event.duration)}:${Math.floor(
-                        (event.duration - Math.floor(event.duration)) * 60
+                        (event.duration - Math.floor(event.duration)) * 60,
                       )} horas`}
                     </Typography>
                   </Grid>
@@ -96,7 +96,7 @@ class EventResult extends Component {
 
 EventResult.propTypes = {
   event: PropTypes.instanceOf(Object).isRequired,
-  classes: PropTypes.instanceOf(Object).isRequired
+  classes: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default withStyles(styles)(EventResult);

@@ -11,19 +11,19 @@ import Filter from './Filter';
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   filter: {
     'max-width': '25%',
-    'min-width': 200
+    'min-width': 200,
   },
   events: {
     'max-width': '75%',
-    'min-width': 300
+    'min-width': 300,
   },
   card: {
-    minWidth: '75%'
-  }
+    minWidth: '75%',
+  },
 };
 
 class HistoricalData extends Component {
@@ -33,7 +33,7 @@ class HistoricalData extends Component {
       data: null,
       errorStatus: false,
       errorMessage: '',
-      filter: { pageNumber: 1 }
+      filter: { pageNumber: 1 },
     };
     this.loadData = this.loadData.bind(this);
     this.allEvents = this.allEvents.bind(this);
@@ -48,7 +48,7 @@ class HistoricalData extends Component {
 
   setFilter(filter) {
     this.setState({
-      filter
+      filter,
     });
     this.loadData(filter);
   }
@@ -71,7 +71,7 @@ class HistoricalData extends Component {
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
-            horizontal: 'center'
+            horizontal: 'center',
           }}
           open
           variant="error"
@@ -142,7 +142,7 @@ class HistoricalData extends Component {
       <div>
         {this.showErrorMessage()}
         <div className="main">
-          <div >
+          <div>
             <Grid container direction="row" justify="center" alignItems="center" spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={5}>
                 <Filter foundEvents={totalEventos} setFilter={filter => this.setFilter(filter)} />

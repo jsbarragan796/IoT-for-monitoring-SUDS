@@ -8,21 +8,21 @@ import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20
+    marginRight: 20,
   },
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
-      display: 'block'
-    }
-  }
+      display: 'block',
+    },
+  },
 });
 
 function WelcomeAppBar(props) {
@@ -51,7 +51,7 @@ function WelcomeAppBar(props) {
 
 WelcomeAppBar.propTypes = {
   classes: PropTypes.instanceOf(Object).isRequired,
-  auth: PropTypes.instanceOf(Object).isRequired
+  auth: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default withStyles(styles)(WelcomeAppBar);

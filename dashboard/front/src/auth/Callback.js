@@ -14,22 +14,14 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
-    outline: 'none'
+    outline: 'none',
   },
   progress: {
-    margin: theme.spacing.unit * 2
-  }
+    margin: theme.spacing.unit * 2,
+  },
 });
 
 class Callback extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      top: 50,
-      left: 50
-    };
-  }
-
   componentDidMount() {
     const { auth } = this.props;
     setTimeout(auth.handleAuthentication, 1000);
@@ -40,7 +32,7 @@ class Callback extends Component {
     return {
       top: `${top}%`,
       left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`
+      transform: `translate(-${top}%, -${left}%)`,
     };
   }
 
@@ -72,7 +64,6 @@ class Callback extends Component {
 }
 Callback.propTypes = {
   auth: PropTypes.instanceOf(Object).isRequired,
-  classes: PropTypes.instanceOf(Object).isRequired
+  classes: PropTypes.instanceOf(Object).isRequired,
 };
 export default withStyles(styles)(Callback);
-// export default Callback;

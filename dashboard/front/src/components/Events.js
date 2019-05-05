@@ -18,6 +18,6 @@ class Events extends Component {
 }
 
 Events.propTypes = {
-  auth: PropTypes.instanceOf(Object).isRequired
+  auth: PropTypes.instanceOf(Object).isRequired,
 };
 export default Events;

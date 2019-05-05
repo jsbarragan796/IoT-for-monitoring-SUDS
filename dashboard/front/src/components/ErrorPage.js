@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/logo.png';
+import logo from '../assets/SUDS2.png';
 
 const ErrorPage = () => (
   <div className="main">
