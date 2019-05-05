@@ -49,7 +49,7 @@ class DinamicGraph extends Component {
   }
 
   drawGraph() {
-    const { rain, conductivity, level, showRain } = this.props;
+    const { rain, conductivity, level, showOption } = this.props;
     const getFullTime = (date) => {
       return new Date(date).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
     }
@@ -61,11 +61,23 @@ class DinamicGraph extends Component {
     const dates5 = rain.map(d => new Date(d.time));
     const allDates = dates1.concat(dates2).concat(dates3).concat(dates4).concat(dates5).sort((a, b) => d3.ascending(a, b));
     const dates = allDates.filter((elem, index, self) => index === self.indexOf(elem));
-    const series = [{ name: 'entrada', values: level.entry }, { name: 'salida', values: level.exit }];
+    const scale = showOption === 'rain' ? 1.5 : 1;
+    let series = []
+    let yDimention = 0
+    let labelY = ''
+    if(showOption === 'conductivity'){
+      series = [{ name: 'entrada', values: conductivity.entry }, { name: 'salida', values: conductivity.exit }];
+      yDimention = scale*Math.max(d3.max(conductivity.entry, d => d.value), d3.max(conductivity.exit, d => d.value))
+      labelY = 'Conductividad μS/cm'
+    } else{
+      series = [{ name: 'entrada', values: level.entry }, { name: 'salida', values: level.exit }];
+      yDimention = scale*Math.max(d3.max(level.entry, d => d.value), d3.max(level.exit, d => d.value))
+      labelY = 'Caudal l/s'
+    }
     const svg = d3.select(this.svg);
     this.height = svg.attr('height') - this.margin.top - this.margin.bottom;
     this.width = svg.attr('width') - this.margin.left - this.margin.right;
-
+  
     this.x = d3
       .scaleTime()
       .domain(d3.extent(dates, d => d))
@@ -91,14 +103,14 @@ class DinamicGraph extends Component {
     
     this.yConductivity = d3
       .scaleLinear()
-      .domain([scale*Math.max(d3.max(conductivity.entry, d => d.value), d3.max(conductivity.exit, d => d.value))*3,0])
+      .domain([scale * Math.max(d3.max(conductivity.entry, d => d.value), d3.max(conductivity.exit, d => d.value))*3,0])
       .nice()
       .range([ (this.height) - this.margin.bottom, this.margin.top])
     
-    const scale = showRain ? 1.5 : 1;
+
     this.y = d3
       .scaleLinear()
-      .domain([0, scale*Math.max(d3.max(level.entry, d => d.value), d3.max(level.exit, d => d.value))])
+      .domain([0, yDimention])
       .nice()
       .range([this.height - this.margin.bottom, this.margin.top]);
 
@@ -180,7 +192,7 @@ class DinamicGraph extends Component {
             )
 
 
-    if(showRain){
+    if(showOption === 'rain'){
         svg
         .append('g')
         .attr('transform', `translate(${this.width},0)`)
@@ -222,7 +234,7 @@ class DinamicGraph extends Component {
       .attr('transform',
         `translate(${this.margin.left / 2} ,${this.height / 2})rotate(-90)`)
       .style('text-anchor', 'middle')
-      .text('Caudal l/s');
+      .text(labelY);
 
     this.color = (name) => {
       switch (name) {
@@ -282,5 +294,5 @@ DinamicGraph.propTypes = {
   rain: PropTypes.instanceOf(Object).isRequired,
   conductivity: PropTypes.instanceOf(Object).isRequired,
   level: PropTypes.instanceOf(Object).isRequired,
-  showRain: PropTypes.bool.isRequired
+  showOption: PropTypes.bool.isRequired
 };

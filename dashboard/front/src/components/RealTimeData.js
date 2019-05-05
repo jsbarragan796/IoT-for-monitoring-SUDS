@@ -24,7 +24,7 @@ class RealTimeData extends Component {
       data: null,
       errorStatus: false,
       errorMessage: '',
-      showRain: false,
+      showOption: 'simple',
       eventId:null,
       graphTitle: 'Caudal vs tiempo',
       extraRain:false,
@@ -53,7 +53,6 @@ class RealTimeData extends Component {
     this.setState({ [name]: event.target.checked });
   };
   currentWidth() {
-    console.log("asdf")
     this.setState({ width: window.innerWidth });
   }
   getCsv() {
@@ -76,9 +75,14 @@ class RealTimeData extends Component {
     if (option === 'imagen') {
       saveSvgAsPng(document.querySelector('#realTimeGraph'), `${graphTitle} ${date}`, { scale: 3 });
     }
-    
-    if (option= 'flow-and-rain-vs-time'){
-      this.handleChangeRain()
+    if (option === 'flow-vs-time'){
+      this.handleChangeRain('simple', 'Caudal vs tiempo')
+    }
+    if (option === 'flow-and-rain-vs-time'){
+      this.handleChangeRain('rain', 'Caudal y recipitación vs tiempo')
+    }
+    if (option === 'conductivity-vs-time'){
+      this.handleChangeRain('conductivity', 'Conductividad vs tiempo ')
     }
   };
 
@@ -149,9 +153,8 @@ class RealTimeData extends Component {
     return '';
   }
 
-  handleChangeRain() {
-    const { showRain } = this.state;
-    this.setState({ showRain: !showRain, graphTitle: !showRain ? 'Caudal y recipitación vs tiempo' : 'Caudal vs tiempo' });
+  handleChangeRain(type,title) {
+    this.setState({ showOption: type, graphTitle: title});
   }
 
   render() {
@@ -160,7 +163,7 @@ class RealTimeData extends Component {
       <img src={suds} alt="Logo" className="responsive" />
     </Grid>
     <Grid item xs={6}>
-      <Typography color="inherit" variant="h6">
+      <Typography color="primary" variant="h6">
         Inició un evento, esperando datos..
       </Typography>
     </Grid>
@@ -172,7 +175,7 @@ class RealTimeData extends Component {
     let final = '';
     let maxInflow = 'Esperando datos';
     let maxOutflow = 'Esperando datos';
-    const { data, showRain, graphTitle, width,menuOptions } = this.state;
+    const { data, showOption, graphTitle, width,menuOptions } = this.state;
     
     if (data && data.events && data.events.length > 0) {
      
@@ -198,7 +201,7 @@ class RealTimeData extends Component {
           <DinamicGraph
             level={{ entry: data.events[0].entrylevel, exit: data.events[0].exitlevel }}
             rain={data.events[0].entryrain}
-            showRain={showRain}
+            showOption={showOption}
             conductivity={{
               entry: data.events[0].entryconductivity,
               exit: data.events[0].exitconductivity
@@ -245,10 +248,10 @@ class RealTimeData extends Component {
                   <Grid container direction="row" justify="center" >
                       <Grid item xs={12}>
                       <Paper elevation={3} style={{padding:10}}>
-                        <Typography color="inherit" variant="h5" align="center">
+                        <Typography color="secondary" variant="h5" align="center">
                           {`${dif} horas`}
                         </Typography>
-                        <Typography color="inherit" variant="h6" align="center">
+                        <Typography color="secondary" variant="h6" align="center">
                           {`Duración`}
                         </Typography>  
                       </Paper> 
@@ -259,10 +262,10 @@ class RealTimeData extends Component {
                   <Grid container direction="row" justify="center" >
                       <Grid item xs={12} >
                       <Paper elevation={3} style={{padding:10}}>
-                        <Typography color="inherit" variant="h5" align="center">
+                        <Typography color="secondary" variant="h5" align="center">
                           {`${w} `}
                         </Typography>
-                        <Typography color="inherit" variant="h6" align="center">
+                        <Typography color="secondary" variant="h6" align="center">
                           {`Fecha de inico`}
                         </Typography> 
                         </Paper>       
@@ -273,10 +276,10 @@ class RealTimeData extends Component {
                     <Grid container  direction="row" justify="center" >
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
-                          <Typography color="inherit" variant="h5" align="center">
+                          <Typography color="secondary" variant="h5" align="center">
                             {`${e}`}
                           </Typography>    
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                             {`Último dato recibido`}
                           </Typography> 
                           </Paper>          
@@ -287,10 +290,10 @@ class RealTimeData extends Component {
                     <Grid container  direction="row" justify="center" >
                         <Grid item xs={12}>
                         <Paper elevation={3} style={{padding:10}}>
-                          <Typography color="inherit" variant="h6" align="center">
-                            {`Entrada:${maxInflow.value? maxInflow.value.toFixed(2): maxInflow } l/s - Salida:${maxOutflow.value? maxOutflow.value.toFixed(2): maxOutflow } l/s`}
+                          <Typography color="secondary" variant="h6" align="center">
+                            {`Entrada:${maxInflow.value? maxInflow.value.toFixed(2): 0 } l/s - Salida:${maxOutflow.value? maxOutflow.value.toFixed(2): 0 } l/s`}
                           </Typography>     
-                          <Typography color="inherit" variant="h6" align="center">
+                          <Typography color="secondary" variant="h6" align="center">
                             {`Caudales pico registrados`}
                           </Typography> 
                           </Paper>          
@@ -318,16 +321,19 @@ class RealTimeData extends Component {
                       open={Boolean(menuOptions)}
                       onClose={()=> {this.handleClose("menuOptions")}}
                     >
-                    <MenuItem key={"option2"} selected={false} onClick={() => {this.handleOption('menuOptions','flow-vs-time', fechaInicio,graphTitle)}}>
+                    <MenuItem key={"option1"} selected={false} onClick={() => {this.handleOption('menuOptions','flow-vs-time', fechaInicio,graphTitle)}}>
                       Ver Caudal vs tiempo 
                     </MenuItem>  
                     <MenuItem key={"option2"} selected={false} onClick={() => {this.handleOption('menuOptions','flow-and-rain-vs-time', fechaInicio,graphTitle)}}>
                       Ver Caudal y precipitación vs tiempo 
                   </MenuItem>  
-                    <MenuItem key={"option1"} selected={false} onClick={() => {this.handleOption('menuOptions','csv', fechaInicio,graphTitle)}}>
+                  <MenuItem key={"option3"} selected={false} onClick={() => {this.handleOption('menuOptions','conductivity-vs-time', fechaInicio,graphTitle)}}>
+                  Ver Conductividad vs tiempo 
+                  </MenuItem>  
+                    <MenuItem key={"option4"} selected={false} onClick={() => {this.handleOption('menuOptions','csv', fechaInicio,graphTitle)}}>
                       Descargar datos
                     </MenuItem>
-                    <MenuItem key={"option2"} selected={false} onClick={() => {this.handleOption('menuOptions','imagen', fechaInicio,graphTitle)}}>
+                    <MenuItem key={"option5"} selected={false} onClick={() => {this.handleOption('menuOptions','imagen', fechaInicio,graphTitle)}}>
                       Descargar imagen 
                     </MenuItem>    
                                 
