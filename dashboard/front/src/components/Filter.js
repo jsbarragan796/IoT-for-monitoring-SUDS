@@ -219,6 +219,8 @@ class Filter extends Component {
                   emptyLabel=""
                   className={classes.textField}
                   variant="filled"
+                  openTo="year"
+                  views={["year", "month", "day"]}
                   format="MM/dd/yyyy"
                   mask={value => (value !== '' ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])
                   }
@@ -233,6 +235,8 @@ class Filter extends Component {
                   label="Hasta"
                   emptyLabel=""
                   className={classes.textField}
+                  openTo="year"
+                  views={["year", "month", "day"]}
                   variant="filled"
                   format="MM/dd/yyyy"
                   mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])

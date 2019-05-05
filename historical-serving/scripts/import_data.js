@@ -129,8 +129,10 @@ const postEventData = async (event) => {
     const row = allData[index]
     // row[4] // sensorId
     const valueLevel = String(Math.trunc(row[3] * 100)).padStart(4, '0')
+    const valueRain = String(Math.trunc(row[3] * 10)).padStart(4, '0')
     const valueConductivity = String(Math.trunc(row[1] < 0 ? 0 : row[1] * 100)).padStart(4, '0')
     const codedValue = `11${valueConductivity}10${valueLevel}`
+    const codedValueRain = `11${valueRain}11${valueRain}`
     // row[0] + 18000 // to convert to UTC (input data is in colombian time)
     // const body = buildPostBody(row[4], row[3], row[0] + 18000)
     if (inicio) {
@@ -141,7 +143,9 @@ const postEventData = async (event) => {
     // await postData(body)
     console.log("codedValue ",codedValue)
     const body = buildPostBody(row[4], codedValue, row[0] + 18000)
+    const bodyRain = buildPostBody('4D10B5', codedValueRain, row[0] + 18000)
     await hola2(body)
+    await hola2(bodyRain)
   }
 }
 const hola2 = (body) => {

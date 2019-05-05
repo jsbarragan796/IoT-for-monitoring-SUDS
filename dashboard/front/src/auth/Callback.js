@@ -1,3 +1,4 @@
+/* global window */
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -27,15 +28,6 @@ class Callback extends Component {
     setTimeout(auth.handleAuthentication, 1000);
   }
 
-  getModalStyle() {
-    const { top, left } = this.state;
-    return {
-      top: `${top}%`,
-      left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`,
-    };
-  }
-
   render() {
     const { classes, auth } = this.props;
     return (
@@ -49,7 +41,14 @@ class Callback extends Component {
           aria-describedby="simple-modal-description"
           open
         >
-          <div style={this.getModalStyle()} className={classes.paper}>
+          <div
+            style={{
+              top: '50%',
+              left: '50%',
+              transform: `translate(-${50}%, -${50}%)`,
+            }}
+            className={classes.paper}
+          >
             <div style={{ textAlign: 'center' }}>
               <Typography variant="h6" id="modal-title">
                 Iniciando Sesión
