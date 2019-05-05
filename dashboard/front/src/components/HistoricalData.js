@@ -144,10 +144,10 @@ class HistoricalData extends Component {
         <div className="main">
           <div >
             <Grid container direction="row" justify="center" alignItems="center" spacing={0}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid item xs={12} sm={12} md={12} lg={5}>
                 <Filter foundEvents={totalEventos} setFilter={filter => this.setFilter(filter)} />
               </Grid>
-              <Grid item xs={12} sm={12} md={7} lg={7}>
+              <Grid item xs={12} sm={12} md={12} lg={7}>
                 <Grid container direction="column" justify="space-between" alignItems="center" spacing={16}>
                   {events}
                   {paginador}
