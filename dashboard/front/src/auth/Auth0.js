@@ -4,8 +4,6 @@
 import auth0 from 'auth0-js';
 
 export default class Auth0 {
-  userProfile;
-
   auth0 = new auth0.WebAuth({
     domain: process.env.REACT_APP_DOMAIN,
     clientID: process.env.REACT_APP_CLIENT_ID,
@@ -22,17 +20,8 @@ export default class Auth0 {
     this.getProfile = this.getProfile.bind(this);
   }
 
-  getProfile() {
-    if (this.userProfile) {
-      return this.userProfile;
-    }
-    return this.auth0.client.userInfo(localStorage.getItem('access_token'), (err, profile) => {
-      if (profile) {
-        this.userProfile = profile;
-        return this.userProfile;
-      }
-      return {};
-    });
+  getProfile () {
+    return JSON.parse(localStorage.getItem('userProfile'));
   }
 
   login() {
@@ -56,6 +45,7 @@ export default class Auth0 {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+    localStorage.setItem('userProfile', JSON.stringify(authResult.idTokenPayload));
     // navigate to the home route
     location.hash = '';
     location.pathname = '/';
@@ -67,9 +57,11 @@ export default class Auth0 {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('userProfile');
     localStorage.clear();
     // navigate to the home route
     location.pathname = '/inicio';
+    this.auth0.logout({"returnTo": process.env.REACT_APP_LOGOUT_URL});
   }
 
   isAuthenticated() {

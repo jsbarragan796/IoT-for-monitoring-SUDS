@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Timeline from '@material-ui/icons/Timeline';
 import RssFeed from '@material-ui/icons/RssFeed';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import Help from '@material-ui/icons/HelpOutline';
 import Badge from '@material-ui/core/Badge';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import navBarLogo from '../assets/navbar2.png';
@@ -83,9 +84,8 @@ class AppNavBar extends Component {
   render() {
     const { mobileMoreAnchorEl, RTEvnets } = this.state;
     const { classes, auth } = this.props;
-    const userdata = auth.getProfile();
-    console.log('userdata',userdata)
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const userData = auth.getProfile();
     const renderMobileMenu = (
       <Menu
         anchorEl={mobileMoreAnchorEl}
@@ -108,6 +108,12 @@ class AppNavBar extends Component {
           </IconButton>
             Histórico
         </MenuItem>
+        <MenuItem component={Link} to="/ayuda">
+        <IconButton color="inherit">
+            <Help />
+          </IconButton>
+            Ayuda
+        </MenuItem>
         <MenuItem onClick={auth.logout}>
           <IconButton color="inherit">
             <ExitToApp />
@@ -125,7 +131,7 @@ class AppNavBar extends Component {
               <img src={navBarLogo} width="100wv" alt="Logo" />
             </IconButton>
             <Typography className={classes.title} color="inherit" noWrap>
-              MISUDS
+              Hola, {userData? userData.nickname: " " }
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
@@ -151,6 +157,18 @@ class AppNavBar extends Component {
                   {'Histórico'}
                 </Typography>
               </IconButton>
+
+              <IconButton
+              color="inherit"
+              component={Link}
+              to="/ayuda"
+            >
+              <Help />
+              <Typography color="inherit" className={classes.grow}>
+                {'Ayuda'}
+              </Typography>
+            </IconButton>
+              
               <IconButton
                 onClick={auth.logout}
                 color="inherit"

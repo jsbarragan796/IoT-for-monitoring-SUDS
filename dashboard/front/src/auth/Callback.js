@@ -5,7 +5,7 @@ import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import WelcomeAppBar from '../components/WelcomeAppNavBar';
-import logo from '../assets/logo.png';
+import logo from '../assets/SUDS2.png';
 
 const styles = theme => ({
   paper: {
@@ -32,7 +32,7 @@ class Callback extends Component {
 
   componentDidMount() {
     const { auth } = this.props;
-    setTimeout(auth.handleAuthentication, 1700);
+    setTimeout(auth.handleAuthentication, 1000);
   }
 
   getModalStyle() {
