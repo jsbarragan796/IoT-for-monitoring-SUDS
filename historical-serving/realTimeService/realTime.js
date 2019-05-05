@@ -11,7 +11,6 @@ let interval = undefined
 
 const validatorFunction =  () =>{
   return new Promise(async (resolve, reject) => {
-  // console.log("interval executing")
   if(numberOfClients > 0 ){
     const currentNumberOfEvents = await EventLogic.numberOfNotEndedEvents()
     if ( numberOfEvents && !currentNumberOfEvents) { 
@@ -49,7 +48,6 @@ const setEventChecker = () => {
     if ( numberOfClients && !interval) {
       await validatorFunction()
       interval = setInterval( validatorFunction , 1000)
-      console.log("interval alive")
     }
     else {
       if (!numberOfClients && interval ) {
@@ -57,7 +55,6 @@ const setEventChecker = () => {
         interval = undefined
         eventsWithMeasurements = []
         numberOfEvents = 0
-        console.log("interval killed")
       }
     }
     resolve()
@@ -69,31 +66,23 @@ module.exports = {
     console.log('socket start on port ',PORT_SOCKET)
     io.on('connection', (client) => {
       numberOfClients++
-      console.log("Entro numberOfClients", numberOfClients)
       client.on('sub-are-current-events',  async (join) => {
         await setEventChecker()
-        console.log("Entro  sub-are-current-events", numberOfEvents)
         client.emit('are-current-events', Boolean(numberOfEvents))
         if (join) client.join('subsCurrentEvent');
       }) 
       client.on('sub-current-events', async (join) => {
-        console.log("Entro  ")
-        console.log("numberOfEvents  ",  numberOfEvents)
         await setEventChecker()
-        console.log("numberOfEvents derspues ",  numberOfEvents)
         if (numberOfEvents) {
-          console.log("caso 1")
           const paginator = { currentPage: 1, totalPages: 1, events: eventsWithMeasurements }
           client.emit('current-events', paginator)
         } else {
-          console.log("caso 2", numberOfEvents)
           client.emit('current-events', { currentPage: 0, totalPages: 0, events: []}) 
         }
         if (join) client.join('subsCurrentEventData');
       }) 
       client.on('disconnect', async() => {
         numberOfClients--
-        console.log(" disconed numberOfClients ", numberOfClients)
         if (numberOfClients < 0 ) numberOfClients = 0
         await setEventChecker()
       });
