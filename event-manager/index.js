@@ -71,7 +71,7 @@
     if (event) {
       const { _id, lastMeasurementDate } = event
       const now = new Date().getTime() * 1000000
-      if (now - lastMeasurementDate > 6e10) await endEvent(_id, lastMeasurementDate)
+      // if (now - lastMeasurementDate > 6e10) await endEvent(_id, lastMeasurementDate)
     }
   })
 })()

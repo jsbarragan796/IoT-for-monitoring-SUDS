@@ -35,8 +35,7 @@ module.exports = (producer, redis) => {
           const valM1 = getMessageValue(messagePart1)
           const channelM1 = getchannel(messagePart1)
           const measurementTypeM1 = await getMeasurementType(sensorId, channelM1)
-
-          await sendMeasurementMessage(sensorId, measurementTypeM1, valM1, ts)
+          if (measurementTypeM1) await sendMeasurementMessage(sensorId, measurementTypeM1, valM1, ts)
 
           if (messagePart1 !== messagePart2) {
             const valM2 = getMessageValue(messagePart2)

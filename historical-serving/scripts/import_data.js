@@ -142,6 +142,7 @@ const postEventData = async (event) => {
     }
     // await postData(body)
     console.log("codedValue ",codedValue)
+    console.log("codedValueRain ",codedValueRain)
     const body = buildPostBody(row[4], codedValue, row[0] + 18000)
     const bodyRain = buildPostBody('4D10B5', codedValueRain, row[0] + 18000)
     await hola2(body)

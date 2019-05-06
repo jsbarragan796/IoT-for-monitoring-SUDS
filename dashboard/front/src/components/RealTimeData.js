@@ -97,7 +97,7 @@ class RealTimeData extends Component {
   subRealTimeEvents() {
     connectionHandler.subRealTimeEvents(async (response) => {
       const { data } = this.state;
-      if (data.events[0].startDate) {
+      if (data && data.events[0] && data.events[0].startDate) {
         Object.keys(response.data).forEach((key) => {
           if (data.events[0][key] && typeof data.events[0][key] === 'object') {
             const lastElemtent = data.events[0][key].pop();
