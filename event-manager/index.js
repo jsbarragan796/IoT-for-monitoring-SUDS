@@ -66,12 +66,12 @@
   })
 
   cron.schedule(CRON_SCHEDULE, async () => {
-    console.log('Cron started', CRON_SCHEDULE)
-    const event = await findMostRecentOpenEvent()
-    if (event) {
-      const { _id, lastMeasurementDate } = event
-      const now = new Date().getTime() * 1000000
-      // if (now - lastMeasurementDate > 6e10) await endEvent(_id, lastMeasurementDate)
-    }
+    // console.log('Cron started', CRON_SCHEDULE)
+    // const event = await findMostRecentOpenEvent()
+    // if (event) {
+    //   const { _id, lastMeasurementDate } = event
+    //   const now = new Date().getTime() * 1000000
+    //   if (now - lastMeasurementDate > 6e10) await endEvent(_id, lastMeasurementDate)
+    // }
   })
 })()
