@@ -2,7 +2,7 @@
 Monitoreo Ingeligente de Sistemas de Drenage Sostenible
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/20799513/62122604-b21db380-b28b-11e9-9699-deeef2bdb006.png" height="300">
+<img height="300" src="https://user-images.githubusercontent.com/20799513/62122604-b21db380-b28b-11e9-9699-deeef2bdb006.png" height="300">
 </p>
 
 ## Manual de despliegue
@@ -11,7 +11,7 @@ Este manual está dirigido a un profesional de software para que administre y ma
 ## Arquitectura
 ### Diagrama de componentes 
 <p align="center">
-<img width="746" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62123447-90bdc700-b28d-11e9-9a86-f92fd7d3699f.png">
+<img height="300" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62123447-90bdc700-b28d-11e9-9a86-f92fd7d3699f.png">
  </p>
 
 
@@ -21,6 +21,6 @@ time series database y guarda los resultados en la document database. Se suscrib
 ### Diagrama de despliegue
 
 <p align="center">
-<img width="746" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62128912-1b58f300-b29b-11e9-9d12-1371a504ca15.png">
+<img height="300" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62128912-1b58f300-b29b-11e9-9d12-1371a504ca15.png">
  </p>
 
