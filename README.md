@@ -5,7 +5,7 @@ Monitoreo Ingeligente de Sistemas de Drenage Sostenible
 <img height="300" src="https://user-images.githubusercontent.com/20799513/62122604-b21db380-b28b-11e9-9699-deeef2bdb006.png" height="300">
 </p>
 
-## Manual de despliegue
+# Manual de despliegue
 
 Este manual está dirigido a un profesional de software para que administre y mantenga a MISUDS.
 ## Arquitectura
@@ -21,6 +21,22 @@ time series database y guarda los resultados en la document database. Se suscrib
 ### Diagrama de despliegue
 
 <p align="center">
-<img height="300" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62128912-1b58f300-b29b-11e9-9d12-1371a504ca15.png">
+<img height="500" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62128912-1b58f300-b29b-11e9-9d12-1371a504ca15.png">
  </p>
+
+MISUDS está desplegado en 5 servidores 
+
+
+
+## Software Requerido
+
+* **NodeJS**
+Es el ambiente de ejecución de JavaScript con el cual se construyeron todos los servicios. La versión utilizada fue la 8. https://nodejs.org/en/ 
+
+* **Nodemon**
+Es una herramienta utilizada en desarrollo para correr un daemon de nodejs que reinicie el proceso cada vez que se guardan los cambios. https://nodemon.io/ 
+
+* **PM2**
+Manejador de procesos de nodeJS. Se utiliza para correr los procesos de los servicios de backend. http://pm2.keymetrics.io/ 
+
 
