@@ -1,12 +1,26 @@
-# Intelligent Monitoring of Sustainable Drainage Systems
+# MI SUDS
+Monitoreo Ingeligente de Sistemas de Drenage Sostenible
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a1f7b657a1604e199e529fb125b049e7)](https://app.codacy.com/app/jsbarragan796/Intelligent-monitoring-of-sustainable-drainage-systems?utm_source=github.com&utm_medium=referral&utm_content=jsbarragan796/Intelligent-monitoring-of-sustainable-drainage-systems&utm_campaign=Badge_Grade_Dashboard)
+<p align="center">
+<img src="https://user-images.githubusercontent.com/20799513/62122604-b21db380-b28b-11e9-9699-deeef2bdb006.png" height="300">
+</p>
 
-<img src="https://raw.githubusercontent.com/jsbarragan796/Intelligent-monitoring-of-sustainable-drainage-systems/master/dashboard/front/public/logo150.png">
+## Manual de despliegue
+
+Este manual está dirigido a un profesional de software para que administre y mantenga a MISUDS.
+## Arquitectura
+### Diagrama de componentes 
+<p align="center">
+<img width="746" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62123447-90bdc700-b28d-11e9-9a86-f92fd7d3699f.png">
+ </p>
 
 
+Mi suds cuenta con 13 componentes, primero está la **Entidad física** que tomar las mediciones de los sensores y consume del componente de **Comunicación especializada en IoT** para el envío de los datos. El componente de comunicación luego consume del componente **Reception** el cual consume del componente de **In memory database** para establecer el tipo de dato y establecer qué tópico se va a publicar en el **Message broker**. El componente **Crude data** se encuentra suscrito al message broker para guardar mediciones en la **Time series database**. El componente **Event manager** está suscrito al broker y consume del **Document database** para establecer si un evento debe finalizarse. El componente de **Notification** se suscribe al broker, para el envío de mensajes cuando inicia un evento. El **Aggregate data** realiza procesamiento de la data almacenada en 
+time series database y guarda los resultados en la document database. Se suscribe al broker para determinar cuándo debe procesar las mediciones de un evento. Por ultimo **Historical serving** consume de las bases de datos para exponerle al **Web client** la información de los eventos que consume el usuario final. 
 
-## Introduction
+### Diagrama de despliegue
 
-## Architecture
-![Architecture](https://github.com/jsbarragan796/Intelligent-monitoring-of-sustainable-drainage-systems/blob/master/architecture/components.png)
+<p align="center">
+<img width="746" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62128912-1b58f300-b29b-11e9-9d12-1371a504ca15.png">
+ </p>
+
