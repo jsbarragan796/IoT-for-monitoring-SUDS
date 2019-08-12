@@ -177,11 +177,15 @@ Para correr cualquier proceso por primera vez se deben ejecutar el comando ```np
 ### Servicios de AWS
 Actualmente se está consumiendo el servicio Amazon SES para el envío de notificaciones por mensaje de texto. Para configurarlo es necesario crear una cuenta en AWS, y mediante Amazon IAM, que es el servicio de identificación y acceso, se crea una cuenta programática.
 
- 
+<p align="center">
+<img height="500" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62859197-0e3bfb00-bcc2-11e9-954a-4e21b2ce435f.png">
+ </p>
 
 Es importante que al usuario se le asocie con la política de acceso al servicio.
 
- 
+ <p align="center">
+<img height="500" alt="compomentes" src="https://user-images.githubusercontent.com/20799513/62859230-29a70600-bcc2-11e9-8594-0473ccb5fa64.png">
+ </p>
 
 Al finalizar la creación, se podrá ver la llave de acceso y el secret del usuario.
 
