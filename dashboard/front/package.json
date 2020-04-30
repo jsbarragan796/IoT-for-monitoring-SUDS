@@ -14,7 +14,7 @@
     "date-fns": "^2.0.0-alpha.25",
     "dotenv": "^6.2.0",
     "eslint-config-standard-react": "^7.0.2",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "js-file-download": "^0.4.4",
     "material-ui-flat-pagination": "^3.2.0",
     "material-ui-pickers": "^2.1.2",
