@@ -10,7 +10,7 @@
     "ajv-keywords": "^3.2.0",
     "auth0-js": "^9.7.3",
     "axios": "^0.18.0",
-    "d3": "^5.7.0",
+    "d3": "^7.6.1",
     "date-fns": "^2.0.0-alpha.25",
     "dotenv": "^6.2.0",
     "eslint-config-standard-react": "^7.0.2",
